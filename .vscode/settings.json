@@ -1,0 +1,45 @@
+{
+  "editor.linkedEditing": true,
+  "breadcrumbs.enabled": false,
+  "editor.stickyScroll.enabled": true,
+  "editor.minimap.enabled": false,
+  "editor.scrollbar.vertical": "hidden",
+  "editor.overviewRulerBorder": false,
+  "editor.hideCursorInOverviewRuler": true,
+  "editor.formatOnSave": true,
+  "editor.wordWrap": "bounded",
+  "editor.glyphMargin": false,
+  "editor.fontLigatures": true,
+  "editor.guides.bracketPairs": true,
+  "editor.guides.bracketPairsHorizontal": false,
+  "editor.quickSuggestions": {
+    "strings": true
+  },
+  "workbench.editor.enablePreview": false,
+  "workbench.statusBar.visible": false,
+  "prettier.singleQuote": true,
+  "javascript.preferences.renameMatchingJsxTags": true,
+  "javascript.preferences.importModuleSpecifierEnding": "js",
+  "console-ninja.featureSet": "Community",
+  "tailwindCSS.emmetCompletions": false,
+  "css.validate": false,
+  "editor.inlineSuggest.enabled": true,
+  "css.lint.unknownAtRules": "ignore",
+  "[html]": {
+    "editor.defaultFormatter": "esbenp.prettier-vscode"
+  },
+  "[javascript]": {
+    "editor.defaultFormatter": "esbenp.prettier-vscode"
+  },
+  "[css]": {
+    "editor.defaultFormatter": "esbenp.prettier-vscode"
+  },
+  "[javascriptreact]": {
+    "editor.defaultFormatter": "esbenp.prettier-vscode"
+  },
+  "[jsonc]": {
+    "editor.defaultFormatter": "esbenp.prettier-vscode"
+  },
+  "javascript.updateImportsOnFileMove.enabled": "always",
+  "inlineFold.supportedLanguages": ["html", "javascript", "javascriptreact"]
+}
