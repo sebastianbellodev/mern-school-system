@@ -7,5 +7,7 @@ connectToAtlas((error) => {
   if (!error) {
     app.listen(PORT);
     console.log('Server on port', PORT);
+  } else {
+    console.log(error);
   }
 });

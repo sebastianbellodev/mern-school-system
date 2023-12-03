@@ -11,17 +11,16 @@ const user_json = (operation, document) => {
     user: {
       id: document._id,
       username: document.username,
-      email: document.email,
     },
   };
 };
 
 export const signup = async (request, response) => {
-  const { username, email, password } = request.body;
+  const { username, password } = request.body;
   try {
     const salt = await bcrypt.genSalt(10);
     bcrypt.hash(password, salt, async (error, hash) => {
-      const user = new User({ username, email, password: hash });
+      const user = new User({ username, password: hash });
       const document = await user.save();
       const token = await signToken(document._id);
 
@@ -34,20 +33,18 @@ export const signup = async (request, response) => {
 };
 
 export const login = async (request, response) => {
-  const { email, password } = request.body;
+  const { username, password } = request.body;
   try {
-    const document = await User.findOne({ email });
+    const document = await User.findOne({ username });
     if (!document)
       return response
         .status(code.UNAUTHORIZED)
-        .send({ error: body.INVALID_CREDENTIALS });
+        .send({ error: body.LOGIN_FAILED });
 
     const isUser = await bcrypt.compare(password, document.password);
 
     if (!isUser) {
-      response
-        .status(code.UNAUTHORIZED)
-        .send({ error: body.INVALID_CREDENTIALS });
+      response.status(code.UNAUTHORIZED).send({ error: body.LOGIN_FAILED });
     } else {
       const token = await signToken(document._id);
 

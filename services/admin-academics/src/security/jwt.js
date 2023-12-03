@@ -24,18 +24,18 @@ export const signToken = (id) => {
 
 export const isValidToken = (request, response, callback) => {
   const { token } = request.cookies;
-  if (!token)
-    return response
-      .status(code.UNAUTHORIZED)
-      .send({ error: body.MISSING_TOKEN });
+  if (!token) {
+    return response.status(code.FORBIDDEN).send({ error: body.MISSING_TOKEN });
+  }
 
   jwt.verify(token, KEY, (error, id) => {
-    if (error)
+    if (error) {
       return response
         .status(code.FORBIDDEN)
         .send({ error: body.INVALID_TOKEN });
+    }
 
     request.id = id;
-    callback();
+    return callback();
   });
 };
