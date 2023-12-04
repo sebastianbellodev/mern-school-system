@@ -1,6 +1,6 @@
 <mxfile host="65bd71144e">
     <diagram id="LMq2UV9fvD7WIYkg8hmm" name="Deployment Diagram">
-        <mxGraphModel dx="960" dy="578" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="850" pageHeight="1100" math="0" shadow="0">
+        <mxGraphModel dx="1008" dy="607" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="850" pageHeight="1100" math="0" shadow="0">
             <root>
                 <mxCell id="0"/>
                 <mxCell id="1" parent="0"/>
@@ -52,7 +52,7 @@
                 <mxCell id="122" value="" style="group" parent="1" vertex="1" connectable="0">
                     <mxGeometry x="80" y="466" width="160" height="130" as="geometry"/>
                 </mxCell>
-                <mxCell id="123" value="School Notifications&lt;br&gt;Formats Web App" style="verticalAlign=top;align=center;shape=cube;size=10;direction=south;fontStyle=0;html=1;boundedLbl=1;spacingLeft=5;container=0;" parent="122" vertex="1">
+                <mxCell id="123" value="Landing Web App" style="verticalAlign=top;align=center;shape=cube;size=10;direction=south;fontStyle=0;html=1;boundedLbl=1;spacingLeft=5;container=0;" parent="122" vertex="1">
                     <mxGeometry width="160" height="130" as="geometry"/>
                 </mxCell>
                 <mxCell id="124" value="&amp;lt;&amp;lt;artifact&amp;gt;&amp;gt;&lt;br&gt;&lt;br&gt;&lt;b&gt;ReactClientApp&lt;/b&gt;" style="html=1;align=center;verticalAlign=middle;dashed=0;fontSize=12;container=0;" parent="122" vertex="1">
