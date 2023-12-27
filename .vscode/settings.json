@@ -16,7 +16,7 @@
     "strings": true
   },
   "workbench.editor.enablePreview": false,
-  "workbench.statusBar.visible": false,
+  "workbench.statusBar.visible": true,
   "prettier.singleQuote": true,
   "javascript.preferences.renameMatchingJsxTags": true,
   "javascript.preferences.importModuleSpecifierEnding": "js",
