@@ -1,6 +1,6 @@
 import mongoose from 'mongoose';
 
-const TEACHER_SCHEMA = new mongoose.Schema({
+const TUTOR_SCHEMA = new mongoose.Schema({
   name: {
     type: String,
     required: true,
@@ -13,18 +13,22 @@ const TEACHER_SCHEMA = new mongoose.Schema({
     type: String,
     required: true,
   },
+  address: {
+    type: String,
+    required: true,
+  },
   emailAddress: {
     type: String,
     required: true,
     trim: true,
     unique: true,
   },
-  user: {
-    type: mongoose.Schema.Types.ObjectId,
-    ref: 'users',
+  phone: {
+    type: String,
+    required: true,
+    trim: true,
   },
-  groups: [{ type: mongoose.Schema.Types.ObjectId, ref: 'groups' }],
-  subjects: [{ type: mongoose.Schema.Types.ObjectId, ref: 'subjects' }],
+  students: [{ type: mongoose.Schema.Types.ObjectId, ref: 'students' }],
 });
 
-export default mongoose.model('teachers', TEACHER_SCHEMA);
+export default mongoose.model('tutors', TUTOR_SCHEMA);
