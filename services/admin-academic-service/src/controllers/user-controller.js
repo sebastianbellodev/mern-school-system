@@ -80,9 +80,7 @@ export const update = async (request, response) => {
       const salt = await bcrypt.genSalt(10);
       bcrypt.hash(password, salt, async (error, hash) => {
         const user = new User({ username, password: hash });
-        document = await User.findOneAndUpdate({ username }, user, {
-          new: true,
-        });
+        document = await User.findOneAndUpdate({ username }, user);
         response.status(code.OK).send(USER_JSON(body.PUT, document));
       });
     } else {
