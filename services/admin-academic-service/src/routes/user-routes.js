@@ -1,10 +1,11 @@
 import { Router } from 'express';
 
 import {
-  signUp,
+  getUser,
   login,
   logOut,
-  getUser,
+  signUp,
+  update,
 } from '../controllers/user-controller.js';
 import { isValidToken } from '../security/jwt.js';
 import { isValidAuth } from '../security/basic.js';
