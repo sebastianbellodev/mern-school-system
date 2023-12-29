@@ -1,14 +1,20 @@
 import { Router } from 'express';
 
-import { signup, login, logout, user } from '../controllers/user-controller.js';
+import {
+  signUp,
+  login,
+  logOut,
+  getUser,
+} from '../controllers/user-controller.js';
 import { isValidToken } from '../security/jwt.js';
 import { isValidAuth } from '../security/basic.js';
 
 const router = Router();
 
-router.post('/signup', isValidAuth, signup);
+router.get('/:username', isValidToken, getUser);
 router.post('/login', isValidAuth, login);
-router.post('/logout', logout);
-router.get('/:username', isValidToken, user);
+router.post('/logout', logOut);
+router.post('/signup', isValidAuth, signUp);
+router.put('/:username', isValidToken, update);
 
 export default router;
