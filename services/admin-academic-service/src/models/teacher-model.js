@@ -19,6 +19,11 @@ const TEACHER_SCHEMA = new mongoose.Schema({
     trim: true,
     unique: true,
   },
+  deleted: {
+    type: Boolean,
+    required: true,
+    default: false,
+  },
   user: {
     type: mongoose.Schema.Types.ObjectId,
     ref: 'users',

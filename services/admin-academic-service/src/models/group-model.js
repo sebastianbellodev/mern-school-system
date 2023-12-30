@@ -6,12 +6,11 @@ const GROUP_SCHEMA = new mongoose.Schema({
     required: true,
     unique: true,
   },
-  propadeuticArea: {
-    type: mongoose.Schema.Types.ObjectId,
-    ref: 'propadeuticareas',
+  deleted: {
+    type: Boolean,
+    required: true,
+    default: false,
   },
-  students: [{ type: mongoose.Schema.Types.ObjectId, ref: 'students' }],
-  subjects: [{ type: mongoose.Schema.Types.ObjectId, ref: 'subjects' }],
 });
 
 export default mongoose.model('groups', GROUP_SCHEMA);

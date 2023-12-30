@@ -1,18 +1,19 @@
-import { Router } from 'express';
-
+import Router from 'express';
 import {
-  getUser,
+  getByUsername,
   login,
   logOut,
+  remove,
   signUp,
   update,
 } from '../controllers/user-controller.js';
-import { isValidToken } from '../security/jwt.js';
-import { isValidAuth } from '../security/basic.js';
+import isValidToken from '../security/jwt.js';
+import isValidAuth from '../security/basic.js';
 
 const router = Router();
 
-router.get('/:username', isValidToken, getUser);
+router.delete(':/username', isValidToken, remove);
+router.get('/:username', isValidToken, getByUsername);
 router.post('/login', isValidAuth, login);
 router.post('/logout', logOut);
 router.post('/signup', isValidAuth, signUp);

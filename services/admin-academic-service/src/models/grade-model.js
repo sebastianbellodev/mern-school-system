@@ -5,9 +5,10 @@ const GRADE_SCHEMA = new mongoose.Schema({
     type: Number,
     required: true,
   },
-  partial: {
-    type: mongoose.Schema.Types.ObjectId,
-    ref: 'partials',
+  deleted: {
+    type: Boolean,
+    required: true,
+    default: false,
   },
   partial: {
     type: mongoose.Schema.Types.ObjectId,

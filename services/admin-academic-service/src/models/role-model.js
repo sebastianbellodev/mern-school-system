@@ -6,7 +6,11 @@ const ROLE_SCHEMA = new mongoose.Schema({
     required: true,
     unique: true,
   },
-  users: [{ type: mongoose.Schema.Types.ObjectId, ref: 'users' }],
+  deleted: {
+    type: Boolean,
+    required: true,
+    default: false,
+  },
 });
 
 export default mongoose.model('roles', ROLE_SCHEMA);

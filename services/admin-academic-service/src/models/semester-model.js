@@ -9,7 +9,11 @@ const SEMESTER_SCHEMA = new mongoose.Schema({
     type: Date,
     required: true,
   },
-  partials: [{ type: mongoose.Schema.Types.ObjectId, ref: 'partials' }],
+  deleted: {
+    type: Boolean,
+    required: true,
+    default: false,
+  },
 });
 
 export default mongoose.model('semesters', SEMESTER_SCHEMA);

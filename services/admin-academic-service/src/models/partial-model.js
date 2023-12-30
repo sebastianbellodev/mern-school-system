@@ -13,11 +13,15 @@ const PARTIAL_SCHEMA = new mongoose.Schema({
     type: Date,
     required: true,
   },
+  deleted: {
+    type: Boolean,
+    required: true,
+    default: false,
+  },
   semester: {
     type: mongoose.Schema.Types.ObjectId,
     ref: 'semesters',
   },
-  grades: [{ type: mongoose.Schema.Types.ObjectId, ref: 'grades' }],
 });
 
 export default mongoose.model('partials', PARTIAL_SCHEMA);

@@ -28,7 +28,11 @@ const TUTOR_SCHEMA = new mongoose.Schema({
     required: true,
     trim: true,
   },
-  students: [{ type: mongoose.Schema.Types.ObjectId, ref: 'students' }],
+  deleted: {
+    type: Boolean,
+    required: true,
+    default: false,
+  },
 });
 
 export default mongoose.model('tutors', TUTOR_SCHEMA);
