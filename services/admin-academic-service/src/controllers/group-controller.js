@@ -9,9 +9,18 @@ const json = (operation, document) => {
       id: document._id,
       number: document.number,
       deleted: document.deleted,
-      partial: document.partial,
-      student: document.student,
-      subject: document.subject,
     },
   };
 };
+
+export const get = async (request, response) => {};
+
+export const getById = async (request, response) => {};
+
+export const getByNumber = async (request, response) => {};
+
+export const log = async (request, response) => {};
+
+export const remove = async (request, response) => {};
+
+export const update = async (request, response) => {};
