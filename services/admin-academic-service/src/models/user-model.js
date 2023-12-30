@@ -12,17 +12,14 @@ const USER_SCHEMA = new mongoose.Schema({
     required: true,
     trim: true,
   },
+  deleted: {
+    type: Boolean,
+    required: true,
+    default: false,
+  },
   role: {
     type: mongoose.Schema.Types.ObjectId,
     ref: 'roles',
-  },
-  student: {
-    type: mongoose.Schema.Types.ObjectId,
-    ref: 'students',
-  },
-  teacher: {
-    type: mongoose.Schema.Types.ObjectId,
-    ref: 'teachers',
   },
 });
 

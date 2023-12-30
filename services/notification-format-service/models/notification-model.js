@@ -25,6 +25,11 @@ const NOTIFICATION_SCHEMA = new mongoose.Schema({
     type: mongoose.Schema.Types.ObjectId,
     ref: 'types',
   },
+  deleted: {
+    type: Boolean,
+    required: true,
+    default: false,
+  },
 });
 
 export default mongoose.model('notifications', NOTIFICATION_SCHEMA);

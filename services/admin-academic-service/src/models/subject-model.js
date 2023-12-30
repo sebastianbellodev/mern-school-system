@@ -1,23 +1,21 @@
 import mongoose from 'mongoose';
 
-const PARTIAL_SCHEMA = new mongoose.Schema({
-  number: {
-    type: Number,
+const SUBJECT_SCHEMA = new mongoose.Schema({
+  name: {
+    type: String,
+    required: true,
+    unique: true,
+  },
+  isJobTraining: {
+    type: Boolean,
     required: true,
   },
-  startDate: {
-    type: Date,
+  deleted: {
+    type: Boolean,
     required: true,
+    default: false,
   },
-  endDate: {
-    type: Date,
-    required: true,
-  },
-  semester: {
-    type: mongoose.Schema.Types.ObjectId,
-    ref: 'semesters',
-  },
-  grades: [{ type: mongoose.Schema.Types.ObjectId, ref: 'grades' }],
+  groups: [{ type: mongoose.Schema.Types.ObjectId, ref: 'groups' }],
 });
 
-export default mongoose.model('partials', PARTIAL_SCHEMA);
+export default mongoose.model('subjects', SUBJECT_SCHEMA);

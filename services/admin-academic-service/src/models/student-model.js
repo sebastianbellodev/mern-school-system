@@ -40,6 +40,11 @@ const STUDENT_SCHEMA = new mongoose.Schema({
     required: true,
     trim: true,
   },
+  deleted: {
+    type: Boolean,
+    required: true,
+    default: false,
+  },
   user: {
     type: mongoose.Schema.Types.ObjectId,
     ref: 'users',
@@ -49,7 +54,6 @@ const STUDENT_SCHEMA = new mongoose.Schema({
     ref: 'tutors',
   },
   groups: [{ type: mongoose.Schema.Types.ObjectId, ref: 'groups' }],
-  grades: [{ type: mongoose.Schema.Types.ObjectId, ref: 'grades' }],
 });
 
 export default mongoose.model('students', STUDENT_SCHEMA);

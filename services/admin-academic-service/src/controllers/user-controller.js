@@ -1,8 +1,8 @@
 import bcrypt from 'bcrypt';
+import User from '../models/user-model.js';
+import signToken from '../security/jwt.js';
 import body from '../tools/body.js';
 import code from '../tools/code.js';
-import User from '../models/user-model.js';
-import { signToken } from '../security/jwt.js';
 
 const json = (operation, document) => {
   return {
@@ -10,11 +10,13 @@ const json = (operation, document) => {
     user: {
       id: document._id,
       username: document.username,
+      deleted: document.deleted,
+      role: document.role,
     },
   };
 };
 
-export const getUser = async (request, response) => {
+export const getByUsername = async (request, response) => {
   const { username } = request.params;
   try {
     const document = await User.findOne({ username: username });
@@ -54,6 +56,24 @@ export const login = async (request, response) => {
 export const logOut = (request, response) => {
   response.cookie('token', '', { expires: new Date(0) });
   return response.send({ operation: body.LOG_OUT });
+};
+
+export const remove = async (request, response) => {
+  const { username } = request.body;
+  try {
+    document = await User.findOneAndUpdate(
+      { username: username },
+      { deleted: true },
+      { new: true }
+    );
+    if (document) {
+      response.status(code.OK).send(json(body.DELETE, document));
+    } else {
+      response.status(code.NOT_FOUND).send({ error: body.NOT_FOUND });
+    }
+  } catch (error) {
+    response.status(code.INTERNAL_SERVER_ERROR).send({ error: body.ERROR });
+  }
 };
 
 export const signUp = async (request, response) => {
