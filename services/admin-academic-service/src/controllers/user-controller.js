@@ -16,6 +16,12 @@ const json = (operation, document) => {
   };
 };
 
+export const get = async (request, response) => {};
+
+export const getById = async (request, response) => {};
+
+export const getByRole = async (request, response) => {};
+
 export const getByUsername = async (request, response) => {
   const { username } = request.params;
   try {

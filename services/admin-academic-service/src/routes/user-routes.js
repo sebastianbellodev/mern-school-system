@@ -1,5 +1,8 @@
 import Router from 'express';
 import {
+  get,
+  getById,
+  getByRole,
   getByUsername,
   login,
   logOut,
@@ -12,11 +15,14 @@ import isValidAuth from '../security/basic.js';
 
 const router = Router();
 
-router.delete(':/username', isValidToken, remove);
-router.get('/:username', isValidToken, getByUsername);
-router.post('/login', isValidAuth, login);
-router.post('/logout', logOut);
-router.post('/signup', isValidAuth, signUp);
-router.put('/:username', isValidToken, update);
+router.delete('/user', isValidToken, remove);
+router.get('/user', isValidToken, get);
+router.get('/user/id', isValidToken, getById);
+router.get('/user/role', isValidToken, getByRole);
+router.get('/user/username', isValidToken, getByUsername);
+router.post('/user/login', isValidAuth, login);
+router.post('/user/logout', logOut);
+router.post('/user/signup', isValidAuth, signUp);
+router.put('/user', isValidToken, update);
 
 export default router;

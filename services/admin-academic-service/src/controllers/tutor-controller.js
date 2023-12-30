@@ -6,6 +6,7 @@ const json = (operation, document) => {
   return {
     operation,
     tutor: {
+      id: document._id,
       name: document.name,
       paternalSurname: document.paternalSurname,
       maternalSurname: document.maternalSurname,
@@ -16,3 +17,15 @@ const json = (operation, document) => {
     },
   };
 };
+
+export const get = async (request, response) => {};
+
+export const getByEmailAddress = async (request, response) => {};
+
+export const getById = async (request, response) => {};
+
+export const log = async (request, response) => {};
+
+export const remove = async (request, response) => {};
+
+export const update = async (request, response) => {};
