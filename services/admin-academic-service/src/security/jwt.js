@@ -21,7 +21,7 @@ export const signToken = (id) => {
   });
 };
 
-export const isValidToken = (request, response, callback) => {
+export default function isValidToken(request, response, callback) {
   const { token } = request.cookies;
   if (!token) {
     return response.status(code.FORBIDDEN).send({ error: body.MISSING_TOKEN });
@@ -35,4 +35,4 @@ export const isValidToken = (request, response, callback) => {
     request.id = id;
     return callback();
   });
-};
+}
