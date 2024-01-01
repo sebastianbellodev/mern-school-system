@@ -1,4 +1,5 @@
 import cookieParser from 'cookie-parser';
+import dotenv from 'dotenv';
 import express from 'express';
 import morgan from 'morgan';
 import grade from './routes/grade-routes.js';
@@ -14,25 +15,26 @@ import tutor from './routes/tutor-routes.js';
 import user from './routes/user-routes.js';
 import code from './tools/code.js';
 
-const app = express();
+dotenv.config();
 
-const API = '/api';
+const app = express();
+const api = '/api';
 
 app.use(morgan('dev'));
 app.use(express.json());
 app.use(cookieParser());
 
-app.use(API, grade);
-app.use(API, group);
-app.use(API, partial);
-app.use(API, propadeuticArea);
-app.use(API, role);
-app.use(API, semester);
-app.use(API, student);
-app.use(API, subject);
-app.use(API, teacher);
-app.use(API, tutor);
-app.use(API, user);
+app.use(api, grade);
+app.use(api, group);
+app.use(api, partial);
+app.use(api, propadeuticArea);
+app.use(api, role);
+app.use(api, semester);
+app.use(api, student);
+app.use(api, subject);
+app.use(api, teacher);
+app.use(api, tutor);
+app.use(api, user);
 
 app.use((request, response, next) => {
   response.sendStatus(code.OK);

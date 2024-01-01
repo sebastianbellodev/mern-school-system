@@ -5,29 +5,60 @@ import body from '../tools/body.js';
 import code from '../tools/code.js';
 
 const json = (operation, document) => {
-  return {
-    operation,
-    user: {
-      id: document._id,
-      username: document.username,
-      deleted: document.deleted,
-      role: document.role,
-    },
-  };
+  if (Array.isArray(document)) {
+    return {
+      operation,
+      users: document.map((user) => ({
+        id: user._id,
+        username: user.username,
+        deleted: user.deleted,
+        role: user.role,
+      })),
+    };
+  } else {
+    return {
+      operation,
+      user: {
+        id: document._id,
+        username: document.username,
+        deleted: document.deleted,
+        role: document.role,
+      },
+    };
+  }
 };
 
-export const get = async (request, response) => {};
+export const get = async (request, response) => {
+  try {
+    const users = await User.find({ deleted: false });
+    if (users.length > 0) {
+      response.status(code.OK).send(json(body.RETRIEVE, users));
+    }
+  } catch (error) {
+    response.status(code.INTERNAL_SERVER_ERROR).send({ error: body.ERROR });
+  }
+};
 
-export const getById = async (request, response) => {};
+export const getById = async (request, response) => {
+  try {
+  } catch (error) {
+    response.status(code.INTERNAL_SERVER_ERROR).send({ error: body.ERROR });
+  }
+};
 
-export const getByRole = async (request, response) => {};
+export const getByRole = async (request, response) => {
+  try {
+  } catch (error) {
+    response.status(code.INTERNAL_SERVER_ERROR).send({ error: body.ERROR });
+  }
+};
 
 export const getByUsername = async (request, response) => {
-  const { username } = request.params;
+  const username = request.body.username;
   try {
-    const document = await User.findOne({ username: username });
-    if (document) {
-      response.send(json(body.RETRIEVE, document));
+    const user = await User.findOne({ username: username });
+    if (user) {
+      response.send(json(body.RETRIEVE, user));
     } else {
       response.status(code.NOT_FOUND).send({ error: body.NOT_FOUND });
     }
