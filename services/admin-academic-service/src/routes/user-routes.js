@@ -10,8 +10,8 @@ import {
   signUp,
   update,
 } from '../controllers/user-controller.js';
-import isValidToken from '../security/jwt.js';
 import isValidAuth from '../security/basic.js';
+import isValidToken from '../security/jwt.js';
 
 const router = Router();
 
