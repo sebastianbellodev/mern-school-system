@@ -1,6 +1,9 @@
 import basicAuth from 'basic-auth';
+import dotenv from 'dotenv';
 import body from '../tools/body.js';
 import code from '../tools/code.js';
+
+dotenv.config();
 
 const key = {
   USERNAME: process.env.AUTH_USERNAME,

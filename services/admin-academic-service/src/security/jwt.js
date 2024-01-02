@@ -1,6 +1,9 @@
 import jwt from 'jsonwebtoken';
+import dotenv from 'dotenv';
 import body from '../tools/body.js';
 import code from '../tools/code.js';
+
+dotenv.config();
 
 const KEY = process.env.JWT_KEY;
 
