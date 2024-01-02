@@ -13,8 +13,6 @@ const key = {
 const isValidAuth = (request, response, callback) => {
   const auth = basicAuth(request);
   if (auth) {
-    console.log('Authorization:', auth);
-    console.log('USER ' + key.USERNAME);
     if (auth.name === key.USERNAME && auth.pass === key.PASSWORD) {
       return callback();
     }
