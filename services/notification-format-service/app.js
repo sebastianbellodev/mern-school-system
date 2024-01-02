@@ -7,16 +7,15 @@ import type from './routes/type-routes.js';
 import code from './tools/code.js';
 
 const app = express();
-
-const API = '/api';
+const api = '/api';
 
 app.use(morgan('dev'));
 app.use(express.json());
 app.use(cookieParser());
 
-app.use(API, format);
-app.use(API, notification);
-app.use(API, type);
+app.use(api, format);
+app.use(api, notification);
+app.use(api, type);
 
 app.use((request, response, next) => {
   response.sendStatus(code.OK);

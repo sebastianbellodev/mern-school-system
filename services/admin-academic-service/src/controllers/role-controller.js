@@ -1,16 +1,27 @@
-import Role from '../models/role-model.js';
 import body from '../tools/body.js';
 import code from '../tools/code.js';
+import Role from '../models/role-model.js';
 
-const json = (operation, document) => {
-  return {
-    operation,
-    role: {
-      id: document._id,
-      name: document.name,
-      deleted: document.deleted,
-    },
-  };
+const json = (message, document) => {
+  if (Array.isArray(document)) {
+    return {
+      message,
+      roles: document.map((role) => ({
+        id: role._id,
+        name: role.name,
+        deleted: role.deleted,
+      })),
+    };
+  } else {
+    return {
+      message,
+      role: {
+        id: document._id,
+        name: document.name,
+        deleted: document.deleted,
+      },
+    };
+  }
 };
 
 export const get = async (request, response) => {};

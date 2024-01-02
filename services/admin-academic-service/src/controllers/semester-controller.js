@@ -1,17 +1,28 @@
-import Semester from '../models/semester-model.js';
 import body from '../tools/body.js';
 import code from '../tools/code.js';
+import Semester from '../models/semester-model.js';
 
-const json = (operation, document) => {
-  return {
-    operation,
-    semester: {
-      id: document._id,
-      startDate: document.startDate,
-      endDate: document.endDate,
-      deleted: document.deleted,
-    },
-  };
+const json = (message, document) => {
+  if (Array.isArray(document)) {
+    return {
+      message,
+      semesters: document.map((semester) => ({
+        id: semester._id,
+        name: semester.name,
+        deleted: semester.deleted,
+      })),
+    };
+  } else {
+    return {
+      message,
+      semester: {
+        id: document._id,
+        startDate: document.startDate,
+        endDate: document.endDate,
+        deleted: document.deleted,
+      },
+    };
+  }
 };
 
 export const get = async (request, response) => {};

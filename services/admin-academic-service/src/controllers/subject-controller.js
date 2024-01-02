@@ -1,18 +1,31 @@
-import Subject from '../models/subject-model.js';
 import body from '../tools/body.js';
 import code from '../tools/code.js';
+import Subject from '../models/subject-model.js';
 
-const json = (operation, document) => {
-  return {
-    operation,
-    subject: {
-      id: document._id,
-      name: document.name,
-      isJobTraining: document.isJobTraining,
-      deleted: document.deleted,
-      groups: document.groups,
-    },
-  };
+const json = (message, document) => {
+  if (Array.isArray(document)) {
+    return {
+      message,
+      subjects: document.map((subject) => ({
+        id: subject._id,
+        name: subject.name,
+        isJobTraining: subject.isJobTraining,
+        deleted: subject.deleted,
+        groups: subject.groups,
+      })),
+    };
+  } else {
+    return {
+      message,
+      subject: {
+        id: document._id,
+        name: document.name,
+        isJobTraining: document.isJobTraining,
+        deleted: document.deleted,
+        groups: document.groups,
+      },
+    };
+  }
 };
 
 export const get = async (request, response) => {};

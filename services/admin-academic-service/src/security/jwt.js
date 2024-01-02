@@ -9,35 +9,25 @@ const KEY = process.env.JWT_KEY;
 
 export const signToken = (id) => {
   return new Promise((resolve, reject) => {
-    jwt.sign(
-      {
-        id,
-      },
-      KEY,
-      {
-        expiresIn: '2h',
-      },
-      (error, token) => {
-        !error ? resolve(token) : reject(error);
-      }
-    );
+    jwt.sign({ id }, KEY, { expiresIn: '2h' }, (error, token) => {
+      !error ? resolve(token) : reject(error);
+    });
   });
 };
 
-const isValidToken = (request, response, callback) => {
-  const token = request.cookies;
-  if (!token) {
+export const isValidToken = (request, response, callback) => {
+  const token = request.cookies.token;
+  if (token) {
+    jwt.verify(token, KEY, (error, id) => {
+      if (error) {
+        return response
+          .status(code.FORBIDDEN)
+          .send({ error: body.INVALID_TOKEN });
+      }
+      request.id = id;
+      return callback();
+    });
+  } else {
     return response.status(code.FORBIDDEN).send({ error: body.MISSING_TOKEN });
   }
-  jwt.verify(token, KEY, (error, id) => {
-    if (error) {
-      return response
-        .status(code.FORBIDDEN)
-        .send({ error: body.INVALID_TOKEN });
-    }
-    request.id = id;
-    return callback();
-  });
 };
-
-export default isValidToken;

@@ -1,6 +1,6 @@
 const body = {
-  ALREADY_REGISTERED: 'Data already registered.',
   DELETE: 'Data deleted successfully.',
+  ENRROLLED: 'Data already registered.',
   ERROR: "Something went wrong. Don't worry, we'll be fixing it up soon...",
   INVALID_AUTHORIZATION: 'Invalid authorization.',
   INVALID_TOKEN: 'Invalid token used.',
@@ -13,7 +13,6 @@ const body = {
   POST: 'Data registered successfully.',
   PUT: 'Data updated successfully.',
   RETRIEVE: 'Data retrieved.',
-  SIGN_UP: 'Signed up successfully.',
 };
 
 export default body;

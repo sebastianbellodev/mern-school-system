@@ -10,7 +10,7 @@ const key = {
   PASSWORD: process.env.AUTH_PASSWORD,
 };
 
-const isValidAuth = (request, response, callback) => {
+export const isValidAuth = (request, response, callback) => {
   const auth = basicAuth(request);
   if (auth) {
     if (auth.name === key.USERNAME && auth.pass === key.PASSWORD) {
@@ -24,5 +24,3 @@ const isValidAuth = (request, response, callback) => {
     .status(code.UNAUTHORIZED)
     .send({ error: body.MISSING_AUTHORIZATION });
 };
-
-export default isValidAuth;

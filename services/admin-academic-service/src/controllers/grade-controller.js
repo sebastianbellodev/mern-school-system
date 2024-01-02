@@ -1,19 +1,33 @@
-import Grade from '../models/grade-model.js';
 import body from '../tools/body.js';
 import code from '../tools/code.js';
+import Grade from '../models/grade-model.js';
 
-const json = (operation, document) => {
-  return {
-    operation,
-    grade: {
-      id: document._id,
-      number: document.number,
-      deleted: document.deleted,
-      partial: document.partial,
-      student: document.student,
-      subject: document.subject,
-    },
-  };
+const json = (message, document) => {
+  if (Array.isArray(document)) {
+    return {
+      message,
+      grades: document.map((grade) => ({
+        id: grade._id,
+        number: grade.number,
+        deleted: grade.deleted,
+        partial: grade.partial,
+        student: grade.student,
+        subject: grade.subject,
+      })),
+    };
+  } else {
+    return {
+      message,
+      grade: {
+        id: document._id,
+        number: document.number,
+        deleted: document.deleted,
+        partial: document.partial,
+        student: document.student,
+        subject: document.subject,
+      },
+    };
+  }
 };
 
 export const get = async (request, response) => {};

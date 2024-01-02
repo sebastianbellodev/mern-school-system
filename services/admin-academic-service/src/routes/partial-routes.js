@@ -9,7 +9,7 @@ import {
   remove,
   update,
 } from '../controllers/partial-controller.js';
-import isValidToken from '../security/jwt.js';
+import { isValidToken } from '../security/jwt.js';
 
 const router = Router();
 
