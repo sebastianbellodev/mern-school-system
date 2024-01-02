@@ -7,7 +7,7 @@ import {
   remove,
   update,
 } from '../controllers/tutor-controller.js';
-import isValidToken from '../security/jwt.js';
+import { isValidToken } from '../security/jwt.js';
 
 const router = Router();
 

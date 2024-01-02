@@ -1,6 +1,14 @@
 import basicAuth from 'basic-auth';
+import dotenv from 'dotenv';
 import body from '../tools/body.js';
 import code from '../tools/code.js';
+
+dotenv.config();
+
+const key = {
+  USERNAME: process.env.AUTH_USERNAME,
+  PASSWORD: process.env.AUTH_PASSWORD,
+};
 
 export const isValidAuth = (request, response, callback) => {
   const auth = basicAuth(request);
@@ -15,9 +23,4 @@ export const isValidAuth = (request, response, callback) => {
   return response
     .status(code.UNAUTHORIZED)
     .send({ error: body.MISSING_AUTHORIZATION });
-};
-
-const key = {
-  USERNAME: process.env.AUTH_USERNAME,
-  PASSWORD: process.env.AUTH_PASSWORD,
 };
