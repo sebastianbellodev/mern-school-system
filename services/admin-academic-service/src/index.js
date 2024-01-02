@@ -1,5 +1,5 @@
 import app from './app.js';
-import { connectToAtlas } from './data/database.js';
+import connectToAtlas from './data/database.js';
 
 const PORT = 3000;
 

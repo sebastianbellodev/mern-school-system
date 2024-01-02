@@ -1,6 +1,9 @@
 import basicAuth from 'basic-auth';
+import dotenv from 'dotenv';
 import body from '../tools/body.js';
 import code from '../tools/code.js';
+
+dotenv.config();
 
 const key = {
   USERNAME: process.env.AUTH_USERNAME,
@@ -10,6 +13,8 @@ const key = {
 const isValidAuth = (request, response, callback) => {
   const auth = basicAuth(request);
   if (auth) {
+    console.log('Authorization:', auth);
+    console.log('USER ' + key.USERNAME);
     if (auth.name === key.USERNAME && auth.pass === key.PASSWORD) {
       return callback();
     }
