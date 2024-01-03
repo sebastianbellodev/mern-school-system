@@ -24,14 +24,96 @@ const json = (message, document) => {
   }
 };
 
-export const get = async (request, response) => {};
+export const get = async (request, response) => {
+  try {
+    let document = await Group.find({ deleted: false });
+    if (document.length > 0) {
+      response.status(code.OK).send(json(body.RETRIEVE, document));
+    } else {
+      response.status(code.NOT_FOUND).send({ error: body.NOT_FOUND });
+    }
+  } catch (error) {
+    response.status(code.INTERNAL_SERVER_ERROR).send({ error: body.ERROR });
+  }
+};
 
-export const getById = async (request, response) => {};
+export const getById = async (request, response) => {
+  let id = request.body.id;
+  try {
+    let document = await Group.findOne({ _id: id, deleted: false });
+    if (document) {
+      response.status(code.OK).send(json(body.RETRIEVE, document));
+    } else {
+      response.status(code.NOT_FOUND).send({ error: body.NOT_FOUND });
+    }
+  } catch (error) {
+    response.status(code.INTERNAL_SERVER_ERROR).send({ error: body.ERROR });
+  }
+};
 
-export const getByNumber = async (request, response) => {};
+export const getByNumber = async (request, response) => {
+  let number = request.body.number;
+  try {
+    let document = await Group.findOne({ number: number, deleted: false });
+    if (document) {
+      response.status(code.OK).send(json(body.RETRIEVE, document));
+    } else {
+      response.status(code.NOT_FOUND).send({ error: body.NOT_FOUND });
+    }
+  } catch (error) {
+    response.status(code.INTERNAL_SERVER_ERROR).send({ error: body.ERROR });
+  }
+};
 
-export const log = async (request, response) => {};
+export const log = async (request, response) => {
+  let number = request.body.number;
+  try {
+    let group = await Group.findOne({ number: number, deleted: false });
+    if (!group) {
+      group = new Group({ number: number });
+      let document = await group.save();
+      response.status(code.CREATED).send(json(body.POST, document));
+    } else {
+      response.status(code.BAD_REQUEST).send({ error: body.ENRROLLED });
+    }
+  } catch (error) {
+    response.status(code.INTERNAL_SERVER_ERROR).send({ error: body.ERROR });
+  }
+};
 
-export const remove = async (request, response) => {};
+export const remove = async (request, response) => {
+  let id = request.body.id;
+  try {
+    let group = await Group.findOne({ _id: id, deleted: false });
+    if (group) {
+      group.deleted = true;
+      let document = await group.save();
+      response.status(code.OK).send(json(body.DELETE, document));
+    } else {
+      response.status(code.NOT_FOUND).send({ error: body.NOT_FOUND });
+    }
+  } catch (error) {
+    response.status(code.INTERNAL_SERVER_ERROR).send({ error: body.ERROR });
+  }
+};
 
-export const update = async (request, response) => {};
+export const update = async (request, response) => {
+  let { id, number } = request.body;
+  try {
+    let group = await Group.findOne({ number: number, deleted: false });
+    if (!group) {
+      group = await Group.findOne({ _id: id, deleted: false });
+      if (group) {
+        group.number = number;
+        let document = await group.save();
+        response.status(code.OK).send(json(body.PUT, document));
+      } else {
+        response.status(code.NOT_FOUND).send({ error: body.NOT_FOUND });
+      }
+    } else {
+      response.status(code.BAD_REQUEST).send({ error: body.ENRROLLED });
+    }
+  } catch (error) {
+    response.status(code.INTERNAL_SERVER_ERROR).send({ error: body.ERROR });
+  }
+};

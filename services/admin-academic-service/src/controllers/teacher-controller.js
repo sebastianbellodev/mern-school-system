@@ -12,10 +12,10 @@ const json = (message, document) => {
         paternalSurname: teacher.paternalSurname,
         maternalSurname: teacher.maternalSurname,
         emailAddress: teacher.emailAddress,
-        deleted: teacher.deleted,
-        user: teacher.user,
         groups: teacher.groups,
         subjects: teacher.subjects,
+        user: teacher.user,
+        deleted: teacher.deleted,
       })),
     };
   } else {
@@ -27,16 +27,27 @@ const json = (message, document) => {
         paternalSurname: document.paternalSurname,
         maternalSurname: document.maternalSurname,
         emailAddress: document.emailAddress,
-        deleted: document.deleted,
-        user: document.user,
         groups: document.groups,
         subjects: document.subjects,
+        user: document.user,
+        deleted: document.deleted,
       },
     };
   }
 };
 
-export const get = async (request, response) => {};
+export const get = async (request, response) => {
+  try {
+    let document = await Teacher.find({ deleted: false });
+    if (document.length > 0) {
+      response.status(code.OK).send(json(body.RETRIEVE, document));
+    } else {
+      response.status(code.NOT_FOUND).send({ error: body.NOT_FOUND });
+    }
+  } catch (error) {
+    response.status(code.INTERNAL_SERVER_ERROR).send({ error: body.ERROR });
+  }
+};
 
 export const getByEmailAddress = async (request, response) => {};
 
@@ -48,8 +59,92 @@ export const getBySubject = async (request, response) => {};
 
 export const getByUser = async (request, response) => {};
 
-export const log = async (request, response) => {};
+export const log = async (request, response) => {
+  let {
+    name,
+    paternalSurname,
+    maternalSurname,
+    emailAddress,
+    groups,
+    subjects,
+    user,
+  } = request.body;
+  try {
+    let teacher = await Teacher.findOne({
+      emailAddress: emailAddress,
+      deleted: false,
+    });
+    if (!teacher) {
+      teacher = new Teacher({
+        name: name,
+        paternalSurname: paternalSurname,
+        maternalSurname: maternalSurname,
+        emailAddress: emailAddress,
+        groups: groups,
+        subjects: subjects,
+        user: user,
+      });
+      let document = await teacher.save();
+      response.status(code.CREATED).send(json(body.POST, document));
+    } else {
+      response.status(code.BAD_REQUEST).send({ error: body.ENRROLLED });
+    }
+  } catch (error) {
+    response.status(code.INTERNAL_SERVER_ERROR).send({ error: body.ERROR });
+  }
+};
 
-export const remove = async (request, response) => {};
+export const remove = async (request, response) => {
+  let id = request.body.id;
+  try {
+    let teacher = await Teacher.findOne({ _id: id, deleted: false });
+    if (teacher) {
+      teacher.deleted = true;
+      let document = await teacher.save();
+      response.status(code.OK).send(json(body.DELETE, document));
+    } else {
+      response.status(code.NOT_FOUND).send({ error: body.NOT_FOUND });
+    }
+  } catch (error) {
+    response.status(code.INTERNAL_SERVER_ERROR).send({ error: body.ERROR });
+  }
+};
 
-export const update = async (request, response) => {};
+export const update = async (request, response) => {
+  let {
+    id,
+    name,
+    paternalSurname,
+    maternalSurname,
+    emailAddress,
+    groups,
+    subjects,
+    user,
+  } = request.body;
+  try {
+    let teacher = await Teacher.findOne({
+      emailAddress: emailAddress,
+      deleted: false,
+    });
+    if (!teacher) {
+      teacher = await Teacher.findOne({ _id: id, deleted: false });
+      if (teacher) {
+        teacher.name = name;
+        teacher.paternalSurname = paternalSurname;
+        teacher.maternalSurname = maternalSurname;
+        teacher.emailAddress = emailAddress;
+        teacher.groups = groups;
+        teacher.subjects = subjects;
+        teacher.user = user;
+        let document = await teacher.save();
+        response.status(code.OK).send(json(body.PUT, document));
+      } else {
+        response.status(code.NOT_FOUND).send({ error: body.NOT_FOUND });
+      }
+    } else {
+      response.status(code.BAD_REQUEST).send({ error: body.ENRROLLED });
+    }
+  } catch (error) {
+    response.status(code.INTERNAL_SERVER_ERROR).send({ error: body.ERROR });
+  }
+};

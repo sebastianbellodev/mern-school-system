@@ -5,21 +5,20 @@ const USER_SCHEMA = new mongoose.Schema({
     type: String,
     required: true,
     trim: true,
-    unique: true,
   },
   password: {
     type: String,
     required: true,
     trim: true,
   },
+  role: {
+    type: mongoose.Schema.Types.ObjectId,
+    ref: 'roles',
+  },
   deleted: {
     type: Boolean,
     required: true,
     default: false,
-  },
-  role: {
-    type: mongoose.Schema.Types.ObjectId,
-    ref: 'roles',
   },
 });
 

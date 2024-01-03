@@ -4,16 +4,12 @@ const PROPADEUTIC_AREA_SCHEMA = new mongoose.Schema({
   name: {
     type: String,
     required: true,
-    unique: true,
   },
+  groups: [{ type: mongoose.Schema.Types.ObjectId, ref: 'groups' }],
   deleted: {
     type: Boolean,
     required: true,
     default: false,
-  },
-  group: {
-    type: mongoose.Schema.Types.ObjectId,
-    ref: 'groups',
   },
 });
 
