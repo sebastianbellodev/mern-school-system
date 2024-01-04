@@ -49,15 +49,78 @@ export const get = async (request, response) => {
   }
 };
 
-export const getByEmailAddress = async (request, response) => {};
+export const getByEmailAddress = async (request, response) => {
+  let emailAddress = request.body.emailAddress;
+  try {
+    let document = await Teacher.findOne({
+      emailAddress: emailAddress,
+      deleted: false,
+    });
+    if (document) {
+      response.status(code.OK).send(json(body.RETRIEVE, document));
+    } else {
+      response.status(code.NOT_FOUND).send({ error: body.NOT_FOUND });
+    }
+  } catch (error) {
+    response.status(code.INTERNAL_SERVER_ERROR).send({ error: body.ERROR });
+  }
+};
 
-export const getByGroup = async (request, response) => {};
+export const getByGroup = async (request, response) => {
+  let group = request.body.groups[0];
+  try {
+    let document = await Teacher.find({ groups: group, deleted: false });
+    if (document.length > 0) {
+      response.status(code.OK).send(json(body.RETRIEVE, document));
+    } else {
+      response.status(code.NOT_FOUND).send({ error: body.NOT_FOUND });
+    }
+  } catch (error) {
+    response.status(code.INTERNAL_SERVER_ERROR).send({ error: body.ERROR });
+  }
+};
 
-export const getById = async (request, response) => {};
+export const getById = async (request, response) => {
+  let id = request.body.id;
+  try {
+    let document = await Teacher.findOne({ _id: id, deleted: false });
+    if (document) {
+      response.status(code.OK).send(json(body.RETRIEVE, document));
+    } else {
+      response.status(code.NOT_FOUND).send({ error: body.NOT_FOUND });
+    }
+  } catch (error) {
+    response.status(code.INTERNAL_SERVER_ERROR).send({ error: body.ERROR });
+  }
+};
 
-export const getBySubject = async (request, response) => {};
+export const getBySubject = async (request, response) => {
+  let subject = request.body.subjects[0];
+  try {
+    let document = await Teacher.find({ subjects: subject, deleted: deleted });
+    if (document.length > 0) {
+      response.status(code.OK).send(json(body.RETRIEVE, document));
+    } else {
+      response.status(code.NOT_FOUND).send({ error: body.NOT_FOUND });
+    }
+  } catch (error) {
+    response.status(code.INTERNAL_SERVER_ERROR).send({ error: body.ERROR });
+  }
+};
 
-export const getByUser = async (request, response) => {};
+export const getByUser = async (request, response) => {
+  let user = request.body.user;
+  try {
+    let document = await Teacher.findOne({ user: user, deleted: false });
+    if (document) {
+      response.status(code.OK).send(json(body.RETRIEVE, document));
+    } else {
+      response.status(code.NOT_FOUND).send({ error: body.NOT_FOUND });
+    }
+  } catch (error) {
+    response.status(code.INTERNAL_SERVER_ERROR).send({ error: body.ERROR });
+  }
+};
 
 export const log = async (request, response) => {
   let {
