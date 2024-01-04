@@ -4,7 +4,6 @@ const ROLE_SCHEMA = new mongoose.Schema({
   name: {
     type: String,
     required: true,
-    unique: true,
   },
   deleted: {
     type: Boolean,

@@ -5,7 +5,6 @@ const STUDENT_SCHEMA = new mongoose.Schema({
     type: String,
     required: true,
     trim: true,
-    unique: true,
   },
   name: {
     type: String,
@@ -19,41 +18,40 @@ const STUDENT_SCHEMA = new mongoose.Schema({
     type: String,
     required: true,
   },
-  address: {
-    type: String,
-    required: true,
-  },
   curp: {
     type: String,
     required: true,
     trim: true,
     unique: true,
   },
+  address: {
+    type: String,
+    required: true,
+  },
   emailAddress: {
     type: String,
     required: true,
     trim: true,
-    unique: true,
   },
   phone: {
     type: String,
     required: true,
     trim: true,
   },
-  deleted: {
-    type: Boolean,
-    required: true,
-    default: false,
+  groups: [{ type: mongoose.Schema.Types.ObjectId, ref: 'groups' }],
+  tutor: {
+    type: mongoose.Schema.Types.ObjectId,
+    ref: 'tutors',
   },
   user: {
     type: mongoose.Schema.Types.ObjectId,
     ref: 'users',
   },
-  tutor: {
-    type: mongoose.Schema.Types.ObjectId,
-    ref: 'tutors',
+  deleted: {
+    type: Boolean,
+    required: true,
+    default: false,
   },
-  groups: [{ type: mongoose.Schema.Types.ObjectId, ref: 'groups' }],
 });
 
 export default mongoose.model('students', STUDENT_SCHEMA);

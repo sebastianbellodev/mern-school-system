@@ -13,14 +13,14 @@ const PARTIAL_SCHEMA = new mongoose.Schema({
     type: Date,
     required: true,
   },
+  semester: {
+    type: mongoose.Schema.Types.ObjectId,
+    ref: 'semesters',
+  },
   deleted: {
     type: Boolean,
     required: true,
     default: false,
-  },
-  semester: {
-    type: mongoose.Schema.Types.ObjectId,
-    ref: 'semesters',
   },
 });
 

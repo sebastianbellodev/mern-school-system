@@ -4,7 +4,6 @@ const GROUP_SCHEMA = new mongoose.Schema({
   number: {
     type: Number,
     required: true,
-    unique: true,
   },
   deleted: {
     type: Boolean,

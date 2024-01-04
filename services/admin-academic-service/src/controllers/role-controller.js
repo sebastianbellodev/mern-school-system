@@ -24,14 +24,96 @@ const json = (message, document) => {
   }
 };
 
-export const get = async (request, response) => {};
+export const get = async (request, response) => {
+  try {
+    let document = await Role.find({ deleted: false });
+    if (document.length > 0) {
+      response.status(code.OK).send(json(body.RETRIEVE, document));
+    } else {
+      response.status(code.NOT_FOUND).send({ error: body.NOT_FOUND });
+    }
+  } catch (error) {
+    response.status(code.INTERNAL_SERVER_ERROR).send({ error: body.ERROR });
+  }
+};
 
-export const getById = async (request, response) => {};
+export const getById = async (request, response) => {
+  let id = request.body.id;
+  try {
+    let document = await Role.findOne({ _id: id, deleted: false });
+    if (document) {
+      response.status(code.OK).send(json(body.RETRIEVE, document));
+    } else {
+      response.status(code.NOT_FOUND).send({ error: body.NOT_FOUND });
+    }
+  } catch (error) {
+    response.status(code.INTERNAL_SERVER_ERROR).send({ error: body.ERROR });
+  }
+};
 
-export const getByName = async (request, response) => {};
+export const getByName = async (request, response) => {
+  let name = request.body.name;
+  try {
+    let document = await Role.findOne({ name: name, deleted: false });
+    if (document) {
+      response.status(code.OK).send(json(body.RETRIEVE, document));
+    } else {
+      response.status(code.NOT_FOUND).send({ error: body.NOT_FOUND });
+    }
+  } catch (error) {
+    response.status(code.INTERNAL_SERVER_ERROR).send({ error: body.ERROR });
+  }
+};
 
-export const log = async (request, response) => {};
+export const log = async (request, response) => {
+  let name = request.body.name;
+  try {
+    let role = await Role.findOne({ name: name, deleted: false });
+    if (!role) {
+      role = new Role({ name: name });
+      let document = await role.save();
+      response.status(code.CREATED).send(json(body.POST, document));
+    } else {
+      response.status(code.BAD_REQUEST).send({ error: body.ENRROLLED });
+    }
+  } catch (error) {
+    response.status(code.INTERNAL_SERVER_ERROR).send({ error: body.ERROR });
+  }
+};
 
-export const remove = async (request, response) => {};
+export const remove = async (request, response) => {
+  let id = request.body.id;
+  try {
+    let role = await Role.findOne({ _id: id, deleted: false });
+    if (role) {
+      role.deleted = true;
+      let document = await role.save();
+      response.status(code.OK).send(json(body.DELETE, document));
+    } else {
+      response.status(code.NOT_FOUND).send({ error: body.NOT_FOUND });
+    }
+  } catch (error) {
+    response.status(code.INTERNAL_SERVER_ERROR).send({ error: body.ERROR });
+  }
+};
 
-export const update = async (request, response) => {};
+export const update = async (request, response) => {
+  let { id, name } = request.body;
+  try {
+    let role = await Role.findOne({ name: name, deleted: false });
+    if (!role) {
+      role = await Role.findOne({ _id: id, deleted: false });
+      if (role) {
+        role.name = name;
+        let document = await role.save();
+        response.status(code.OK).send(json(body.PUT, document));
+      } else {
+        response.status(code.NOT_FOUND).send({ error: body.NOT_FOUND });
+      }
+    } else {
+      response.status(code.BAD_REQUEST).send({ error: body.ENRROLLED });
+    }
+  } catch (error) {
+    response.status(code.INTERNAL_SERVER_ERROR).send({ error: body.ERROR });
+  }
+};
