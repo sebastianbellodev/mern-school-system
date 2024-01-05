@@ -14,6 +14,7 @@ export default {
       yellow_hover: '#de970b',
       red: '#b71922',
       red_hover: '#85070e',
+      red_error: '#f44336',
     },
     extend: {},
   },

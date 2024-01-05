@@ -1,19 +1,30 @@
 import Button from 'react-bootstrap/Button';
 import FloatingLabel from 'react-bootstrap/FloatingLabel';
 import Form from 'react-bootstrap/Form';
-import {
-  FaBell as Notification,
-  FaPencil as Edit,
-  FaTrash as Delete,
-} from 'react-icons/fa6';
 
 import Header from '../components/Header';
+import { useNotification } from '../context/NotificationContext.jsx';
+import { useNavigate } from 'react-router-dom';
+import { useEffect, useState } from 'react';
+import NotificationCard from '../components/NotificationCard.jsx';
+// import NotificationCard from '../components/NotificationCard.jsx';
 
 function NotificationPage() {
+  // eslint-disable-next-line no-unused-vars
+  const { getNotification, notification } = useNotification();
+  const [filter, setFilter] = useState({ type: '', date: '' });
+  // eslint-disable-next-line no-unused-vars
+  const [filteredNotification, setFilteredNotification] = useState([]);
+  const navigate = useNavigate();
+
+  useEffect(() => {
+    getNotification();
+  }, [getNotification]);
+
   return (
-    <main className="flex flex-col h-screen">
+    <main className="flex flex-col h-screen z-auto">
       <Header></Header>
-      <section className="flex-grow flex-shrink flex-auto bg-white m-10 z-1">
+      <section className="flex-grow flex-shrink flex-auto bg-white m-10 mt-28">
         <header>
           <h1 className="font-bold text-lg">Notificaciones</h1>
           <h2 className="mb-3">
@@ -21,65 +32,84 @@ function NotificationPage() {
             agregar una notificación, haga clic en el botón inferior.
           </h2>
         </header>
-        <article>
+        <section className="flex flex-col w-fit">
           <Button
             variant="primary"
             type="submit"
-            className="h-14 bg-grey border-none hover:bg-grey_hover text-white font-bold text-base w-[12vw] mb-4"
+            className="h-14 bg-grey border-none hover:bg-grey_hover text-white font-bold text-base w-fit mb-4"
+            onClick={() => navigate('/notification/add')}
           >
             Agregar
           </Button>
-        </article>
-        <article className="flex gap-5 w-[45vw] mb-4">
-          <FloatingLabel controlId="type" label="Tipo" className="w-[21vw]">
-            <Form.Select>
-              <option value="suspension">Suspensión</option>
-              <option value="event">Evento</option>
-              <option value="activity">Actividad</option>
-            </Form.Select>
-          </FloatingLabel>
-          <FloatingLabel
-            controlId="date"
-            label="Fecha"
-            className="flex-grow flex-shrink flex-auto"
-          >
-            <Form.Control type="date"></Form.Control>
-          </FloatingLabel>
-        </article>
-        <section className="flex h-[80vh] w-[90vw] shadow-lg mb-4 rounded-lg p-4">
-          <article className="flex flex-col h-[19vh] w-[18vw] shadow-md overflow-hidden rounded-2xl">
-            <aside className="flex items-center gap-2 p-3 bg-card_grey_hover">
-              <Notification
-                size={30}
-                style={{ 'flex-shrink': '0' }}
-              ></Notification>
-              <section className="flex flex-col overflow-hidden">
-                <h3 className="font-bold text-lg overflow-hidden break-no text-ellipsis">
-                  Títulosssssssssssssssssssssssssssssssssssssssssssssssssssss
-                </h3>
-                <h4 className="text-sm">Fecha</h4>
-              </section>
-            </aside>
-            <main className="flex flex-grow flex-shrink flex-auto content-between items-center gap-2 bg-white w-auto m-2">
-              <Button
-                variant="primary"
-                type="submit"
-                className="h-[5vh] bg-yellow border-none hover:bg-yellow_hover"
+          <section className="flex gap-4 mb-4">
+            <FloatingLabel label="Tipo">
+              <Form.Select
+                name="type"
+                as="type"
+                onChange={(e) => {
+                  setFilter({ ...filter, type: e.target.value });
+                  if (filter.date === '') {
+                    setFilteredNotification(
+                      notification.filter(
+                        (notification) => notification.type === e.target.value
+                      )
+                    );
+                    return;
+                  }
+                  setFilteredNotification(
+                    notification.filter(
+                      (notification) =>
+                        notification.type === e.target.value &&
+                        notification.date === filter.date
+                    )
+                  );
+                }}
+                value={filter.type}
               >
-                <Edit size={15}></Edit>
-              </Button>
-              <Button
-                variant="primary"
-                type="submit"
-                className="h-[5vh] bg-red border-none hover:bg-red_hover"
-              >
-                <Delete size={15}></Delete>
-              </Button>
-              <h5 className="bg-grey text-white p-[3%] rounded-md ml-auto">
-                Suspension
-              </h5>
-            </main>
-          </article>
+                <option value="none">Seleccione una opción</option>
+                <option value="suspension">Suspensión</option>
+                <option value="event">Evento</option>
+                <option value="activity">Actividad</option>
+              </Form.Select>
+            </FloatingLabel>
+            <FloatingLabel label="Fecha">
+              <Form.Control
+                name="date"
+                type="date"
+                onChange={(e) => {
+                  setFilter({ ...filter, date: e.target.value });
+                  if (filter.type === '' || filter.type === 'none') {
+                    setFilteredNotification((prev) => [
+                      ...prev,
+                      notification.filter(
+                        (notification) => notification.date === e.target.value
+                      ),
+                    ]);
+                    return;
+                  }
+                  setFilteredNotification(
+                    notification.filter(
+                      (notification) =>
+                        notification.date === e.target.value &&
+                        notification.type === filter.type
+                    )
+                  );
+                }}
+                value={filter.date}
+              ></Form.Control>
+            </FloatingLabel>
+          </section>
+        </section>
+        <section
+          id="container"
+          className="flex h-[80vh] w-[90vw] shadow-lg mb-4 rounded-lg p-4 gap-3"
+        >
+          {filteredNotification.map((notification) => (
+            <NotificationCard
+              key={notification.id}
+              notification={notification}
+            ></NotificationCard>
+          ))}
         </section>
       </section>
     </main>

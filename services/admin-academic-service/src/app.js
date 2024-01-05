@@ -1,6 +1,8 @@
 import cookieParser from 'cookie-parser';
 import express from 'express';
 import morgan from 'morgan';
+import cors from 'cors';
+
 import grade from './routes/grade-routes.js';
 import group from './routes/group-routes.js';
 import partial from './routes/partial-routes.js';
@@ -17,6 +19,14 @@ import code from './tools/code.js';
 const app = express();
 const api = '/api';
 
+const CORS_ORIGIN = process.env.CORS_ORIGIN;
+
+app.use(
+  cors({
+    origin: 'http://localhost:5173',
+    credentials: true,
+  })
+);
 app.use(morgan('dev'));
 app.use(express.json());
 app.use(cookieParser());

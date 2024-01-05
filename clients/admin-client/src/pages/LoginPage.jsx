@@ -1,3 +1,4 @@
+/* eslint-disable no-unused-vars */
 import 'bootstrap/dist/css/bootstrap.min.css';
 import FloatingLabel from 'react-bootstrap/FloatingLabel';
 import Form from 'react-bootstrap/Form';
@@ -6,19 +7,27 @@ import Col from 'react-bootstrap/esm/Col';
 import Row from 'react-bootstrap/Row';
 import * as formik from 'formik';
 import * as yup from 'yup';
+import { useNavigate } from 'react-router-dom';
 
 import { errors } from '../tools/errors/errors.js';
 import adminLogo from '../img/jrc-admin-logo.webp';
+import { useUser } from '../context/UserContext.jsx';
+import { useEffect } from 'react';
 
 function LoginPage() {
   const { Formik } = formik;
+  const { login, authenticated, errors: loginErrors } = useUser();
+  const navigate = useNavigate();
+
+  useEffect(() => {
+    if (authenticated) {
+      navigate('/notification');
+    }
+  }, [authenticated, navigate]);
 
   const schema = yup.object().shape({
-    email: yup
-      .string()
-      .email(errors.email_invalid)
-      .required(errors.email_required),
-    password: yup.string().required(errors.password_required),
+    username: yup.string(errors.string).required(errors.username_required),
+    password: yup.string(errors.string).required(errors.password_required),
   });
 
   return (
@@ -26,40 +35,51 @@ function LoginPage() {
       <header className="flex flex-col items-center gap-3 mb-5">
         <img
           src={adminLogo}
-          alt="Logotipo de la Plataforma para Personal Administrativo y Docente de Bachilleres Joaquín Ramírez Cabañas"
+          alt="Logotipo de la plataforma para personal administrativo y docente de Bachilleres Joaquín Ramírez Cabañas"
           className="w-[40%]"
         />
         <h1 className="text-2xl sm:text-xl md:text-xl lg:text-2xl xl:text-3xl font-bold text-grey">
           Ingrese a su cuenta
         </h1>
       </header>
-      <section className="flex flex-col justify-center items-center">
+      <section className="flex flex-col justify-center items-center gap-4">
+        {loginErrors.map((error, index) => {
+          return (
+            <div className="text-red_error text-center" key={index}>
+              {error}
+            </div>
+          );
+        })}
         <Formik
           validationSchema={schema}
-          onSubmit={console.log}
-          initialValues={{ email: '', password: '' }}
+          onSubmit={login}
+          initialValues={{ username: '', password: '' }}
         >
           {({ handleSubmit, handleChange, values, errors }) => (
-            <Form noValidate onSubmit={handleSubmit}>
-              <Row className="flex flex-col mb-4 gap-[40px] w-[30vw]">
+            <Form
+              noValidate
+              onSubmit={handleSubmit}
+              className="flex flex-col mb-4 gap-[30px] w-[50%]"
+            >
+              <Row>
                 <Form.Group
                   as={Col}
                   md="3"
-                  controlId="emailValidation"
-                  className="w-[100%]"
+                  controlId="userValidation"
+                  className="w-[100%] mb-3"
                 >
-                  <FloatingLabel controlId="email" label="Correo electrónico">
+                  <FloatingLabel controlId="username" label="Usuario">
                     <Form.Control
                       required
-                      type="email"
+                      type="text"
                       placeholder=""
-                      name="email"
-                      value={values.email}
+                      name="username"
+                      value={values.username}
                       onChange={handleChange}
-                      isInvalid={!!errors.email}
+                      isInvalid={!!errors.username}
                     />
                     <Form.Control.Feedback type="invalid">
-                      {errors.email}
+                      {errors.username}
                     </Form.Control.Feedback>
                   </FloatingLabel>
                 </Form.Group>
@@ -87,7 +107,7 @@ function LoginPage() {
               <Button
                 variant="primary"
                 type="submit"
-                className="h-14 bg-grey border-none hover:bg-grey_hover text-white font-bold text-base w-[100%]"
+                className="h-14 bg-grey border-none hover:bg-grey_hover text-white font-bold text-base"
               >
                 Ingresar
               </Button>
