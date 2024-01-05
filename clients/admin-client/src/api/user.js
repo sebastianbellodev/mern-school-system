@@ -1,4 +1,4 @@
-import axios from './config/axios.js';
+import axios from './config/axiosAdmin.js';
 
 const ROUTE = '/user';
 
