@@ -8,8 +8,7 @@ const json = (message, document) => {
       message,
       types: document.map((type) => ({
         id: type._id,
-        title: type.number,
-        file: type.file,
+        name: type.name,
         deleted: type.deleted,
       })),
     };
@@ -83,37 +82,34 @@ export const log = async (request, response) => {
 };
 
 export const remove = async (request, response) => {
-  let id = request.body.id;
   try {
-    let type = await Type.findOne({ _id: id, deleted: false });
-    if (type) {
-      type.deleted = true;
-      let document = await type.save();
-      response.status(code.OK).send(json(body.DELETE, document));
-    } else {
-      response.status(code.NOT_FOUND).send({ error: body.NOT_FOUND });
+    const document = await Type.findByIdAndDelete(request.body.id);
+
+    if (!document) {
+      return response.status(code.NOT_FOUND).send({ error: body.NOT_FOUND });
     }
+
+    response.status(code.CREATED).send(json(body.DELETE, document));
   } catch (error) {
     response.status(code.INTERNAL_SERVER_ERROR).send({ error: body.ERROR });
   }
 };
 
 export const update = async (request, response) => {
-  let { id, name } = request.body;
   try {
-    let type = await Type.findOne({ name: name, deleted: false });
-    if (!type) {
-      type = await Type.findOne({ _id: id, deleted: false });
-      if (type) {
-        type.name = name;
-        let document = await type.save();
-        response.status(code.OK).send(json(body.PUT, document));
-      } else {
-        response.status(code.NOT_FOUND).send({ error: body.NOT_FOUND });
+    const document = await Type.findByIdAndUpdate(
+      request.body.id,
+      request.body,
+      {
+        new: true,
       }
-    } else {
-      response.status(code.BAD_REQUEST).send({ error: body.ENRROLLED });
+    );
+
+    if (!document) {
+      return response.status(code.NOT_FOUND).send({ error: body.NOT_FOUND });
     }
+
+    response.status(code.CREATED).send(json(body.PUT, document));
   } catch (error) {
     response.status(code.INTERNAL_SERVER_ERROR).send({ error: body.ERROR });
   }

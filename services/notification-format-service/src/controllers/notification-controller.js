@@ -36,7 +36,7 @@ const json = (message, document) => {
 
 export const get = async (request, response) => {
   try {
-    let document = await Notification.find({ deleted: false });
+    let document = await Notification.find({ deleted: false }).populate('type');
     if (document.length > 0) {
       response.status(code.OK).send(json(body.RETRIEVE, document));
     } else {
@@ -137,49 +137,34 @@ export const log = async (request, response) => {
 };
 
 export const remove = async (request, response) => {
-  let id = request.body.id;
   try {
-    let notification = await Notification.findOne({ _id: id, deleted: false });
-    if (notification) {
-      notification.deleted = true;
-      let document = await notification.save();
-      response.status(code.OK).send(json(body.DELETE, document));
-    } else {
-      response.status(code.NOT_FOUND).send({ error: body.NOT_FOUND });
+    const document = await Task.findByIdAndDelete(request.body.id);
+
+    if (!document) {
+      return response.status(code.NOT_FOUND).send({ error: body.NOT_FOUND });
     }
+
+    response.status(code.CREATED).send(json(body.DELETE, document));
   } catch (error) {
     response.status(code.INTERNAL_SERVER_ERROR).send({ error: body.ERROR });
   }
 };
 
 export const update = async (request, response) => {
-  let { id, title, description, date, image, isSpinner, type } = request.body;
   try {
-    let notification = await Notification.findOne({
-      title: title,
-      description: description,
-      date: date,
-      image: image,
-      isSpinner: isSpinner,
-      type: type,
-    });
-    if (!notification) {
-      notification = await Notification.findOne({ _id: id, deleted: false });
-      if (notification) {
-        notification.title = title;
-        notification.description = description;
-        notification.date = date;
-        notification.image = image;
-        notification.isSpinner = isSpinner;
-        notification.type = type;
-        let document = await notification.save();
-        response.status(code.OK).send(json(body.PUT, document));
-      } else {
-        response.status(code.NOT_FOUND).send({ error: body.NOT_FOUND });
+    const document = await Notification.findByIdAndUpdate(
+      request.body.id,
+      request.body,
+      {
+        new: true,
       }
-    } else {
-      response.status(code.BAD_REQUEST).send({ error: body.ENRROLLED });
+    ).populate('type');
+
+    if (!document) {
+      return response.status(code.NOT_FOUND).send({ error: body.NOT_FOUND });
     }
+
+    response.status(code.CREATED).send(json(body.PUT, document));
   } catch (error) {
     response.status(code.INTERNAL_SERVER_ERROR).send({ error: body.ERROR });
   }

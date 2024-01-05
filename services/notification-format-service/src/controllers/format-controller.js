@@ -8,7 +8,7 @@ const json = (message, document) => {
       message,
       formats: document.map((format) => ({
         id: format._id,
-        title: format.number,
+        title: format.title,
         file: format.file,
         deleted: format.deleted,
       })),
@@ -18,7 +18,7 @@ const json = (message, document) => {
       message,
       format: {
         id: document._id,
-        title: document.number,
+        title: document.title,
         file: document.file,
         deleted: document.deleted,
       },
@@ -84,38 +84,34 @@ export const log = async (request, response) => {
 };
 
 export const remove = async (request, response) => {
-  let id = request.body.id;
   try {
-    let format = await Format.findOne({ _id: id, deleted: false });
-    if (format) {
-      format.deleted = true;
-      let document = await format.save();
-      response.status(code.OK).send(json(body.DELETE, document));
-    } else {
-      response.status(code.NOT_FOUND).send({ error: body.NOT_FOUND });
+    const document = await Format.findByIdAndDelete(request.body.id);
+
+    if (!document) {
+      return response.status(code.NOT_FOUND).send({ error: body.NOT_FOUND });
     }
+
+    response.status(code.CREATED).send(json(body.DELETE, document));
   } catch (error) {
     response.status(code.INTERNAL_SERVER_ERROR).send({ error: body.ERROR });
   }
 };
 
 export const update = async (request, response) => {
-  let { id, title, file } = request.body;
   try {
-    let format = await Format.findOne({ title: title, deleted: false });
-    if (!format) {
-      format = await Format.findOne({ _id: id, deleted: false });
-      if (format) {
-        format.title = title;
-        format.file = file;
-        let document = await format.save();
-        response.status(code.OK).send(json(body.PUT, document));
-      } else {
-        response.status(code.NOT_FOUND).send({ error: body.NOT_FOUND });
+    const document = await Format.findByIdAndUpdate(
+      request.body.id,
+      request.body,
+      {
+        new: true,
       }
-    } else {
-      response.status(code.BAD_REQUEST).send({ error: body.ENRROLLED });
+    );
+
+    if (!document) {
+      return response.status(code.NOT_FOUND).send({ error: body.NOT_FOUND });
     }
+
+    response.status(code.CREATED).send(json(body.PUT, document));
   } catch (error) {
     response.status(code.INTERNAL_SERVER_ERROR).send({ error: body.ERROR });
   }
