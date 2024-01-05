@@ -13,8 +13,8 @@ const json = (message, document) => {
       users: document.map((user) => ({
         id: user._id,
         username: user.username,
-        deleted: user.deleted,
         role: user.role,
+        deleted: user.deleted,
       })),
     };
   } else {
@@ -23,8 +23,8 @@ const json = (message, document) => {
       user: {
         id: document._id,
         username: document.username,
-        deleted: document.deleted,
         role: document.role,
+        deleted: document.deleted,
       },
     };
   }
@@ -74,7 +74,7 @@ export const getByRole = async (request, response) => {
 export const getByUsername = async (request, response) => {
   let username = request.body.username;
   try {
-    let document = await User.findOne({ username: username });
+    let document = await User.findOne({ username: username, deleted: false });
     if (document) {
       response.send(json(body.RETRIEVE, document));
     } else {
@@ -88,7 +88,7 @@ export const getByUsername = async (request, response) => {
 export const login = async (request, response) => {
   let { username, password } = request.body;
   try {
-    let document = await User.findOne({ username: username });
+    let document = await User.findOne({ username: username, deleted: false });
     if (document) {
       let isUser = await bcrypt.compare(password, document.password);
       if (isUser) {
@@ -117,7 +117,7 @@ export const remove = async (request, response) => {
     let user = await User.findOne({ _id: id, deleted: false });
     if (user) {
       user.deleted = true;
-      const document = await user.save();
+      let document = await user.save();
       response.status(code.OK).send(json(body.DELETE, document));
     } else {
       response.status(code.NOT_FOUND).send({ error: body.NOT_FOUND });
@@ -130,13 +130,13 @@ export const remove = async (request, response) => {
 export const signUp = async (request, response) => {
   let { username, password, role } = request.body;
   try {
-    let user = await User.findOne({ username: username });
+    let user = await User.findOne({ username: username, deleted: false });
     if (!user) {
       let salt = await bcrypt.genSalt(10);
       bcrypt.hash(password, salt, async (error, hash) => {
         user = new User({ username: username, password: hash, role: role });
-        const document = await user.save();
-        const token = await signToken(document._id);
+        let document = await user.save();
+        let token = await signToken(document._id);
         response.cookie('token', token);
         response.status(code.CREATED).send(json(body.POST, document));
       });
@@ -151,7 +151,7 @@ export const signUp = async (request, response) => {
 export const update = async (request, response) => {
   let { id, username, password } = request.body;
   try {
-    let user = await User.findOne({ username: username });
+    let user = await User.findOne({ username: username, deleted: false });
     if (!user) {
       user = await User.findOne({ _id: id, deleted: false });
       user.username = username;

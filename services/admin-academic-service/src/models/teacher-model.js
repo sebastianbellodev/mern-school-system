@@ -17,19 +17,18 @@ const TEACHER_SCHEMA = new mongoose.Schema({
     type: String,
     required: true,
     trim: true,
-    unique: true,
+  },
+  groups: [{ type: mongoose.Schema.Types.ObjectId, ref: 'groups' }],
+  subjects: [{ type: mongoose.Schema.Types.ObjectId, ref: 'subjects' }],
+  user: {
+    type: mongoose.Schema.Types.ObjectId,
+    ref: 'users',
   },
   deleted: {
     type: Boolean,
     required: true,
     default: false,
   },
-  user: {
-    type: mongoose.Schema.Types.ObjectId,
-    ref: 'users',
-  },
-  groups: [{ type: mongoose.Schema.Types.ObjectId, ref: 'groups' }],
-  subjects: [{ type: mongoose.Schema.Types.ObjectId, ref: 'subjects' }],
 });
 
 export default mongoose.model('teachers', TEACHER_SCHEMA);
