@@ -1,4 +1,6 @@
 import { createContext, useContext, useState, useEffect } from 'react';
+
+import { logRequest } from '../api/task.js';
 import { notifications } from '../json/notification.js';
 
 const NotificationContext = createContext();
@@ -27,6 +29,20 @@ export const NotificationProvider = ({ children }) => {
     setNotification(response);
   };
 
+  const logNotification = async (notification) => {
+    try {
+      const response = await logRequest(notification);
+      const { data } = response;
+      console.log(data);
+      setNotification([...notification, data]);
+    } catch (error) {
+      if (Array.isArray(error.response.data)) {
+        return setErrors(error.response.data);
+      }
+      setErrors([error.response.data.error]);
+    }
+  };
+
   useEffect(() => {
     if (errors.length > 0) {
       const timer = setTimeout(() => {
@@ -38,7 +54,7 @@ export const NotificationProvider = ({ children }) => {
 
   return (
     <NotificationContext.Provider
-      value={{ notification, errors, getNotification }}
+      value={{ notification, errors, getNotification, logNotification }}
     >
       {children}
     </NotificationContext.Provider>
