@@ -9,6 +9,7 @@ import {
   remove,
   signUp,
   update,
+  token,
 } from '../controllers/user-controller.js';
 import { isValidAuth } from '../security/basic.js';
 import { isValidToken } from '../security/jwt.js';
@@ -24,5 +25,6 @@ router.post('/user/login', isValidAuth, login);
 router.post('/user/logout', logOut);
 router.post('/user/signup', isValidAuth, signUp);
 router.put('/user', isValidToken, update);
+router.get('/token', isValidAuth, token);
 
 export default router;
