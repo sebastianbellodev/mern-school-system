@@ -1,3 +1,6 @@
+/* eslint-disable no-unused-vars */
+/* eslint-disable react-hooks/exhaustive-deps */
+// eslint-disable-next-line no-unused-vars
 import Button from 'react-bootstrap/Button';
 import FloatingLabel from 'react-bootstrap/FloatingLabel';
 import Form from 'react-bootstrap/Form';
@@ -7,19 +10,26 @@ import { useNotification } from '../context/NotificationContext.jsx';
 import { useNavigate } from 'react-router-dom';
 import { useEffect, useState } from 'react';
 import NotificationCard from '../components/NotificationCard.jsx';
-// import NotificationCard from '../components/NotificationCard.jsx';
+import { useType } from '../context/TypeContext.jsx';
 
 function NotificationPage() {
-  // eslint-disable-next-line no-unused-vars
-  const { getNotification, notification } = useNotification();
   const [filter, setFilter] = useState({ type: '', date: '' });
-  // eslint-disable-next-line no-unused-vars
-  const [filteredNotification, setFilteredNotification] = useState([]);
+  const {
+    getNotification,
+    notification,
+    filterNotification,
+    setFilterNotification,
+  } = useNotification();
+  const { getType, type, errors: typeErrors } = useType();
   const navigate = useNavigate();
 
   useEffect(() => {
+    getType();
+  }, []);
+
+  useEffect(() => {
     getNotification();
-  }, [getNotification]);
+  }, []);
 
   return (
     <main className="flex flex-col h-screen z-auto">
@@ -49,27 +59,28 @@ function NotificationPage() {
                 onChange={(e) => {
                   setFilter({ ...filter, type: e.target.value });
                   if (filter.date === '') {
-                    setFilteredNotification(
+                    return setFilterNotification(
                       notification.filter(
-                        (notification) => notification.type === e.target.value
+                        (notification) =>
+                          notification.type._id === e.target.value
                       )
                     );
-                    return;
                   }
-                  setFilteredNotification(
+                  setFilterNotification(
                     notification.filter(
                       (notification) =>
-                        notification.type === e.target.value &&
-                        notification.date === filter.date
+                        notification.type._id === e.target.value &&
+                        String(notification.date).startsWith(filter.date)
                     )
                   );
                 }}
-                value={filter.type}
               >
                 <option value="none">Seleccione una opción</option>
-                <option value="suspension">Suspensión</option>
-                <option value="event">Evento</option>
-                <option value="activity">Actividad</option>
+                {type.map((type) => (
+                  <option key={type.id} value={type.id}>
+                    {type.name}
+                  </option>
+                ))}
               </Form.Select>
             </FloatingLabel>
             <FloatingLabel label="Fecha">
@@ -79,32 +90,29 @@ function NotificationPage() {
                 onChange={(e) => {
                   setFilter({ ...filter, date: e.target.value });
                   if (filter.type === '' || filter.type === 'none') {
-                    setFilteredNotification((prev) => [
-                      ...prev,
-                      notification.filter(
-                        (notification) => notification.date === e.target.value
-                      ),
-                    ]);
-                    return;
+                    return setFilterNotification(
+                      notification.filter((notification) =>
+                        String(notification.date).startsWith(e.target.value)
+                      )
+                    );
                   }
-                  setFilteredNotification(
+                  setFilterNotification(
                     notification.filter(
                       (notification) =>
-                        notification.date === e.target.value &&
-                        notification.type === filter.type
+                        String(notification.date).startsWith(e.target.value) &&
+                        notification.type._id === filter.type
                     )
                   );
                 }}
-                value={filter.date}
               ></Form.Control>
             </FloatingLabel>
           </section>
         </section>
         <section
           id="container"
-          className="flex h-[80vh] w-[90vw] shadow-lg mb-4 rounded-lg p-4 gap-3"
+          className="flex flex-wrap h-fit w-[80vw] shadow-lg mb-4 rounded-lg p-4 gap-3"
         >
-          {filteredNotification.map((notification) => (
+          {filterNotification.map((notification) => (
             <NotificationCard
               key={notification.id}
               notification={notification}

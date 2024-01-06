@@ -138,13 +138,21 @@ export const log = async (request, response) => {
 
 export const remove = async (request, response) => {
   try {
-    const document = await Task.findByIdAndDelete(request.body.id);
+    const document = await Notification.findByIdAndUpdate(
+      request.body.id,
+      {
+        deleted: true,
+      },
+      {
+        new: true,
+      }
+    ).populate('type');
 
     if (!document) {
       return response.status(code.NOT_FOUND).send({ error: body.NOT_FOUND });
     }
 
-    response.status(code.CREATED).send(json(body.DELETE, document));
+    response.status(code.NO_CONTENT).send(json(body.DELETE, document));
   } catch (error) {
     response.status(code.INTERNAL_SERVER_ERROR).send({ error: body.ERROR });
   }

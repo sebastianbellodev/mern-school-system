@@ -5,10 +5,13 @@ import {
   FaPencil as Edit,
   FaTrash as Delete,
 } from 'react-icons/fa6';
+import { useNotification } from '../context/NotificationContext.jsx';
 
 function NotificationCard({ notification }) {
+  const { removeNotification } = useNotification();
+
   return (
-    <article className="flex flex-col h-[180px] w-[220px] shadow-md overflow-hidden rounded-2xl">
+    <article className="flex flex-col h-[180px] w-[300px] shadow-md overflow-hidden rounded-2xl">
       <aside className="flex items-center gap-2 p-3 bg-card_grey_hover h-[60%]">
         <Notification size={30} style={{ flexShrink: '0' }}></Notification>
         <aside className="flex flex-col overflow-hidden">
@@ -16,7 +19,7 @@ function NotificationCard({ notification }) {
             {notification.title}
           </h3>
           <h4 className="text-sm overflow-hidden text-ellipsis">
-            {notification.date}
+            {String(notification.date).slice(0, 10)}
           </h4>
         </aside>
       </aside>
@@ -32,11 +35,12 @@ function NotificationCard({ notification }) {
           variant="primary"
           type="submit"
           className="h-[5vh] bg-red border-none hover:bg-red_hover"
+          onClick={() => removeNotification(notification.id)}
         >
           <Delete size={15}></Delete>
         </Button>
         <h5 className="bg-grey text-white p-[3%] rounded-md ml-auto">
-          {notification.type}
+          {notification.type.name}
         </h5>
       </section>
     </article>

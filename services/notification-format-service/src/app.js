@@ -1,6 +1,8 @@
 import cookieParser from 'cookie-parser';
 import express from 'express';
 import morgan from 'morgan';
+import cors from 'cors';
+
 import format from './routes/format-routes.js';
 import notification from './routes/notification-routes.js';
 import type from './routes/type-routes.js';
@@ -9,6 +11,11 @@ import code from './tools/code.js';
 const app = express();
 const api = '/api';
 
+app.use(
+  cors({
+    origin: 'http://localhost:5173',
+  })
+);
 app.use(morgan('dev'));
 app.use(express.json());
 app.use(cookieParser());

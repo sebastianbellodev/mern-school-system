@@ -45,7 +45,7 @@ function Header() {
         <nav
           id="sidebar"
           className={`${
-            open ? 'w-[22vw] md:w-[21vw] lg:w-[15vw] 2xl:w-[10vw]' : 'w-0'
+            open ? 'w-[26vw] md:w-[21vw] lg:w-[18vw] 2xl:w-[13vw]' : 'w-0'
           } bg-light_grey min-h-screen fixed top-[11vh] left-0  overflow-z-hidden transition-all duration-450`}
         >
           <ul
