@@ -24,6 +24,7 @@ const NOTIFICATION_SCHEMA = new mongoose.Schema({
   type: {
     type: mongoose.Schema.Types.ObjectId,
     ref: 'types',
+    required: true,
   },
   deleted: {
     type: Boolean,

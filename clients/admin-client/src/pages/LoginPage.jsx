@@ -1,3 +1,4 @@
+/* eslint-disable react-hooks/exhaustive-deps */
 /* eslint-disable no-unused-vars */
 import 'bootstrap/dist/css/bootstrap.min.css';
 import FloatingLabel from 'react-bootstrap/FloatingLabel';
@@ -23,7 +24,7 @@ function LoginPage() {
     if (authenticated) {
       navigate('/notification');
     }
-  }, [authenticated, navigate]);
+  }, [authenticated]);
 
   const schema = yup.object().shape({
     username: yup.string(errors.string).required(errors.username_required),
