@@ -26,7 +26,7 @@ const json = (message, document) => {
 
 export const get = async (request, response) => {
   try {
-    let document = await Type.find({ deleted: false });
+    const document = await Type.find({ deleted: false });
     if (document.length > 0) {
       response.status(code.OK).send(json(body.RETRIEVE, document));
     } else {
@@ -38,9 +38,9 @@ export const get = async (request, response) => {
 };
 
 export const getById = async (request, response) => {
-  let id = request.body.id;
+  const id = request.body.id;
   try {
-    let document = await Type.findOne({ _id: id, deleted: false });
+    const document = await Type.findOne({ _id: id, deleted: false });
     if (document) {
       response.status(code.OK).send(json(body.RETRIEVE, document));
     } else {
@@ -52,9 +52,9 @@ export const getById = async (request, response) => {
 };
 
 export const getByName = async (request, response) => {
-  let name = request.body.name;
+  const name = request.body.name;
   try {
-    let document = await Type.findOne({ name: name, deleted: false });
+    const document = await Type.findOne({ name: name, deleted: false });
     if (document) {
       response.status(code.OK).send(json(body.RETRIEVE, document));
     } else {
@@ -66,12 +66,12 @@ export const getByName = async (request, response) => {
 };
 
 export const log = async (request, response) => {
-  let name = request.body.name;
+  const name = request.body.name;
   try {
     let type = await Type.findOne({ name: name, deleted: false });
     if (!type) {
       type = new Type({ name: name });
-      let document = await type.save();
+      const document = await type.save();
       response.status(code.CREATED).send(json(body.POST, document));
     } else {
       response.status(code.BAD_REQUEST).send({ error: body.ENRROLLED });
@@ -82,42 +82,34 @@ export const log = async (request, response) => {
 };
 
 export const remove = async (request, response) => {
+  const id = request.body.id;
   try {
     const document = await Type.findByIdAndUpdate(
-      request.body.id,
-      {
-        deleted: true,
-      },
-      {
-        new: true,
-      }
+      id,
+      { deleted: true },
+      { new: true }
     );
-
-    if (!document) {
-      return response.status(code.NOT_FOUND).send({ error: body.NOT_FOUND });
+    if (document) {
+      response.status(code.OK).send(json(body.DELETE, document));
+    } else {
+      response.status(code.NOT_FOUND).send({ error: body.NOT_FOUND });
     }
-
-    response.status(code.NO_CONTENT).send(json(body.DELETE, document));
   } catch (error) {
     response.status(code.INTERNAL_SERVER_ERROR).send({ error: body.ERROR });
   }
 };
 
 export const update = async (request, response) => {
+  const id = request.body.id;
   try {
-    const document = await Type.findByIdAndUpdate(
-      request.body.id,
-      request.body,
-      {
-        new: true,
-      }
-    );
-
-    if (!document) {
-      return response.status(code.NOT_FOUND).send({ error: body.NOT_FOUND });
+    const document = await Type.findByIdAndUpdate(id, request.body, {
+      new: true,
+    });
+    if (document) {
+      response.status(code.OK).send(json(body.PUT, document));
+    } else {
+      response.status(code.NOT_FOUND).send({ error: body.NOT_FOUND });
     }
-
-    response.status(code.CREATED).send(json(body.PUT, document));
   } catch (error) {
     response.status(code.INTERNAL_SERVER_ERROR).send({ error: body.ERROR });
   }

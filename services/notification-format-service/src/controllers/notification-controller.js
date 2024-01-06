@@ -39,7 +39,9 @@ const json = (message, document) => {
 
 export const get = async (request, response) => {
   try {
-    let document = await Notification.find({ deleted: false }).populate('type');
+    const document = await Notification.find({ deleted: false }).populate(
+      'type'
+    );
     if (document.length > 0) {
       response.status(code.OK).send(json(body.RETRIEVE, document));
     } else {
@@ -51,12 +53,12 @@ export const get = async (request, response) => {
 };
 
 export const getByDate = async (request, response) => {
-  let date = new Date();
+  const date = new Date();
   try {
-    let document = await Notification.find({
+    const document = await Notification.find({
       date: { $lte: date },
       deleted: false,
-    });
+    }).populate('type');
     if (document.length > 0) {
       response.status(code.OK).send(json(body.RETRIEVE, document));
     } else {
@@ -83,9 +85,12 @@ export const getById = async (request, response) => {
 };
 
 export const getByTitle = async (request, response) => {
-  let title = request.body.title;
+  const title = request.body.title;
   try {
-    let document = await Notification.find({ title: title, deleted: false });
+    const document = await Notification.find({
+      title: title,
+      deleted: false,
+    }).populate('type');
     if (document.length > 0) {
       response.status(code.OK).send(json(body.RETRIEVE, document));
     } else {
@@ -97,9 +102,12 @@ export const getByTitle = async (request, response) => {
 };
 
 export const getByType = async (request, response) => {
-  let type = request.body.type;
+  const type = request.body.type;
   try {
-    let document = await Notification.find({ type: type, deleted: false });
+    const document = await Notification.find({
+      type: type,
+      deleted: false,
+    }).populate('type');
     if (document.length > 0) {
       response.status(code.OK).send(json(body.RETRIEVE, document));
     } else {
@@ -111,7 +119,7 @@ export const getByType = async (request, response) => {
 };
 
 export const log = async (request, response) => {
-  let { title, description, date, image, isSpinner, type } = request.body;
+  const { title, description, date, image, isSpinner, type } = request.body;
   try {
     let notification = await Notification.findOne({
       title: title,
@@ -153,39 +161,33 @@ export const log = async (request, response) => {
 };
 
 export const remove = async (request, response) => {
+  const id = request.body.id;
   try {
     const document = await Notification.findByIdAndUpdate(
-      request.body.id,
-      {
-        deleted: true,
-      },
-      {
-        new: true,
-      }
+      id,
+      { deleted: true },
+      { new: true }
     ).populate('type');
-
-    if (!document) {
-      return response.status(code.NOT_FOUND).send({ error: body.NOT_FOUND });
+    if (document) {
+      response.status(code.OK).send(json(body.DELETE, document));
+    } else {
+      response.status(code.NOT_FOUND).send({ error: body.NOT_FOUND });
     }
-
-    response.status(code.NO_CONTENT).send(json(body.DELETE, document));
   } catch (error) {
     response.status(code.INTERNAL_SERVER_ERROR).send({ error: body.ERROR });
   }
 };
 
 export const update = async (request, response) => {
+  const id = request.body.id;
   try {
-    const document = await Notification.findByIdAndUpdate(
-      request.body.id,
-      request.body,
-      {
-        new: true,
-      }
-    ).populate('type');
-
-    if (!document) {
-      return response.status(code.NOT_FOUND).send({ error: body.NOT_FOUND });
+    const document = await Notification.findByIdAndUpdate(id, request.body, {
+      new: true,
+    }).populate('type');
+    if (document) {
+      response.status(code.OK).send(json(body.PUT, document));
+    } else {
+      response.status(code.NOT_FOUND).send({ error: body.NOT_FOUND });
     }
 
     if (request.files?.image) {

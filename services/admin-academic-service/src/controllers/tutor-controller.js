@@ -36,7 +36,7 @@ const json = (message, document) => {
 
 export const get = async (request, response) => {
   try {
-    let document = await Tutor.find({ deleted: false });
+    const document = await Tutor.find({ deleted: false });
     if (document.length > 0) {
       response.status(code.OK).send(json(body.RETRIEVE, document));
     } else {
@@ -48,9 +48,9 @@ export const get = async (request, response) => {
 };
 
 export const getByEmailAddress = async (request, response) => {
-  let emailAddress = request.body.emailAddress;
+  const emailAddress = request.body.emailAddress;
   try {
-    let document = await Tutor.findOne({
+    const document = await Tutor.findOne({
       emailAddress: emailAddress,
       deleted: false,
     });
@@ -65,9 +65,9 @@ export const getByEmailAddress = async (request, response) => {
 };
 
 export const getById = async (request, response) => {
-  let id = request.body.id;
+  const id = request.body.id;
   try {
-    let document = await Tutor.findOne({ _id: id, deleted: false });
+    const document = await Tutor.findOne({ _id: id, deleted: false });
     if (document) {
       response.status(code.OK).send(json(body.RETRIEVE, document));
     } else {
@@ -79,8 +79,14 @@ export const getById = async (request, response) => {
 };
 
 export const log = async (request, response) => {
-  let { name, paternalSurname, maternalSurname, address, emailAddress, phone } =
-    request.body;
+  const {
+    name,
+    paternalSurname,
+    maternalSurname,
+    address,
+    emailAddress,
+    phone,
+  } = request.body;
   try {
     let tutor = await Tutor.findOne({
       emailAddress: emailAddress,
@@ -95,7 +101,7 @@ export const log = async (request, response) => {
         emailAddress: emailAddress,
         phone: phone,
       });
-      let document = await tutor.save();
+      const document = await tutor.save();
       response.status(code.CREATED).send(json(body.POST, document));
     } else {
       response.status(code.BAD_REQUEST).send({ error: body.ENRROLLED });
@@ -106,12 +112,14 @@ export const log = async (request, response) => {
 };
 
 export const remove = async (request, response) => {
-  let id = request.body.id;
+  const id = request.body.id;
   try {
-    let tutor = await Tutor.findOne({ _id: id, deleted: false });
-    if (tutor) {
-      tutor.deleted = true;
-      let document = await tutor.save();
+    const document = await Tutor.findByIdAndUpdate(
+      id,
+      { deleted: true },
+      { new: true }
+    );
+    if (document) {
       response.status(code.OK).send(json(body.DELETE, document));
     } else {
       response.status(code.NOT_FOUND).send({ error: body.NOT_FOUND });
@@ -122,36 +130,15 @@ export const remove = async (request, response) => {
 };
 
 export const update = async (request, response) => {
-  let {
-    id,
-    name,
-    paternalSurname,
-    maternalSurname,
-    address,
-    emailAddress,
-    phone,
-  } = request.body;
+  const id = request.body.id;
   try {
-    let tutor = await Tutor.findOne({
-      emailAddress: emailAddress,
-      deleted: false,
+    const document = await Tutor.findByIdAndUpdate(id, request.body, {
+      new: true,
     });
-    if (!tutor) {
-      tutor = await Tutor.findOne({ _id: id, deleted: false });
-      if (tutor) {
-        tutor.name = name;
-        tutor.paternalSurname = paternalSurname;
-        tutor.maternalSurname = maternalSurname;
-        tutor.address = address;
-        tutor.emailAddress = emailAddress;
-        tutor.phone = phone;
-        let document = await tutor.save();
-        response.status(code.OK).send(json(body.PUT, document));
-      } else {
-        response.status(code.NOT_FOUND).send({ error: body.NOT_FOUND });
-      }
+    if (document) {
+      response.status(code.OK).send(json(body.PUT, document));
     } else {
-      response.status(code.BAD_REQUEST).send({ error: body.ENRROLLED });
+      response.status(code.NOT_FOUND).send({ error: body.NOT_FOUND });
     }
   } catch (error) {
     response.status(code.INTERNAL_SERVER_ERROR).send({ error: body.ERROR });

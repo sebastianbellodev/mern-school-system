@@ -28,7 +28,9 @@ const json = (message, document) => {
 
 export const get = async (request, response) => {
   try {
-    let document = await PropadeuticArea.find({ deleted: false });
+    const document = await PropadeuticArea.find({ deleted: false }).populate(
+      'groups'
+    );
     if (document.length > 0) {
       response.status(code.OK).send(json(body.RETRIEVE, document));
     } else {
@@ -40,12 +42,12 @@ export const get = async (request, response) => {
 };
 
 export const getByGroup = async (request, response) => {
-  let group = request.body.groups[0];
+  const group = request.body.groups[0];
   try {
-    let document = await PropadeuticArea.findOne({
+    const document = await PropadeuticArea.findOne({
       groups: group,
       deleted: false,
-    });
+    }).populate('groups');
     if (document) {
       response.status(code.OK).send(json(body.RETRIEVE, document));
     } else {
@@ -57,9 +59,12 @@ export const getByGroup = async (request, response) => {
 };
 
 export const getById = async (request, response) => {
-  let id = request.body.id;
+  const id = request.body.id;
   try {
-    let document = await PropadeuticArea.findOne({ _id: id, deleted: false });
+    const document = await PropadeuticArea.findOne({
+      _id: id,
+      deleted: false,
+    }).populate('groups');
     if (document) {
       response.status(code.OK).send(json(body.RETRIEVE, document));
     } else {
@@ -71,12 +76,12 @@ export const getById = async (request, response) => {
 };
 
 export const getByName = async (request, response) => {
-  let name = request.body.name;
+  const name = request.body.name;
   try {
-    let document = await PropadeuticArea.findOne({
+    const document = await PropadeuticArea.findOne({
       name: name,
       deleted: false,
-    });
+    }).populate('groups');
     if (document) {
       response.status(code.OK).send(json(body.RETRIEVE, document));
     } else {
@@ -88,7 +93,7 @@ export const getByName = async (request, response) => {
 };
 
 export const log = async (request, response) => {
-  let { name, groups } = request.body;
+  const { name, groups } = request.body;
   try {
     let propadeuticArea = await PropadeuticArea.findOne({
       name: name,
@@ -107,16 +112,15 @@ export const log = async (request, response) => {
 };
 
 export const remove = async (request, response) => {
-  let id = request.body.id;
+  const id = request.body.id;
   try {
-    let propadeuticArea = await PropadeuticArea.findOne({
-      _id: id,
-      deleted: false,
-    });
-    if (propadeuticArea) {
-      propadeuticArea.deleted = true;
-      let document = await propadeuticArea.save();
-      response.status(code.OK).send(json(body.DELETE, document));
+    const document = await PropadeuticArea.findByIdAndUpdate(
+      id,
+      { deleted: true },
+      { new: true }
+    ).populate('groups');
+    if (document) {
+      response.stauts(code.OK).send(json(body.DELETE, document));
     } else {
       response.status(code.NOT_FOUND).send({ error: body.NOT_FOUND });
     }
@@ -126,27 +130,15 @@ export const remove = async (request, response) => {
 };
 
 export const update = async (request, response) => {
-  let { id, name, groups } = request.body;
+  const id = request.body.id;
   try {
-    let propadeuticArea = await PropadeuticArea.findOne({
-      name: name,
-      deleted: false,
-    });
-    if (!propadeuticArea) {
-      propadeuticArea = await PropadeuticArea.findOne({
-        _id: id,
-        deleted: false,
-      });
-      if (propadeuticArea) {
-        propadeuticArea.name = name;
-        propadeuticArea.groups = groups;
-        let document = await propadeuticArea.save();
-        response.status(code.OK).send(json(body.PUT, document));
-      } else {
-        response.status(code.NOT_FOUND).send({ error: body.NOT_FOUND });
-      }
+    const document = await PropadeuticArea.findByIdAndUpdate(id, request.body, {
+      new: true,
+    }).populate('groups');
+    if (document) {
+      response.stauts(code.OK).send(json(body.PUT, document));
     } else {
-      response.status(code.BAD_REQUEST).send({ error: body.ENRROLLED });
+      response.status(code.NOT_FOUND).send({ error: body.NOT_FOUND });
     }
   } catch (error) {
     response.status(code.INTERNAL_SERVER_ERROR).send({ error: body.ERROR });
