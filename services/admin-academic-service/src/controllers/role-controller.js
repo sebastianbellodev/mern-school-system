@@ -84,10 +84,12 @@ export const log = async (request, response) => {
 export const remove = async (request, response) => {
   let id = request.body.id;
   try {
-    let role = await Role.findOne({ _id: id, deleted: false });
-    if (role) {
-      role.deleted = true;
-      let document = await role.save();
+    let document = await Role.findByIdAndUpdate(
+      id,
+      { deleted: true },
+      { new: true }
+    );
+    if (document) {
       response.status(code.OK).send(json(body.DELETE, document));
     } else {
       response.status(code.NOT_FOUND).send({ error: body.NOT_FOUND });
@@ -98,20 +100,15 @@ export const remove = async (request, response) => {
 };
 
 export const update = async (request, response) => {
-  let { id, name } = request.body;
+  let id = request.body.id;
   try {
-    let role = await Role.findOne({ name: name, deleted: false });
-    if (!role) {
-      role = await Role.findOne({ _id: id, deleted: false });
-      if (role) {
-        role.name = name;
-        let document = await role.save();
-        response.status(code.OK).send(json(body.PUT, document));
-      } else {
-        response.status(code.NOT_FOUND).send({ error: body.NOT_FOUND });
-      }
+    let document = await Role.findByIdAndUpdate(id, request.body, {
+      new: true,
+    });
+    if (document) {
+      response.status(code.OK).send(json(body.PUT, document));
     } else {
-      response.status(code.BAD_REQUEST).send({ error: body.ENRROLLED });
+      response.status(code.NOT_FOUND).send({ error: body.NOT_FOUND });
     }
   } catch (error) {
     response.status(code.INTERNAL_SERVER_ERROR).send({ error: body.ERROR });
