@@ -30,7 +30,7 @@ const json = (message, document) => {
 
 export const get = async (request, response) => {
   try {
-    let document = await Subject.find({ deleted: false }).populate('groups');
+    const document = await Subject.find({ deleted: false }).populate('groups');
     if (document.length > 0) {
       response.status(code.OK).send(json(body.RETRIEVE, document));
     } else {
@@ -42,9 +42,9 @@ export const get = async (request, response) => {
 };
 
 export const getByGroup = async (request, response) => {
-  let group = request.body.groups[0];
+  const group = request.body.groups[0];
   try {
-    let document = await Subject.find({
+    const document = await Subject.find({
       groups: group,
       deleted: false,
     }).populate('groups');
@@ -59,11 +59,12 @@ export const getByGroup = async (request, response) => {
 };
 
 export const getById = async (request, response) => {
-  let id = request.body.id;
+  const id = request.body.id;
   try {
-    let document = await Subject.findOne({ _id: id, deleted: false }).populate(
-      'groups'
-    );
+    const document = await Subject.findOne({
+      _id: id,
+      deleted: false,
+    }).populate('groups');
     if (document) {
       response.status(code.OK).send(json(body.RETRIEVE, document));
     } else {
@@ -76,7 +77,7 @@ export const getById = async (request, response) => {
 
 export const getByJobTraining = async (request, response) => {
   try {
-    let document = await Subject.find({
+    const document = await Subject.find({
       isJobTraining: true,
       deleted: false,
     }).populate('groups');
@@ -91,9 +92,9 @@ export const getByJobTraining = async (request, response) => {
 };
 
 export const getByName = async (request, response) => {
-  let name = request.body.name;
+  const name = request.body.name;
   try {
-    let document = await Subject.findOne({
+    const document = await Subject.findOne({
       name: name,
       deleted: false,
     }).populate('groups');
@@ -108,7 +109,7 @@ export const getByName = async (request, response) => {
 };
 
 export const log = async (request, response) => {
-  let { name, isJobTraining, groups } = request.body;
+  const { name, isJobTraining, groups } = request.body;
   try {
     let subject = await Subject.findOne({ name: name, deleted: false });
     if (!subject) {
@@ -117,7 +118,7 @@ export const log = async (request, response) => {
         isJobTraining: isJobTraining,
         groups: groups,
       });
-      let document = await subject.save();
+      const document = await subject.save();
       response.status(code.CREATED).send(json(body.POST, document));
     } else {
       response.status(code.BAD_REQUEST).send({ error: body.ENRROLLED });
@@ -128,9 +129,9 @@ export const log = async (request, response) => {
 };
 
 export const remove = async (request, response) => {
-  let id = request.body.id;
+  const id = request.body.id;
   try {
-    let document = await Subject.findByIdAndUpdate(
+    const document = await Subject.findByIdAndUpdate(
       id,
       { deleted: true },
       { new: true }
@@ -146,9 +147,9 @@ export const remove = async (request, response) => {
 };
 
 export const update = async (request, response) => {
-  let id = request.body.id;
+  const id = request.body.id;
   try {
-    let document = await Subject.findByIdAndUpdate(id, request.body, {
+    const document = await Subject.findByIdAndUpdate(id, request.body, {
       new: true,
     }).populate('groups');
     if (document) {

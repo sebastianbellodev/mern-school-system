@@ -1,5 +1,4 @@
 import bcrypt from 'bcrypt';
-import jwt from 'jsonwebtoken';
 import body from '../tools/body.js';
 import code from '../tools/code.js';
 import User from '../models/user-model.js';
@@ -31,7 +30,7 @@ const json = (message, document) => {
 
 export const get = async (request, response) => {
   try {
-    let document = await User.find({ deleted: false }).populate('role');
+    const document = await User.find({ deleted: false }).populate('role');
     if (document.length > 0) {
       response.status(code.OK).send(json(body.RETRIEVE, document));
     } else {
@@ -43,9 +42,9 @@ export const get = async (request, response) => {
 };
 
 export const getById = async (request, response) => {
-  let id = request.body.id;
+  const id = request.body.id;
   try {
-    let document = await User.findOne({ _id: id, deleted: false }).populate(
+    const document = await User.findOne({ _id: id, deleted: false }).populate(
       'role'
     );
     if (document) {
@@ -59,9 +58,9 @@ export const getById = async (request, response) => {
 };
 
 export const getByRole = async (request, response) => {
-  let role = request.body.role;
+  const role = request.body.role;
   try {
-    let document = await User.find({ role: role, deleted: false }).populate(
+    const document = await User.find({ role: role, deleted: false }).populate(
       'role'
     );
     if (document.length > 0) {
@@ -75,9 +74,9 @@ export const getByRole = async (request, response) => {
 };
 
 export const getByUsername = async (request, response) => {
-  let username = request.body.username;
+  const username = request.body.username;
   try {
-    let document = await User.findOne({
+    const document = await User.findOne({
       username: username,
       deleted: false,
     }).populate('role');
@@ -92,17 +91,17 @@ export const getByUsername = async (request, response) => {
 };
 
 export const login = async (request, response) => {
-  let { username, password } = request.body;
+  const { username, password } = request.body;
   try {
-    let document = await User.findOne({
+    const document = await User.findOne({
       username: username,
       deleted: false,
     }).populate('role');
     if (document) {
-      let isUser = await bcrypt.compare(password, document.password);
+      const isUser = await bcrypt.compare(password, document.password);
       if (isUser) {
-        let id = document._id;
-        let token = await signToken(id);
+        const id = document._id;
+        const token = await signToken(id);
         response.cookie('token', token);
         response.send(json(body.LOGIN, document));
       } else {
@@ -122,9 +121,9 @@ export const logOut = (request, response) => {
 };
 
 export const remove = async (request, response) => {
-  let id = request.body.id;
+  const id = request.body.id;
   try {
-    let document = await User.findByIdAndUpdate(
+    const document = await User.findByIdAndUpdate(
       id,
       { deleted: true },
       { new: true }
@@ -140,16 +139,16 @@ export const remove = async (request, response) => {
 };
 
 export const signUp = async (request, response) => {
-  let { username, password, role } = request.body;
+  const { username, password, role } = request.body;
   try {
     let user = await User.findOne({ username: username, deleted: false });
     if (!user) {
-      let salt = await bcrypt.genSalt(10);
+      const salt = await bcrypt.genSalt(10);
       bcrypt.hash(password, salt, async (error, hash) => {
         user = new User({ username: username, password: hash, role: role });
-        let document = await user.save();
-        let id = document._id;
-        let token = await signToken(id);
+        const document = await user.save();
+        const id = document._id;
+        const token = await signToken(id);
         response.cookie('token', token);
         response.status(code.CREATED).send(json(body.POST, document));
       });
@@ -162,9 +161,9 @@ export const signUp = async (request, response) => {
 };
 
 export const update = async (request, response) => {
-  let id = request.body.id;
+  const id = request.body.id;
   try {
-    let document = await User.findByIdAndUpdate(id, request.body, {
+    const document = await User.findByIdAndUpdate(id, request.body, {
       new: true,
     }).populate('role');
     if (document) {

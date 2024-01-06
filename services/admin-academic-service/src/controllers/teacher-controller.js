@@ -38,7 +38,7 @@ const json = (message, document) => {
 
 export const get = async (request, response) => {
   try {
-    let document = await Teacher.find({ deleted: false })
+    const document = await Teacher.find({ deleted: false })
       .populate('groups')
       .populate('subjects')
       .populate('user');
@@ -53,9 +53,9 @@ export const get = async (request, response) => {
 };
 
 export const getByEmailAddress = async (request, response) => {
-  let emailAddress = request.body.emailAddress;
+  const emailAddress = request.body.emailAddress;
   try {
-    let document = await Teacher.findOne({
+    const document = await Teacher.findOne({
       emailAddress: emailAddress,
       deleted: false,
     })
@@ -73,9 +73,9 @@ export const getByEmailAddress = async (request, response) => {
 };
 
 export const getByGroup = async (request, response) => {
-  let group = request.body.groups[0];
+  const group = request.body.groups[0];
   try {
-    let document = await Teacher.find({ groups: group, deleted: false })
+    const document = await Teacher.find({ groups: group, deleted: false })
       .populate('groups')
       .populate('subjects')
       .populate('user');
@@ -90,9 +90,9 @@ export const getByGroup = async (request, response) => {
 };
 
 export const getById = async (request, response) => {
-  let id = request.body.id;
+  const id = request.body.id;
   try {
-    let document = await Teacher.findOne({ _id: id, deleted: false })
+    const document = await Teacher.findOne({ _id: id, deleted: false })
       .populate('groups')
       .populate('subjects')
       .populate('user');
@@ -107,9 +107,9 @@ export const getById = async (request, response) => {
 };
 
 export const getBySubject = async (request, response) => {
-  let subject = request.body.subjects[0];
+  const subject = request.body.subjects[0];
   try {
-    let document = await Teacher.find({ subjects: subject, deleted: deleted })
+    const document = await Teacher.find({ subjects: subject, deleted: deleted })
       .populate('groups')
       .populate('subjects')
       .populate('user');
@@ -124,9 +124,9 @@ export const getBySubject = async (request, response) => {
 };
 
 export const getByUser = async (request, response) => {
-  let user = request.body.user;
+  const user = request.body.user;
   try {
-    let document = await Teacher.findOne({ user: user, deleted: false })
+    const document = await Teacher.findOne({ user: user, deleted: false })
       .populate('groups')
       .populate('subjects')
       .populate('user');
@@ -141,7 +141,7 @@ export const getByUser = async (request, response) => {
 };
 
 export const log = async (request, response) => {
-  let {
+  const {
     name,
     paternalSurname,
     maternalSurname,
@@ -165,7 +165,7 @@ export const log = async (request, response) => {
         subjects: subjects,
         user: user,
       });
-      let document = await teacher.save();
+      const document = await teacher.save();
       response.status(code.CREATED).send(json(body.POST, document));
     } else {
       response.status(code.BAD_REQUEST).send({ error: body.ENRROLLED });
@@ -176,9 +176,9 @@ export const log = async (request, response) => {
 };
 
 export const remove = async (request, response) => {
-  let id = request.body.id;
+  const id = request.body.id;
   try {
-    let document = await Teacher.findByIdAndUpdate(
+    const document = await Teacher.findByIdAndUpdate(
       id,
       { deleted: true },
       { new: true }
@@ -197,9 +197,9 @@ export const remove = async (request, response) => {
 };
 
 export const update = async (request, response) => {
-  let id = request.body.id;
+  const id = request.body.id;
   try {
-    let document = await Teacher.findByIdAndUpdate(id, request.body, {
+    const document = await Teacher.findByIdAndUpdate(id, request.body, {
       new: true,
     })
       .populate('groups')

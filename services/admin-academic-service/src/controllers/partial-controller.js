@@ -32,7 +32,9 @@ const json = (message, document) => {
 
 export const get = async (request, response) => {
   try {
-    let document = await Partial.find({ deleted: false }).populate('semester');
+    const document = await Partial.find({ deleted: false }).populate(
+      'semester'
+    );
     if (document.length > 0) {
       response.status(code.OK).send(json(body.RETRIEVE, document));
     } else {
@@ -44,9 +46,9 @@ export const get = async (request, response) => {
 };
 
 export const getByDate = async (request, response) => {
-  let date = new Date();
+  const date = new Date();
   try {
-    let document = await Partial.find({
+    const document = await Partial.find({
       startDate: { $lte: date },
       endDate: { $gte: date },
       deleted: false,
@@ -62,11 +64,12 @@ export const getByDate = async (request, response) => {
 };
 
 export const getById = async (request, response) => {
-  let id = request.body.id;
+  const id = request.body.id;
   try {
-    let document = await Partial.findOne({ _id: id, deleted: false }).populate(
-      'semester'
-    );
+    const document = await Partial.findOne({
+      _id: id,
+      deleted: false,
+    }).populate('semester');
     if (document) {
       response.status(code.OK).send(json(body.RETRIEVE, document));
     } else {
@@ -78,9 +81,9 @@ export const getById = async (request, response) => {
 };
 
 export const getByNumber = async (request, response) => {
-  let number = request.body.number;
+  const number = request.body.number;
   try {
-    let document = await Partial.find({
+    const document = await Partial.find({
       number: number,
       deleted: false,
     }).populate('semester');
@@ -95,9 +98,9 @@ export const getByNumber = async (request, response) => {
 };
 
 export const getBySemester = async (request, response) => {
-  let semester = request.body.semester;
+  const semester = request.body.semester;
   try {
-    let document = await Partial.find({
+    const document = await Partial.find({
       semester: semester,
       deleted: false,
     }).populate('semester');
@@ -112,7 +115,7 @@ export const getBySemester = async (request, response) => {
 };
 
 export const log = async (request, response) => {
-  let { number, startDate, endDate, semester } = request.body;
+  const { number, startDate, endDate, semester } = request.body;
   try {
     let partial = await Partial.findOne({
       number: number,
@@ -128,7 +131,7 @@ export const log = async (request, response) => {
         endDate: endDate,
         semester: semester,
       });
-      let document = await partial.save();
+      const document = await partial.save();
       response.status(code.CREATED).send(json(body.POST, document));
     } else {
       response.status(code.BAD_REQUEST).send({ error: body.ENRROLLED });
@@ -139,9 +142,9 @@ export const log = async (request, response) => {
 };
 
 export const remove = async (request, response) => {
-  let id = request.body.id;
+  const id = request.body.id;
   try {
-    let document = await Partial.findByIdAndUpdate(
+    const document = await Partial.findByIdAndUpdate(
       id,
       { deleted: true },
       { new: true }
@@ -157,9 +160,9 @@ export const remove = async (request, response) => {
 };
 
 export const update = async (request, response) => {
-  let id = request.body.id;
+  const id = request.body.id;
   try {
-    let document = await Partial.findByIdAndUpdate(id, request.body, {
+    const document = await Partial.findByIdAndUpdate(id, request.body, {
       new: true,
     }).populate('semester');
     if (document) {

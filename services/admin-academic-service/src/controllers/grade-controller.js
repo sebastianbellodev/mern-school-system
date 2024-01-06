@@ -32,7 +32,7 @@ const json = (message, document) => {
 
 export const get = async (request, response) => {
   try {
-    let document = await Grade.find({ deleted: false })
+    const document = await Grade.find({ deleted: false })
       .populate('partial')
       .populate('student')
       .populate('subject');
@@ -47,9 +47,9 @@ export const get = async (request, response) => {
 };
 
 export const getById = async (request, response) => {
-  let id = request.body.id;
+  const id = request.body.id;
   try {
-    let document = await Grade.findOne({ _id: id, deleted: false })
+    const document = await Grade.findOne({ _id: id, deleted: false })
       .populate('partial')
       .populate('student')
       .populate('subject');
@@ -64,9 +64,9 @@ export const getById = async (request, response) => {
 };
 
 export const getByNumber = async (request, response) => {
-  let number = request.body.number;
+  const number = request.body.number;
   try {
-    let document = await Grade.find({ number: number, deleted: false })
+    const document = await Grade.find({ number: number, deleted: false })
       .populate('partial')
       .populate('student')
       .populate('subject');
@@ -81,9 +81,9 @@ export const getByNumber = async (request, response) => {
 };
 
 export const getByPartial = async (request, response) => {
-  let partial = request.body.partial;
+  const partial = request.body.partial;
   try {
-    let document = await Grade.find({ partial: partial, deleted: false })
+    const document = await Grade.find({ partial: partial, deleted: false })
       .populate('partial')
       .populate('student')
       .populate('subject');
@@ -98,9 +98,9 @@ export const getByPartial = async (request, response) => {
 };
 
 export const getByStudent = async (request, response) => {
-  let student = request.body.student;
+  const student = request.body.student;
   try {
-    let document = await Grade.find({ student: student, deleted: false })
+    const document = await Grade.find({ student: student, deleted: false })
       .populate('partial')
       .populate('student')
       .populate('subject');
@@ -115,9 +115,9 @@ export const getByStudent = async (request, response) => {
 };
 
 export const getBySubject = async (request, response) => {
-  let subject = request.body.subject;
+  const subject = request.body.subject;
   try {
-    let document = await Grade.find({ subject: subject, deleted: false })
+    const document = await Grade.find({ subject: subject, deleted: false })
       .populate('partial')
       .populate('student')
       .populate('subject');
@@ -132,7 +132,7 @@ export const getBySubject = async (request, response) => {
 };
 
 export const log = async (request, response) => {
-  let { number, partial, student, subject } = request.body;
+  const { number, partial, student, subject } = request.body;
   try {
     let grade = await Grade.findOne({
       partial: partial,
@@ -147,7 +147,7 @@ export const log = async (request, response) => {
         student: student,
         subject: subject,
       });
-      let document = await grade.save();
+      const document = await grade.save();
       response.status(code.CREATED).send(json(body.POST, document));
     } else {
       response.status(code.BAD_REQUEST).send({ error: body.ENRROLLED });
@@ -158,9 +158,9 @@ export const log = async (request, response) => {
 };
 
 export const remove = async (request, response) => {
-  let id = request.body.id;
+  const id = request.body.id;
   try {
-    let document = await Grade.findByIdAndUpdate(
+    const document = await Grade.findByIdAndUpdate(
       id,
       { deleted: true },
       { new: true }
@@ -180,7 +180,7 @@ export const remove = async (request, response) => {
 
 export const update = async (request, response) => {
   try {
-    let document = await Grade.findByIdAndUpdate(
+    const document = await Grade.findByIdAndUpdate(
       request.body.id,
       request.body,
       { new: true }
