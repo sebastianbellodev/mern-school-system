@@ -28,7 +28,7 @@ const json = (message, document) => {
 
 export const get = async (request, response) => {
   try {
-    let document = await PropadeuticArea.find({ deleted: false }).populate(
+    const document = await PropadeuticArea.find({ deleted: false }).populate(
       'groups'
     );
     if (document.length > 0) {
@@ -42,9 +42,9 @@ export const get = async (request, response) => {
 };
 
 export const getByGroup = async (request, response) => {
-  let group = request.body.groups[0];
+  const group = request.body.groups[0];
   try {
-    let document = await PropadeuticArea.findOne({
+    const document = await PropadeuticArea.findOne({
       groups: group,
       deleted: false,
     }).populate('groups');
@@ -59,9 +59,9 @@ export const getByGroup = async (request, response) => {
 };
 
 export const getById = async (request, response) => {
-  let id = request.body.id;
+  const id = request.body.id;
   try {
-    let document = await PropadeuticArea.findOne({
+    const document = await PropadeuticArea.findOne({
       _id: id,
       deleted: false,
     }).populate('groups');
@@ -76,9 +76,9 @@ export const getById = async (request, response) => {
 };
 
 export const getByName = async (request, response) => {
-  let name = request.body.name;
+  const name = request.body.name;
   try {
-    let document = await PropadeuticArea.findOne({
+    const document = await PropadeuticArea.findOne({
       name: name,
       deleted: false,
     }).populate('groups');
@@ -93,7 +93,7 @@ export const getByName = async (request, response) => {
 };
 
 export const log = async (request, response) => {
-  let { name, groups } = request.body;
+  const { name, groups } = request.body;
   try {
     let propadeuticArea = await PropadeuticArea.findOne({
       name: name,
@@ -112,9 +112,9 @@ export const log = async (request, response) => {
 };
 
 export const remove = async (request, response) => {
-  let id = request.body.id;
+  const id = request.body.id;
   try {
-    let document = await PropadeuticArea.findByIdAndUpdate(
+    const document = await PropadeuticArea.findByIdAndUpdate(
       id,
       { deleted: true },
       { new: true }
@@ -130,9 +130,9 @@ export const remove = async (request, response) => {
 };
 
 export const update = async (request, response) => {
-  let id = request.body.id;
+  const id = request.body.id;
   try {
-    let document = await PropadeuticArea.findByIdAndUpdate(id, request.body, {
+    const document = await PropadeuticArea.findByIdAndUpdate(id, request.body, {
       new: true,
     }).populate('groups');
     if (document) {

@@ -7,7 +7,6 @@ import {
   remove,
   update,
 } from '../controllers/format-controller.js';
-import { isValidToken } from '../security/jwt.js';
 import { isValidAuth } from '../security/basic.js';
 
 const router = Router();

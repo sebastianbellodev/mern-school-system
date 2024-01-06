@@ -36,7 +36,9 @@ const json = (message, document) => {
 
 export const get = async (request, response) => {
   try {
-    let document = await Notification.find({ deleted: false }).populate('type');
+    const document = await Notification.find({ deleted: false }).populate(
+      'type'
+    );
     if (document.length > 0) {
       response.status(code.OK).send(json(body.RETRIEVE, document));
     } else {
@@ -48,9 +50,9 @@ export const get = async (request, response) => {
 };
 
 export const getByDate = async (request, response) => {
-  let date = new Date();
+  const date = new Date();
   try {
-    let document = await Notification.find({
+    const document = await Notification.find({
       date: { $lte: date },
       deleted: false,
     }).populate('type');
@@ -65,9 +67,9 @@ export const getByDate = async (request, response) => {
 };
 
 export const getById = async (request, response) => {
-  let id = request.body.id;
+  const id = request.body.id;
   try {
-    let document = await Notification.findOne({
+    const document = await Notification.findOne({
       _id: id,
       deleted: false,
     }).populate('type');
@@ -82,9 +84,9 @@ export const getById = async (request, response) => {
 };
 
 export const getByTitle = async (request, response) => {
-  let title = request.body.title;
+  const title = request.body.title;
   try {
-    let document = await Notification.find({
+    const document = await Notification.find({
       title: title,
       deleted: false,
     }).populate('type');
@@ -99,9 +101,9 @@ export const getByTitle = async (request, response) => {
 };
 
 export const getByType = async (request, response) => {
-  let type = request.body.type;
+  const type = request.body.type;
   try {
-    let document = await Notification.find({
+    const document = await Notification.find({
       type: type,
       deleted: false,
     }).populate('type');
@@ -116,7 +118,7 @@ export const getByType = async (request, response) => {
 };
 
 export const log = async (request, response) => {
-  let { title, description, date, image, isSpinner, type } = request.body;
+  const { title, description, date, image, isSpinner, type } = request.body;
   try {
     let notification = await Notification.findOne({
       title: title,
@@ -135,7 +137,7 @@ export const log = async (request, response) => {
         isSpinner: isSpinner,
         type: type,
       });
-      let document = await notification.save();
+      const document = await notification.save();
       response.status(code.CREATED).send(json(body.POST, document));
     } else {
       response.status(code.BAD_REQUEST).send({ error: body.ENRROLLED });
@@ -146,9 +148,9 @@ export const log = async (request, response) => {
 };
 
 export const remove = async (request, response) => {
-  let id = request.body.id;
+  const id = request.body.id;
   try {
-    let document = await Notification.findByIdAndUpdate(
+    const document = await Notification.findByIdAndUpdate(
       id,
       { deleted: true },
       { new: true }
@@ -164,9 +166,9 @@ export const remove = async (request, response) => {
 };
 
 export const update = async (request, response) => {
-  let id = request.body.id;
+  const id = request.body.id;
   try {
-    let document = await Notification.findByIdAndUpdate(id, request.body, {
+    const document = await Notification.findByIdAndUpdate(id, request.body, {
       new: true,
     }).populate('type');
     if (document) {
