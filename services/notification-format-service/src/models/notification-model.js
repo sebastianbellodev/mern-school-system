@@ -14,8 +14,8 @@ const NOTIFICATION_SCHEMA = new mongoose.Schema({
     required: true,
   },
   image: {
-    type: String,
-    required: true,
+    public_id: String,
+    secure_url: String,
   },
   isSpinner: {
     type: Boolean,

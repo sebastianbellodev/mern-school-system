@@ -36,6 +36,10 @@ function App() {
                   element={<NotificationFormPage></NotificationFormPage>}
                 ></Route>
                 <Route
+                  path="/notification/:id"
+                  element={<NotificationFormPage></NotificationFormPage>}
+                ></Route>
+                <Route
                   path="/format"
                   element={<FormatPage></FormatPage>}
                 ></Route>
