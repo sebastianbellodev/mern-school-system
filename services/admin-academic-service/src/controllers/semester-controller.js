@@ -94,10 +94,12 @@ export const log = async (request, response) => {
 export const remove = async (request, response) => {
   let id = request.body.id;
   try {
-    let semester = await Semester.findOne({ _id: id, deleted: false });
-    if (semester) {
-      semester.deleted = true;
-      let document = await semester.save();
+    let document = await Semester.findByIdAndUpdate(
+      id,
+      { deleted: true },
+      { new: true }
+    );
+    if (document) {
       response.status(code.OK).send(json(body.DELETE, document));
     } else {
       response.status(code.NOT_FOUND).send({ error: body.NOT_FOUND });
@@ -108,25 +110,15 @@ export const remove = async (request, response) => {
 };
 
 export const update = async (request, response) => {
-  let { id, startDate, endDate } = request.body;
+  let id = request.body.id;
   try {
-    let semester = await Semester.findOne({
-      startDate: startDate,
-      endDate: endDate,
-      deleted: false,
+    let document = await Semester.findByIdAndUpdate(id, request.body, {
+      new: true,
     });
-    if (!semester) {
-      semester = await Semester.findOne({ _id: id, deleted: false });
-      if (semester) {
-        semester.startDate = startDate;
-        semester.endDate = endDate;
-        let document = await semester.save();
-        response.status(code.OK).send(json(body.PUT, document));
-      } else {
-        response.status(code.NOT_FOUND).send({ error: body.NOT_FOUND });
-      }
+    if (document) {
+      response.status(code.OK).send(json(body.PUT, document));
     } else {
-      response.status(code.BAD_REQUEST).send({ error: body.ENRROLLED });
+      response.status(code.NOT_FOUND).send({ error: body.NOT_FOUND });
     }
   } catch (error) {
     response.status(code.INTERNAL_SERVER_ERROR).send({ error: body.ERROR });

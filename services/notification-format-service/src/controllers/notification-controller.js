@@ -53,7 +53,7 @@ export const getByDate = async (request, response) => {
     let document = await Notification.find({
       date: { $lte: date },
       deleted: false,
-    });
+    }).populate('type');
     if (document.length > 0) {
       response.status(code.OK).send(json(body.RETRIEVE, document));
     } else {
@@ -67,7 +67,10 @@ export const getByDate = async (request, response) => {
 export const getById = async (request, response) => {
   let id = request.body.id;
   try {
-    let document = await Notification.findOne({ _id: id, deleted: false });
+    let document = await Notification.findOne({
+      _id: id,
+      deleted: false,
+    }).populate('type');
     if (document) {
       response.status(code.OK).send(json(body.RETRIEVE, document));
     } else {
@@ -81,7 +84,10 @@ export const getById = async (request, response) => {
 export const getByTitle = async (request, response) => {
   let title = request.body.title;
   try {
-    let document = await Notification.find({ title: title, deleted: false });
+    let document = await Notification.find({
+      title: title,
+      deleted: false,
+    }).populate('type');
     if (document.length > 0) {
       response.status(code.OK).send(json(body.RETRIEVE, document));
     } else {
@@ -95,7 +101,10 @@ export const getByTitle = async (request, response) => {
 export const getByType = async (request, response) => {
   let type = request.body.type;
   try {
-    let document = await Notification.find({ type: type, deleted: false });
+    let document = await Notification.find({
+      type: type,
+      deleted: false,
+    }).populate('type');
     if (document.length > 0) {
       response.status(code.OK).send(json(body.RETRIEVE, document));
     } else {
@@ -137,42 +146,34 @@ export const log = async (request, response) => {
 };
 
 export const remove = async (request, response) => {
+  let id = request.body.id;
   try {
-    const document = await Notification.findByIdAndUpdate(
-      request.body.id,
-      {
-        deleted: true,
-      },
-      {
-        new: true,
-      }
+    let document = await Notification.findByIdAndUpdate(
+      id,
+      { deleted: true },
+      { new: true }
     ).populate('type');
-
-    if (!document) {
-      return response.status(code.NOT_FOUND).send({ error: body.NOT_FOUND });
+    if (document) {
+      response.status(code.OK).send(json(body.DELETE, document));
+    } else {
+      response.status(code.NOT_FOUND).send({ error: body.NOT_FOUND });
     }
-
-    response.status(code.NO_CONTENT).send(json(body.DELETE, document));
   } catch (error) {
     response.status(code.INTERNAL_SERVER_ERROR).send({ error: body.ERROR });
   }
 };
 
 export const update = async (request, response) => {
+  let id = request.body.id;
   try {
-    const document = await Notification.findByIdAndUpdate(
-      request.body.id,
-      request.body,
-      {
-        new: true,
-      }
-    ).populate('type');
-
-    if (!document) {
-      return response.status(code.NOT_FOUND).send({ error: body.NOT_FOUND });
+    let document = await Notification.findByIdAndUpdate(id, request.body, {
+      new: true,
+    }).populate('type');
+    if (document) {
+      response.status(code.OK).send(json(body.PUT, document));
+    } else {
+      response.status(code.NOT_FOUND).send({ error: body.NOT_FOUND });
     }
-
-    response.status(code.CREATED).send(json(body.PUT, document));
   } catch (error) {
     response.status(code.INTERNAL_SERVER_ERROR).send({ error: body.ERROR });
   }

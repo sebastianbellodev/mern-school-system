@@ -38,7 +38,10 @@ const json = (message, document) => {
 
 export const get = async (request, response) => {
   try {
-    let document = await Teacher.find({ deleted: false });
+    let document = await Teacher.find({ deleted: false })
+      .populate('groups')
+      .populate('subjects')
+      .populate('user');
     if (document.length > 0) {
       response.status(code.OK).send(json(body.RETRIEVE, document));
     } else {
@@ -55,7 +58,10 @@ export const getByEmailAddress = async (request, response) => {
     let document = await Teacher.findOne({
       emailAddress: emailAddress,
       deleted: false,
-    });
+    })
+      .populate('groups')
+      .populate('subjects')
+      .populate('user');
     if (document) {
       response.status(code.OK).send(json(body.RETRIEVE, document));
     } else {
@@ -69,7 +75,10 @@ export const getByEmailAddress = async (request, response) => {
 export const getByGroup = async (request, response) => {
   let group = request.body.groups[0];
   try {
-    let document = await Teacher.find({ groups: group, deleted: false });
+    let document = await Teacher.find({ groups: group, deleted: false })
+      .populate('groups')
+      .populate('subjects')
+      .populate('user');
     if (document.length > 0) {
       response.status(code.OK).send(json(body.RETRIEVE, document));
     } else {
@@ -83,7 +92,10 @@ export const getByGroup = async (request, response) => {
 export const getById = async (request, response) => {
   let id = request.body.id;
   try {
-    let document = await Teacher.findOne({ _id: id, deleted: false });
+    let document = await Teacher.findOne({ _id: id, deleted: false })
+      .populate('groups')
+      .populate('subjects')
+      .populate('user');
     if (document) {
       response.status(code.OK).send(json(body.RETRIEVE, document));
     } else {
@@ -97,7 +109,10 @@ export const getById = async (request, response) => {
 export const getBySubject = async (request, response) => {
   let subject = request.body.subjects[0];
   try {
-    let document = await Teacher.find({ subjects: subject, deleted: deleted });
+    let document = await Teacher.find({ subjects: subject, deleted: deleted })
+      .populate('groups')
+      .populate('subjects')
+      .populate('user');
     if (document.length > 0) {
       response.status(code.OK).send(json(body.RETRIEVE, document));
     } else {
@@ -111,7 +126,10 @@ export const getBySubject = async (request, response) => {
 export const getByUser = async (request, response) => {
   let user = request.body.user;
   try {
-    let document = await Teacher.findOne({ user: user, deleted: false });
+    let document = await Teacher.findOne({ user: user, deleted: false })
+      .populate('groups')
+      .populate('subjects')
+      .populate('user');
     if (document) {
       response.status(code.OK).send(json(body.RETRIEVE, document));
     } else {
@@ -160,10 +178,15 @@ export const log = async (request, response) => {
 export const remove = async (request, response) => {
   let id = request.body.id;
   try {
-    let teacher = await Teacher.findOne({ _id: id, deleted: false });
-    if (teacher) {
-      teacher.deleted = true;
-      let document = await teacher.save();
+    let document = await Teacher.findByIdAndUpdate(
+      id,
+      { deleted: true },
+      { new: true }
+    )
+      .populate('groups')
+      .populate('subjects')
+      .populate('user');
+    if (document) {
       response.status(code.OK).send(json(body.DELETE, document));
     } else {
       response.status(code.NOT_FOUND).send({ error: body.NOT_FOUND });
@@ -174,38 +197,18 @@ export const remove = async (request, response) => {
 };
 
 export const update = async (request, response) => {
-  let {
-    id,
-    name,
-    paternalSurname,
-    maternalSurname,
-    emailAddress,
-    groups,
-    subjects,
-    user,
-  } = request.body;
+  let id = request.body.id;
   try {
-    let teacher = await Teacher.findOne({
-      emailAddress: emailAddress,
-      deleted: false,
-    });
-    if (!teacher) {
-      teacher = await Teacher.findOne({ _id: id, deleted: false });
-      if (teacher) {
-        teacher.name = name;
-        teacher.paternalSurname = paternalSurname;
-        teacher.maternalSurname = maternalSurname;
-        teacher.emailAddress = emailAddress;
-        teacher.groups = groups;
-        teacher.subjects = subjects;
-        teacher.user = user;
-        let document = await teacher.save();
-        response.status(code.OK).send(json(body.PUT, document));
-      } else {
-        response.status(code.NOT_FOUND).send({ error: body.NOT_FOUND });
-      }
+    let document = await Teacher.findByIdAndUpdate(id, request.body, {
+      new: true,
+    })
+      .populate('groups')
+      .populate('subjects')
+      .populate('user');
+    if (document) {
+      response.status(code.OK).send(json(body.PUT, document));
     } else {
-      response.status(code.BAD_REQUEST).send({ error: body.ENRROLLED });
+      response.status(code.NOT_FOUND).send({ error: body.NOT_FOUND });
     }
   } catch (error) {
     response.status(code.INTERNAL_SERVER_ERROR).send({ error: body.ERROR });

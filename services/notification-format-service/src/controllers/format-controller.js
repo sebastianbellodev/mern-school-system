@@ -84,42 +84,34 @@ export const log = async (request, response) => {
 };
 
 export const remove = async (request, response) => {
+  let id = request.body.id;
   try {
-    const document = await Format.findByIdAndUpdate(
-      request.body.id,
-      {
-        deleted: true,
-      },
-      {
-        new: true,
-      }
+    let document = await Format.findByIdAndUpdate(
+      id,
+      { deleted: true },
+      { new: true }
     );
-
-    if (!document) {
-      return response.status(code.NOT_FOUND).send({ error: body.NOT_FOUND });
+    if (document) {
+      response.status(code.OK).send(json(body.DELETE, document));
+    } else {
+      response.status(code.NOT_FOUND).send({ error: body.NOT_FOUND });
     }
-
-    response.status(code.NO_CONTENT).send(json(body.DELETE, document));
   } catch (error) {
     response.status(code.INTERNAL_SERVER_ERROR).send({ error: body.ERROR });
   }
 };
 
 export const update = async (request, response) => {
+  let id = request.body.id;
   try {
-    const document = await Format.findByIdAndUpdate(
-      request.body.id,
-      request.body,
-      {
-        new: true,
-      }
-    );
-
-    if (!document) {
-      return response.status(code.NOT_FOUND).send({ error: body.NOT_FOUND });
+    let document = await Format.findByIdAndUpdate(id, request.body, {
+      new: true,
+    });
+    if (document) {
+      response.status(code.OK).send(json(body.PUT, document));
+    } else {
+      response.status(code.NOT_FOUND).send({ error: body.NOT_FOUND });
     }
-
-    response.status(code.CREATED).send(json(body.PUT, document));
   } catch (error) {
     response.status(code.INTERNAL_SERVER_ERROR).send({ error: body.ERROR });
   }

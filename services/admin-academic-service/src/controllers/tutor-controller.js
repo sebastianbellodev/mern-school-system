@@ -108,10 +108,12 @@ export const log = async (request, response) => {
 export const remove = async (request, response) => {
   let id = request.body.id;
   try {
-    let tutor = await Tutor.findOne({ _id: id, deleted: false });
-    if (tutor) {
-      tutor.deleted = true;
-      let document = await tutor.save();
+    let document = await Tutor.findByIdAndUpdate(
+      id,
+      { deleted: true },
+      { new: true }
+    );
+    if (document) {
       response.status(code.OK).send(json(body.DELETE, document));
     } else {
       response.status(code.NOT_FOUND).send({ error: body.NOT_FOUND });
@@ -122,36 +124,15 @@ export const remove = async (request, response) => {
 };
 
 export const update = async (request, response) => {
-  let {
-    id,
-    name,
-    paternalSurname,
-    maternalSurname,
-    address,
-    emailAddress,
-    phone,
-  } = request.body;
+  let id = request.body.id;
   try {
-    let tutor = await Tutor.findOne({
-      emailAddress: emailAddress,
-      deleted: false,
+    let document = await Tutor.findByIdAndUpdate(id, request.body, {
+      new: true,
     });
-    if (!tutor) {
-      tutor = await Tutor.findOne({ _id: id, deleted: false });
-      if (tutor) {
-        tutor.name = name;
-        tutor.paternalSurname = paternalSurname;
-        tutor.maternalSurname = maternalSurname;
-        tutor.address = address;
-        tutor.emailAddress = emailAddress;
-        tutor.phone = phone;
-        let document = await tutor.save();
-        response.status(code.OK).send(json(body.PUT, document));
-      } else {
-        response.status(code.NOT_FOUND).send({ error: body.NOT_FOUND });
-      }
+    if (document) {
+      response.status(code.OK).send(json(body.PUT, document));
     } else {
-      response.status(code.BAD_REQUEST).send({ error: body.ENRROLLED });
+      response.status(code.NOT_FOUND).send({ error: body.NOT_FOUND });
     }
   } catch (error) {
     response.status(code.INTERNAL_SERVER_ERROR).send({ error: body.ERROR });

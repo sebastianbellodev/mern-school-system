@@ -28,7 +28,9 @@ const json = (message, document) => {
 
 export const get = async (request, response) => {
   try {
-    let document = await PropadeuticArea.find({ deleted: false });
+    let document = await PropadeuticArea.find({ deleted: false }).populate(
+      'groups'
+    );
     if (document.length > 0) {
       response.status(code.OK).send(json(body.RETRIEVE, document));
     } else {
@@ -45,7 +47,7 @@ export const getByGroup = async (request, response) => {
     let document = await PropadeuticArea.findOne({
       groups: group,
       deleted: false,
-    });
+    }).populate('groups');
     if (document) {
       response.status(code.OK).send(json(body.RETRIEVE, document));
     } else {
@@ -59,7 +61,10 @@ export const getByGroup = async (request, response) => {
 export const getById = async (request, response) => {
   let id = request.body.id;
   try {
-    let document = await PropadeuticArea.findOne({ _id: id, deleted: false });
+    let document = await PropadeuticArea.findOne({
+      _id: id,
+      deleted: false,
+    }).populate('groups');
     if (document) {
       response.status(code.OK).send(json(body.RETRIEVE, document));
     } else {
@@ -76,7 +81,7 @@ export const getByName = async (request, response) => {
     let document = await PropadeuticArea.findOne({
       name: name,
       deleted: false,
-    });
+    }).populate('groups');
     if (document) {
       response.status(code.OK).send(json(body.RETRIEVE, document));
     } else {
@@ -109,14 +114,13 @@ export const log = async (request, response) => {
 export const remove = async (request, response) => {
   let id = request.body.id;
   try {
-    let propadeuticArea = await PropadeuticArea.findOne({
-      _id: id,
-      deleted: false,
-    });
-    if (propadeuticArea) {
-      propadeuticArea.deleted = true;
-      let document = await propadeuticArea.save();
-      response.status(code.OK).send(json(body.DELETE, document));
+    let document = await PropadeuticArea.findByIdAndUpdate(
+      id,
+      { deleted: true },
+      { new: true }
+    ).populate('groups');
+    if (document) {
+      response.stauts(code.OK).send(json(body.DELETE, document));
     } else {
       response.status(code.NOT_FOUND).send({ error: body.NOT_FOUND });
     }
@@ -126,27 +130,15 @@ export const remove = async (request, response) => {
 };
 
 export const update = async (request, response) => {
-  let { id, name, groups } = request.body;
+  let id = request.body.id;
   try {
-    let propadeuticArea = await PropadeuticArea.findOne({
-      name: name,
-      deleted: false,
-    });
-    if (!propadeuticArea) {
-      propadeuticArea = await PropadeuticArea.findOne({
-        _id: id,
-        deleted: false,
-      });
-      if (propadeuticArea) {
-        propadeuticArea.name = name;
-        propadeuticArea.groups = groups;
-        let document = await propadeuticArea.save();
-        response.status(code.OK).send(json(body.PUT, document));
-      } else {
-        response.status(code.NOT_FOUND).send({ error: body.NOT_FOUND });
-      }
+    let document = await PropadeuticArea.findByIdAndUpdate(id, request.body, {
+      new: true,
+    }).populate('groups');
+    if (document) {
+      response.stauts(code.OK).send(json(body.PUT, document));
     } else {
-      response.status(code.BAD_REQUEST).send({ error: body.ENRROLLED });
+      response.status(code.NOT_FOUND).send({ error: body.NOT_FOUND });
     }
   } catch (error) {
     response.status(code.INTERNAL_SERVER_ERROR).send({ error: body.ERROR });
