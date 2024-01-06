@@ -6,9 +6,12 @@ import {
   FaTrash as Delete,
 } from 'react-icons/fa6';
 import { useNotification } from '../context/NotificationContext.jsx';
+import { useNavigate } from 'react-router-dom';
 
 function NotificationCard({ notification }) {
   const { removeNotification } = useNotification();
+
+  const navigate = useNavigate();
 
   return (
     <article className="flex flex-col h-[180px] w-[300px] shadow-md overflow-hidden rounded-2xl">
@@ -28,6 +31,7 @@ function NotificationCard({ notification }) {
           variant="primary"
           type="submit"
           className="h-[5vh] bg-yellow border-none hover:bg-yellow_hover"
+          onClick={() => navigate(`/notification/${notification.id}`)}
         >
           <Edit size={15}></Edit>
         </Button>

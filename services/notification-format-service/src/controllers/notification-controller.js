@@ -1,6 +1,9 @@
+import fs from 'fs-extra';
+
 import body from '../tools/body.js';
 import code from '../tools/code.js';
 import Notification from '../models/notification-model.js';
+import { uploadImage } from '../utils/cloudinary.js';
 
 const json = (message, document) => {
   if (Array.isArray(document)) {
@@ -67,12 +70,10 @@ export const getByDate = async (request, response) => {
 };
 
 export const getById = async (request, response) => {
-  const id = request.body.id;
   try {
-    const document = await Notification.findOne({
-      _id: id,
-      deleted: false,
-    }).populate('type');
+    let document = await Notification.findById(request.body.id).populate(
+      'type'
+    );
     if (document) {
       response.status(code.OK).send(json(body.RETRIEVE, document));
     } else {
@@ -137,7 +138,19 @@ export const log = async (request, response) => {
         isSpinner: isSpinner,
         type: type,
       });
-      const document = await notification.save();
+
+      if (request.files?.image) {
+        const result = await uploadImage(request.files.image.tempFilePath);
+
+        notification.image = {
+          public_id: result.public_id,
+          secure_url: result.secure_url,
+        };
+
+        await fs.unlink(request.files.image.tempFilePath);
+      }
+
+      let document = await notification.save();
       response.status(code.CREATED).send(json(body.POST, document));
     } else {
       response.status(code.BAD_REQUEST).send({ error: body.ENRROLLED });
@@ -176,6 +189,19 @@ export const update = async (request, response) => {
     } else {
       response.status(code.NOT_FOUND).send({ error: body.NOT_FOUND });
     }
+
+    if (request.files?.image) {
+      const result = await uploadImage(request.files.image.tempFilePath);
+
+      document.image = {
+        public_id: result.public_id,
+        secure_url: result.secure_url,
+      };
+
+      await fs.unlink(request.files.image.tempFilePath);
+    }
+
+    response.status(code.CREATED).send(json(body.PUT, document));
   } catch (error) {
     response.status(code.INTERNAL_SERVER_ERROR).send({ error: body.ERROR });
   }

@@ -8,8 +8,8 @@ import Col from 'react-bootstrap/esm/Col';
 import Row from 'react-bootstrap/Row';
 import * as formik from 'formik';
 import * as yup from 'yup';
-import { useNavigate } from 'react-router-dom';
-import { useEffect } from 'react';
+import { useNavigate, useParams } from 'react-router-dom';
+import { useEffect, useRef, useState } from 'react';
 
 import Header from '../components/Header';
 import { errors } from '../tools/errors/errors.js';
@@ -18,16 +18,50 @@ import { useType } from '../context/TypeContext.jsx';
 
 function NotificationFormPage() {
   const { Formik } = formik;
-  const { logNotification, notification } = useNotification();
+  const [image, setImage] = useState({});
+  const {
+    logNotification,
+    getNotificationById,
+    updateNotification,
+    notification,
+  } = useNotification();
   const { getType, type, errors: typeErrors } = useType();
   const navigate = useNavigate();
+  const params = useParams();
+  const formikRef = useRef();
+
+  useEffect(() => {
+    async function loadNotification() {
+      if (params.id) {
+        const notfication = await getNotificationById(params.id);
+        const imagePreview = document.getElementById('imagePreview');
+        formikRef.current.setFieldValue('title', notfication.title);
+        formikRef.current.setFieldValue('isSpinner', notfication.isSpinner);
+        formikRef.current.setFieldValue('type', notfication.type._id);
+        formikRef.current.setFieldValue(
+          'date',
+          String(notfication.date).slice(0, 10)
+        );
+        formikRef.current.setFieldValue('description', notfication.description);
+        imagePreview.src =
+          'https://res.cloudinary.com/dif3tn58q/image/upload/v1704527042/notification/m9c0dua5ged2syjirhrz.webp';
+        imagePreview.classList.remove('hidden');
+      }
+    }
+    loadNotification();
+  }, []);
 
   useEffect(() => {
     getType();
   }, []);
 
-  const log = (notification) => {
-    notification.image = 'file5.png';
+  const handleFormSubmit = (notification) => {
+    notification = { ...notification, image };
+    if (params.id) {
+      notification.id = params.id;
+      updateNotification(notification);
+      return navigate('/notification');
+    }
     logNotification(notification);
     navigate('/notification');
   };
@@ -55,8 +89,9 @@ function NotificationFormPage() {
         </header>
         <section>
           <Formik
+            innerRef={formikRef}
             validationSchema={schema}
-            onSubmit={log}
+            onSubmit={handleFormSubmit}
             initialValues={{
               title: '',
               type: '',
@@ -65,7 +100,13 @@ function NotificationFormPage() {
               description: '',
             }}
           >
-            {({ handleSubmit, handleChange, values, errors }) => (
+            {({
+              handleSubmit,
+              handleChange,
+              setFieldValue,
+              values,
+              errors,
+            }) => (
               <Form
                 noValidate
                 onSubmit={handleSubmit}
@@ -97,6 +138,7 @@ function NotificationFormPage() {
                       type="checkbox"
                       label="Incluir en la página institucional"
                       name="isSpinner"
+                      checked={values.isSpinner}
                       value={values.isSpinner}
                       onChange={handleChange}
                       isInvalid={!!errors.isSpinner}
@@ -169,10 +211,55 @@ function NotificationFormPage() {
                     </FloatingLabel>
                   </Form.Group>
                 </section>
+                <section>
+                  <header>
+                    <h1 className="font-bold text-lg">
+                      Imagen<nav></nav>
+                    </h1>
+                    <h2 className="mb-3">
+                      Únicamente puede seleccionar una imagen con un tamaño de
+                      1250 píxeles de altura por 850 píxeles de altura y un peso
+                      de 1 MB. El formato de imagen esperado es webp.
+                    </h2>
+                  </header>
+                  <article className="flex gap-3 items-center">
+                    <Form.Group controlId="fileValidation" className="mb-3">
+                      <Form.Control
+                        type="file"
+                        accept="image/webp"
+                        value={values.image}
+                        onChange={(e) => {
+                          const file = e.target.files[0];
+                          const imagePreview =
+                            document.getElementById('imagePreview');
+                          const reader = new FileReader();
+                          reader.onloadend = () => {
+                            imagePreview.src = reader.result;
+                            imagePreview.classList.remove('hidden');
+                          };
+                          reader.readAsDataURL(file);
+                          setImage(file);
+                        }}
+                        isInvalid={!!errors.image}
+                      />
+                      <Form.Control.Feedback type="invalid">
+                        {errors.image}
+                      </Form.Control.Feedback>
+                    </Form.Group>
+                    <div className="shadow-m">
+                      <img
+                        className="hidden h-[100px] w-[300px]"
+                        id="imagePreview"
+                        src=""
+                        alt="Imagen seleccionada"
+                      />
+                    </div>
+                  </article>
+                </section>
                 <Button
                   variant="primary"
                   type="submit"
-                  className="h-14 bg-grey border-none hover:bg-grey_hover text-white font-bold text-base"
+                  className="h-14 bg-grey border-none hover:bg-grey_hover text-white font-bold text-base w-[25%]"
                 >
                   Guardar
                 </Button>

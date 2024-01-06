@@ -3,7 +3,13 @@
 /* eslint-disable react-refresh/only-export-components */
 import { createContext, useContext, useState, useEffect } from 'react';
 
-import { getRequest, logRequest, removeRequest } from '../api/notification.js';
+import {
+  getRequest,
+  getByIdRequest,
+  logRequest,
+  updateRequest,
+  removeRequest,
+} from '../api/notification.js';
 
 const NotificationContext = createContext();
 
@@ -37,11 +43,42 @@ export const NotificationProvider = ({ children }) => {
     }
   };
 
+  const getNotificationById = async (id) => {
+    try {
+      const response = await getByIdRequest(id);
+      return response.data.notifications[0];
+    } catch (error) {
+      if (Array.isArray(error.response.data)) {
+        return setErrors(error.response.data);
+      }
+      setErrors([error.response.data.error]);
+    }
+  };
+
   const logNotification = async (notification) => {
     try {
-      const response = await logRequest(notification);
-      const { data } = response;
-      console.log(data);
+      const formData = new FormData();
+      for (const [key, value] of Object.entries(notification)) {
+        formData.append(key, value);
+      }
+      await logRequest(formData);
+      getNotification();
+    } catch (error) {
+      if (Array.isArray(error.response.data)) {
+        return setErrors(error.response.data);
+      }
+      setErrors([error.response.data.error]);
+    }
+  };
+
+  const updateNotification = async (notification) => {
+    try {
+      const formData = new FormData();
+      for (const [key, value] of Object.entries(notification)) {
+        formData.append(key, value);
+      }
+      await updateRequest(formData);
+      getNotification();
     } catch (error) {
       if (Array.isArray(error.response.data)) {
         return setErrors(error.response.data);
@@ -84,7 +121,9 @@ export const NotificationProvider = ({ children }) => {
         filterNotification,
         errors,
         getNotification,
+        getNotificationById,
         logNotification,
+        updateNotification,
         removeNotification,
         setFilterNotification,
       }}

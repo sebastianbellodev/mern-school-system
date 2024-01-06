@@ -8,6 +8,8 @@ export const errors = {
   type_required: 'Tipo requerido',
   date_required: 'Fecha requerida',
   description_required: 'Descripción requerida',
-  image_required: 'Imagen requerido',
+  image_required: 'Imagen requerida',
+  image_size: 'Imagen muy grande, el tamaño máximo es de 1 MB',
   file_required: 'Archivo requerido',
+  file_size: 'Archivo muy grande, el tamaño máximo es de 1 MB',
 };
