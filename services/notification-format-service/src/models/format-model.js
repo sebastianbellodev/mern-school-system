@@ -6,8 +6,8 @@ const FORMAT_SCHEMA = new mongoose.Schema({
     required: true,
   },
   file: {
-    type: String,
-    required: true,
+    public_id: String,
+    secure_url: String,
   },
   deleted: {
     type: Boolean,
