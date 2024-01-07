@@ -38,7 +38,7 @@ export const get = async (request, response) => {
 };
 
 export const getById = async (request, response) => {
-  const id = request.body.id;
+  const id = request.params.id;
   try {
     const document = await Group.findOne({ _id: id, deleted: false });
     if (document) {
@@ -52,7 +52,7 @@ export const getById = async (request, response) => {
 };
 
 export const getByNumber = async (request, response) => {
-  const number = request.body.number;
+  const number = request.params.number;
   try {
     const document = await Group.findOne({ number: number, deleted: false });
     if (document) {
@@ -82,7 +82,7 @@ export const log = async (request, response) => {
 };
 
 export const remove = async (request, response) => {
-  const id = request.body.id;
+  const id = request.params.id;
   try {
     const document = await Group.findByIdAndUpdate(
       id,

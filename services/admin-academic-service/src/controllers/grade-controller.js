@@ -47,7 +47,7 @@ export const get = async (request, response) => {
 };
 
 export const getById = async (request, response) => {
-  const id = request.body.id;
+  const id = request.params.id;
   try {
     const document = await Grade.findOne({ _id: id, deleted: false })
       .populate('partial')
@@ -81,7 +81,7 @@ export const getByNumber = async (request, response) => {
 };
 
 export const getByPartial = async (request, response) => {
-  const partial = request.body.partial;
+  const partial = request.params.partial;
   try {
     const document = await Grade.find({ partial: partial, deleted: false })
       .populate('partial')
@@ -98,7 +98,7 @@ export const getByPartial = async (request, response) => {
 };
 
 export const getByStudent = async (request, response) => {
-  const student = request.body.student;
+  const student = request.params.student;
   try {
     const document = await Grade.find({ student: student, deleted: false })
       .populate('partial')
@@ -115,7 +115,7 @@ export const getByStudent = async (request, response) => {
 };
 
 export const getBySubject = async (request, response) => {
-  const subject = request.body.subject;
+  const subject = request.params.subject;
   try {
     const document = await Grade.find({ subject: subject, deleted: false })
       .populate('partial')
@@ -158,7 +158,7 @@ export const log = async (request, response) => {
 };
 
 export const remove = async (request, response) => {
-  const id = request.body.id;
+  const id = request.params.id;
   try {
     const document = await Grade.findByIdAndUpdate(
       id,
@@ -179,12 +179,11 @@ export const remove = async (request, response) => {
 };
 
 export const update = async (request, response) => {
+  const id = request.body.id;
   try {
-    const document = await Grade.findByIdAndUpdate(
-      request.body.id,
-      request.body,
-      { new: true }
-    )
+    const document = await Grade.findByIdAndUpdate(id, request.body, {
+      new: true,
+    })
       .populate('partial')
       .populate('student')
       .populate('subject');

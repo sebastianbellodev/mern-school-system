@@ -12,7 +12,9 @@ import fileUpload from 'express-fileupload';
 
 const router = Router();
 
+router.delete('/format/:id', isValidAuth, remove);
 router.get('/format', isValidAuth, get);
+router.get('/format/:id', isValidAuth, getById);
 router.post(
   '/format',
   isValidAuth,
@@ -22,9 +24,7 @@ router.post(
   }),
   log
 );
-router.post('/format/id', isValidAuth, getById);
 router.post('/format/title', isValidAuth, getByTitle);
-router.put('/format', isValidAuth, remove);
 router.put(
   '/format',
   isValidAuth,

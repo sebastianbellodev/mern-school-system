@@ -42,7 +42,7 @@ export const get = async (request, response) => {
 };
 
 export const getById = async (request, response) => {
-  const id = request.body.id;
+  const id = request.params.id;
   try {
     const document = await User.findOne({ _id: id, deleted: false }).populate(
       'role'
@@ -58,7 +58,7 @@ export const getById = async (request, response) => {
 };
 
 export const getByRole = async (request, response) => {
-  const role = request.body.role;
+  const role = request.params.role;
   try {
     const document = await User.find({ role: role, deleted: false }).populate(
       'role'
@@ -74,7 +74,7 @@ export const getByRole = async (request, response) => {
 };
 
 export const getByUsername = async (request, response) => {
-  const username = request.body.username;
+  const username = request.params.username;
   try {
     const document = await User.findOne({
       username: username,
@@ -121,7 +121,7 @@ export const logOut = (request, response) => {
 };
 
 export const remove = async (request, response) => {
-  const id = request.body.id;
+  const id = request.params.id;
   try {
     const document = await User.findByIdAndUpdate(
       id,
@@ -185,14 +185,14 @@ export const token = async (request, response) => {
 };
 
 export const update = async (request, response) => {
-  const id = request.body.id;
+  const user = request.body;
   try {
-    const userData = { ...request.body };    
-    if (userData.password) {
+    if (user.password) {
       const salt = await bcrypt.genSalt(10);
-      userData.password = await bcrypt.hash(userData.password, salt);
+      user.password = await bcrypt.hash(user.password, salt);
     }
-    const document = await User.findByIdAndUpdate(id, userData, {
+    const id = user.id;
+    const document = await User.findByIdAndUpdate(id, user, {
       new: true,
     }).populate('role');
     if (document) {
