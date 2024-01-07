@@ -48,7 +48,7 @@ export const get = async (request, response) => {
 };
 
 export const getByEmailAddress = async (request, response) => {
-  const emailAddress = request.body.emailAddress;
+  const emailAddress = request.params.emailAddress;
   try {
     const document = await Tutor.findOne({
       emailAddress: emailAddress,

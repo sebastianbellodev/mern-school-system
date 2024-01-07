@@ -64,7 +64,7 @@ export const getById = async (request, response) => {
 };
 
 export const getByNumber = async (request, response) => {
-  const number = request.body.number;
+  const number = request.params.number;
   try {
     const document = await Grade.find({ number: number, deleted: false })
       .populate('partial')
