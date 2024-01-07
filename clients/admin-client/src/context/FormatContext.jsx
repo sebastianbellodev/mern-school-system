@@ -9,32 +9,28 @@ import {
   logRequest,
   updateRequest,
   removeRequest,
-} from '../api/notification.js';
+} from '../api/format.js';
 
-const NotificationContext = createContext();
+const FormatContext = createContext();
 
-export const useNotification = () => {
-  const context = useContext(NotificationContext);
+export const useFormat = () => {
+  const context = useContext(FormatContext);
 
   if (!context) {
-    throw new Error(
-      'useNotification must be used within a NotificationProvider'
-    );
+    throw new Error('useFormat must be used within a FormatProvider');
   }
 
   return context;
 };
 
-export const NotificationProvider = ({ children }) => {
-  const [notification, setNotification] = useState([]);
-  const [filterNotification, setFilterNotification] = useState([]);
+export const FormatProvider = ({ children }) => {
+  const [format, setFormat] = useState([]);
   const [errors, setErrors] = useState([]);
 
-  const getNotification = async () => {
+  const getFormat = async () => {
     try {
       const response = await getRequest();
-      setNotification(response.data.notifications);
-      setFilterNotification(response.data.notifications);
+      setFormat(response.data.formats);
     } catch (error) {
       if (Array.isArray(error.response.data)) {
         return setErrors(error.response.data);
@@ -43,10 +39,10 @@ export const NotificationProvider = ({ children }) => {
     }
   };
 
-  const getNotificationById = async (id) => {
+  const getFormatById = async (id) => {
     try {
       const response = await getByIdRequest(id);
-      return response.data.notification;
+      return response.data.format;
     } catch (error) {
       if (Array.isArray(error.response.data)) {
         return setErrors(error.response.data);
@@ -55,14 +51,14 @@ export const NotificationProvider = ({ children }) => {
     }
   };
 
-  const logNotification = async (notification) => {
+  const logFormat = async (format) => {
     try {
       const formData = new FormData();
-      for (const [key, value] of Object.entries(notification)) {
+      for (const [key, value] of Object.entries(format)) {
         formData.append(key, value);
       }
       await logRequest(formData);
-      getNotification();
+      getFormat();
     } catch (error) {
       if (Array.isArray(error.response.data)) {
         return setErrors(error.response.data);
@@ -71,14 +67,14 @@ export const NotificationProvider = ({ children }) => {
     }
   };
 
-  const updateNotification = async (notification) => {
+  const updateFormat = async (format) => {
     try {
       const formData = new FormData();
-      for (const [key, value] of Object.entries(notification)) {
+      for (const [key, value] of Object.entries(format)) {
         formData.append(key, value);
       }
       await updateRequest(formData);
-      getNotification();
+      getFormat();
     } catch (error) {
       if (Array.isArray(error.response.data)) {
         return setErrors(error.response.data);
@@ -87,15 +83,13 @@ export const NotificationProvider = ({ children }) => {
     }
   };
 
-  const removeNotification = async (id) => {
+  const removeFormat = async (id) => {
     try {
       const response = await removeRequest(id);
       const { data } = response;
       console.log(data);
       if (response.status === 204) {
-        setFilterNotification(
-          notification.filter((notification) => notification.id !== id)
-        );
+        setFormat([]);
       }
     } catch (error) {
       if (Array.isArray(error.response.data)) {
@@ -115,20 +109,18 @@ export const NotificationProvider = ({ children }) => {
   }, [errors]);
 
   return (
-    <NotificationContext.Provider
+    <FormatContext.Provider
       value={{
-        notification,
-        filterNotification,
+        format,
         errors,
-        getNotification,
-        getNotificationById,
-        logNotification,
-        updateNotification,
-        removeNotification,
-        setFilterNotification,
+        getFormat,
+        getFormatById,
+        logFormat,
+        updateFormat,
+        removeFormat,
       }}
     >
       {children}
-    </NotificationContext.Provider>
+    </FormatContext.Provider>
   );
 };
