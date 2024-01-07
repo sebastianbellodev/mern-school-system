@@ -14,14 +14,14 @@ import { isValidToken } from '../security/jwt.js';
 
 const router = Router();
 
-router.delete('/teacher', isValidToken, remove);
+router.delete('/teacher/:id', isValidToken, remove);
 router.get('/teacher', isValidToken, get);
+router.get('/teacher/:group', isValidToken, getByGroup);
+router.get('/teacher/:id', isValidToken, getById);
+router.get('/teacher/:subject', isValidToken, getBySubject);
+router.get('/teacher/:user', isValidToken, getByUser);
 router.post('/teacher', isValidToken, log);
 router.post('/teacher/emailaddress', isValidToken, getByEmailAddress);
-router.post('/teacher/group', isValidToken, getByGroup);
-router.post('/teacher/id', isValidToken, getById);
-router.post('/teacher/subject', isValidToken, getBySubject);
-router.post('/teacher/user', isValidToken, getByUser);
 router.put('/teacher', isValidToken, update);
 
 export default router;

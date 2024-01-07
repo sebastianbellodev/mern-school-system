@@ -4,6 +4,7 @@ import {
   getByGroup,
   getById,
   getByJobTraining,
+  getByName,
   log,
   remove,
   update,
@@ -12,12 +13,13 @@ import { isValidToken } from '../security/jwt.js';
 
 const router = Router();
 
-router.delete('/subject', isValidToken, remove);
+router.delete('/subject/:id', isValidToken, remove);
 router.get('/subject', isValidToken, get);
+router.get('/subject/:group', isValidToken, getByGroup);
+router.get('/subject/:id', isValidToken, getById);
 router.get('/subject/jobtraining', isValidToken, getByJobTraining);
 router.post('/subject', isValidToken, log);
-router.post('/subject/group', isValidToken, getByGroup);
-router.post('/subject/id', isValidToken, getById);
+router.post('/subject/name', isValidToken, getByName);
 router.put('/subject', isValidToken, update);
 
 export default router;

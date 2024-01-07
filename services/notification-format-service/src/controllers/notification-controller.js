@@ -70,7 +70,7 @@ export const getByDate = async (request, response) => {
 };
 
 export const getById = async (request, response) => {
-  const id = request.body.id;
+  const id = request.params.id;
   try {
     let document = await Notification.findOne({
       _id: id,
@@ -105,7 +105,7 @@ export const getByTitle = async (request, response) => {
 };
 
 export const getByType = async (request, response) => {
-  const type = request.body.type;
+  const type = request.params.type;
   try {
     const document = await Notification.find({
       type: type,
@@ -160,7 +160,7 @@ export const log = async (request, response) => {
 };
 
 export const remove = async (request, response) => {
-  const id = request.body.id;
+  const id = request.params.id;
   try {
     const document = await Notification.findByIdAndUpdate(
       id,

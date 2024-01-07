@@ -73,7 +73,7 @@ export const getByEmailAddress = async (request, response) => {
 };
 
 export const getByGroup = async (request, response) => {
-  const group = request.body.groups[0];
+  const group = request.params.group;
   try {
     const document = await Teacher.find({ groups: group, deleted: false })
       .populate('groups')
@@ -90,7 +90,7 @@ export const getByGroup = async (request, response) => {
 };
 
 export const getById = async (request, response) => {
-  const id = request.body.id;
+  const id = request.params.id;
   try {
     const document = await Teacher.findOne({ _id: id, deleted: false })
       .populate('groups')
@@ -107,7 +107,7 @@ export const getById = async (request, response) => {
 };
 
 export const getBySubject = async (request, response) => {
-  const subject = request.body.subjects[0];
+  const subject = request.params.subject;
   try {
     const document = await Teacher.find({ subjects: subject, deleted: deleted })
       .populate('groups')
@@ -124,7 +124,7 @@ export const getBySubject = async (request, response) => {
 };
 
 export const getByUser = async (request, response) => {
-  const user = request.body.user;
+  const user = request.params.user;
   try {
     const document = await Teacher.findOne({ user: user, deleted: false })
       .populate('groups')
@@ -176,7 +176,7 @@ export const log = async (request, response) => {
 };
 
 export const remove = async (request, response) => {
-  const id = request.body.id;
+  const id = request.params.id;
   try {
     const document = await Teacher.findByIdAndUpdate(
       id,

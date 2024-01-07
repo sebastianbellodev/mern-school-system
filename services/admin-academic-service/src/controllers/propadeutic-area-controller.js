@@ -42,7 +42,7 @@ export const get = async (request, response) => {
 };
 
 export const getByGroup = async (request, response) => {
-  const group = request.body.groups[0];
+  const group = request.params.group;
   try {
     const document = await PropadeuticArea.findOne({
       groups: group,
@@ -59,7 +59,7 @@ export const getByGroup = async (request, response) => {
 };
 
 export const getById = async (request, response) => {
-  const id = request.body.id;
+  const id = request.params.id;
   try {
     const document = await PropadeuticArea.findOne({
       _id: id,
@@ -112,7 +112,7 @@ export const log = async (request, response) => {
 };
 
 export const remove = async (request, response) => {
-  const id = request.body.id;
+  const id = request.params.id;
   try {
     const document = await PropadeuticArea.findByIdAndUpdate(
       id,

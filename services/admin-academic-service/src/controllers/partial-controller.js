@@ -64,7 +64,7 @@ export const getByDate = async (request, response) => {
 };
 
 export const getById = async (request, response) => {
-  const id = request.body.id;
+  const id = request.params.id;
   try {
     const document = await Partial.findOne({
       _id: id,
@@ -81,7 +81,7 @@ export const getById = async (request, response) => {
 };
 
 export const getByNumber = async (request, response) => {
-  const number = request.body.number;
+  const number = request.params.number;
   try {
     const document = await Partial.find({
       number: number,
@@ -98,7 +98,7 @@ export const getByNumber = async (request, response) => {
 };
 
 export const getBySemester = async (request, response) => {
-  const semester = request.body.semester;
+  const semester = request.params.semester;
   try {
     const document = await Partial.find({
       semester: semester,
@@ -142,7 +142,7 @@ export const log = async (request, response) => {
 };
 
 export const remove = async (request, response) => {
-  const id = request.body.id;
+  const id = request.params.id;
   try {
     const document = await Partial.findByIdAndUpdate(
       id,

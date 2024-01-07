@@ -43,7 +43,7 @@ export const get = async (request, response) => {
 };
 
 export const getById = async (request, response) => {
-  const id = request.body.id;
+  const id = request.params.id;
   try {
     const document = await Format.findOne({ _id: id, deleted: false });
     if (document) {
@@ -96,7 +96,7 @@ export const log = async (request, response) => {
 };
 
 export const remove = async (request, response) => {
-  const id = request.body.id;
+  const id = request.params.id;
   try {
     const document = await Format.findByIdAndUpdate(
       id,
