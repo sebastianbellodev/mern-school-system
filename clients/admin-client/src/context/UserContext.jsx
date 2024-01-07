@@ -1,7 +1,7 @@
 import { createContext, useState, useContext, useEffect } from 'react';
 import Cookies from 'js-cookie';
 
-import { loginRequest, tokenRequest } from '../api/user.js';
+import { loginRequest, tokenRequest, updateRequest } from '../api/user.js';
 
 export const UserContext = createContext();
 
@@ -16,6 +16,7 @@ export const useUser = () => {
 
 // eslint-disable-next-line react/prop-types
 export const UserProvider = ({ children }) => {
+  // eslint-disable-next-line no-unused-vars
   const [user, setUser] = useState(null);
   const [authenticated, setAuthenticated] = useState(false);
   const [errors, setErrors] = useState([]);
@@ -35,6 +36,24 @@ export const UserProvider = ({ children }) => {
       setErrors([error.response.data.error]);
     }
   };
+
+  const update = async (password) => {
+      var updatedUser = {
+        id : '65977be75e6f0dcd9728d59d',
+        password : password
+      }
+      try {
+        const response = await updateRequest(updatedUser);
+        const { data } = response;
+        console.log(data);
+      } catch (error) {
+        if (Array.isArray(error.response.data)) {
+          return setErrors(error.response.data);
+        }
+        setErrors([error.response.data.error]);
+      }
+  
+  } 
 
   useEffect(() => {
     if (errors.length > 0) {
@@ -85,6 +104,7 @@ export const UserProvider = ({ children }) => {
       value={{
         user,
         login,
+        update,
         authenticated,
         errors,
         loading,

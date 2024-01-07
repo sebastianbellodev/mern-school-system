@@ -187,7 +187,12 @@ export const token = async (request, response) => {
 export const update = async (request, response) => {
   const id = request.body.id;
   try {
-    const document = await User.findByIdAndUpdate(id, request.body, {
+    const userData = { ...request.body };    
+    if (userData.password) {
+      const salt = await bcrypt.genSalt(10);
+      userData.password = await bcrypt.hash(userData.password, salt);
+    }
+    const document = await User.findByIdAndUpdate(id, userData, {
       new: true,
     }).populate('role');
     if (document) {
