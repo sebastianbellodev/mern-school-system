@@ -12,6 +12,7 @@ import { UserProvider } from './context/UserContext.jsx';
 import { NotificationProvider } from './context/NotificationContext.jsx';
 import { TypeProvider } from './context/TypeContext.jsx';
 import ProtectedRoute from './pages/security/ProtectedRoute.jsx';
+import EditUserPage from './pages/EditUserPage.jsx';
 
 function App() {
   return (
@@ -56,6 +57,10 @@ function App() {
                   path="/semester"
                   element={<SemesterPage></SemesterPage>}
                 ></Route>
+                <Route 
+                  path="/edituser" 
+                  element={<EditUserPage></EditUserPage>}></Route>
+
               </Route>
             </Routes>
           </BrowserRouter>
