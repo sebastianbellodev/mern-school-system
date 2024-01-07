@@ -71,15 +71,15 @@ export const getByDate = async (request, response) => {
 
 export const getById = async (request, response) => {
   try {
-    let document = await Notification.findById(request.body.id).populate(
-      'type'
-    );
+    const { id } = request.params;
+    let document = await Notification.findById(id).populate('type');
     if (document) {
       response.status(code.OK).send(json(body.RETRIEVE, document));
     } else {
       response.status(code.NOT_FOUND).send({ error: body.NOT_FOUND });
     }
   } catch (error) {
+    console.log(error);
     response.status(code.INTERNAL_SERVER_ERROR).send({ error: body.ERROR });
   }
 };
@@ -184,10 +184,9 @@ export const update = async (request, response) => {
     const document = await Notification.findByIdAndUpdate(id, request.body, {
       new: true,
     }).populate('type');
-    if (document) {
-      response.status(code.OK).send(json(body.PUT, document));
-    } else {
-      response.status(code.NOT_FOUND).send({ error: body.NOT_FOUND });
+
+    if (!document) {
+      return response.status(code.NOT_FOUND).send({ error: body.NOT_FOUND });
     }
 
     if (request.files?.image) {
