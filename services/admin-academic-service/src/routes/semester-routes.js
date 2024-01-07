@@ -14,8 +14,8 @@ const router = Router();
 router.delete('/semester', isValidToken, remove);
 router.get('/semester', isValidToken, get);
 router.get('/semester/date', isValidToken, getByDate);
-router.get('/semester/id', isValidToken, getById);
 router.post('/semester', isValidToken, log);
+router.post('/semester/id', isValidToken, getById);
 router.put('/semester', isValidToken, update);
 
 export default router;

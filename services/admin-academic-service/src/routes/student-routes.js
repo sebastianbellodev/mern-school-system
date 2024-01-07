@@ -16,12 +16,12 @@ const router = Router();
 
 router.delete('/student', isValidToken, remove);
 router.get('/student', isValidToken, get);
-router.get('/student/group', isValidToken, getByGroup);
-router.get('/student/id', isValidToken, getById);
-router.get('/student/niev', isValidToken, getByNiev);
-router.get('/student/tutor', isValidToken, getByTutor);
-router.get('/student/user', isValidToken, getByUser);
 router.post('/student', isValidToken, log);
+router.post('/student/group', isValidToken, getByGroup);
+router.post('/student/id', isValidToken, getById);
+router.post('/student/niev', isValidToken, getByNiev);
+router.post('/student/tutor', isValidToken, getByTutor);
+router.post('/student/user', isValidToken, getByUser);
 router.put('/student', isValidToken, update);
 
 export default router;

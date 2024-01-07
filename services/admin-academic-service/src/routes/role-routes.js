@@ -13,9 +13,9 @@ const router = Router();
 
 router.delete('/role', isValidToken, remove);
 router.get('/role', isValidToken, get);
-router.get('/role/id', isValidToken, getById);
-router.get('/role/name', isValidToken, getByName);
 router.post('/role', isValidToken, log);
+router.post('/role/id', isValidToken, getById);
+router.post('/role/name', isValidToken, getByName);
 router.put('/role', isValidToken, update);
 
 export default router;

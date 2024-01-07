@@ -70,9 +70,12 @@ export const getByDate = async (request, response) => {
 };
 
 export const getById = async (request, response) => {
+  const id = request.body.id;
   try {
-    const { id } = request.params;
-    let document = await Notification.findById(id).populate('type');
+    let document = await Notification.findOne({
+      _id: id,
+      deleted: false,
+    }).populate('type');
     if (document) {
       response.status(code.OK).send(json(body.RETRIEVE, document));
     } else {
@@ -138,18 +141,14 @@ export const log = async (request, response) => {
         isSpinner: isSpinner,
         type: type,
       });
-
       if (request.files?.image) {
         const result = await uploadImage(request.files.image.tempFilePath);
-
         notification.image = {
           public_id: result.public_id,
           secure_url: result.secure_url,
         };
-
         await fs.unlink(request.files.image.tempFilePath);
       }
-
       let document = await notification.save();
       response.status(code.CREATED).send(json(body.POST, document));
     } else {
@@ -184,22 +183,17 @@ export const update = async (request, response) => {
     const document = await Notification.findByIdAndUpdate(id, request.body, {
       new: true,
     }).populate('type');
-
     if (!document) {
       return response.status(code.NOT_FOUND).send({ error: body.NOT_FOUND });
     }
-
     if (request.files?.image) {
       const result = await uploadImage(request.files.image.tempFilePath);
-
       document.image = {
         public_id: result.public_id,
         secure_url: result.secure_url,
       };
-
       await fs.unlink(request.files.image.tempFilePath);
     }
-
     response.status(code.CREATED).send(json(body.PUT, document));
   } catch (error) {
     response.status(code.INTERNAL_SERVER_ERROR).send({ error: body.ERROR });
