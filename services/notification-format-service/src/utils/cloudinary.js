@@ -17,6 +17,12 @@ export const uploadImage = async (path) => {
   });
 };
 
-export const deleteImage = async (public_id) => {
+export const uploadFile = async (path) => {
+  return await cloudinary.uploader.upload(path, {
+    folder: 'format',
+  });
+};
+
+export const deleteResource = async (public_id) => {
   return await cloudinary.uploader.destroy(public_id);
 };

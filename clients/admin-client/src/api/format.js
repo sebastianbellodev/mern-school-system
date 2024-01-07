@@ -1,6 +1,6 @@
 import axios from './config/axiosNoti.js';
 
-const ROUTE = '/notification';
+const ROUTE = '/format';
 
 export const getRequest = () => axios.get(`${ROUTE}`);
 
