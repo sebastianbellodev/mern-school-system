@@ -46,7 +46,7 @@ export const NotificationProvider = ({ children }) => {
   const getNotificationById = async (id) => {
     try {
       const response = await getByIdRequest(id);
-      return response.data.notifications[0];
+      return response.data.notification;
     } catch (error) {
       if (Array.isArray(error.response.data)) {
         return setErrors(error.response.data);

@@ -17,7 +17,7 @@ const router = Router();
 router.delete('/notification', isValidAuth, remove);
 router.get('/notification', isValidAuth, get);
 router.get('/notification/date', isValidAuth, getByDate);
-router.get('/notification/id', isValidAuth, getById);
+router.get('/notification/:id', isValidAuth, getById);
 router.get('/notification/title', isValidAuth, getByTitle);
 router.get('/notification/type', isValidAuth, getByType);
 router.post(

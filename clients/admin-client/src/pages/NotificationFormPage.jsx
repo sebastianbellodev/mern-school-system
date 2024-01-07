@@ -43,8 +43,7 @@ function NotificationFormPage() {
           String(notfication.date).slice(0, 10)
         );
         formikRef.current.setFieldValue('description', notfication.description);
-        imagePreview.src =
-          'https://res.cloudinary.com/dif3tn58q/image/upload/v1704527042/notification/m9c0dua5ged2syjirhrz.webp';
+        imagePreview.src = notfication.image.secure_url;
         imagePreview.classList.remove('hidden');
       }
     }

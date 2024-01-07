@@ -4,7 +4,9 @@ const ROUTE = '/notification';
 
 export const getRequest = () => axios.get(`${ROUTE}`);
 
-export const getByIdRequest = (id) => axios.get(`${ROUTE}`, { data: { id } });
+export const getByIdRequest = (id) => {
+  return axios.get(`${ROUTE}/${id}`);
+};
 
 export const logRequest = (formData) =>
   axios.post(`${ROUTE}`, formData, {
