@@ -58,7 +58,7 @@ export const getByDate = async (request, response) => {
 };
 
 export const getById = async (request, response) => {
-  const id = request.body.id;
+  const id = request.params.id;
   try {
     const document = await Semester.findOne({ _id: id, deleted: false });
     if (document) {
@@ -92,7 +92,7 @@ export const log = async (request, response) => {
 };
 
 export const remove = async (request, response) => {
-  const id = request.body.id;
+  const id = request.params.id;
   try {
     const document = await Semester.findByIdAndUpdate(
       id,

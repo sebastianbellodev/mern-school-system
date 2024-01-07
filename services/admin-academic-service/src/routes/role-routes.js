@@ -11,11 +11,11 @@ import { isValidToken } from '../security/jwt.js';
 
 const router = Router();
 
-router.delete('/role', isValidToken, remove);
+router.delete('/role/:id', isValidToken, remove);
 router.get('/role', isValidToken, get);
-router.get('/role/id', isValidToken, getById);
-router.get('/role/name', isValidToken, getByName);
+router.get('/role/:id', isValidToken, getById);
 router.post('/role', isValidToken, log);
+router.post('/role/name', isValidToken, getByName);
 router.put('/role', isValidToken, update);
 
 export default router;

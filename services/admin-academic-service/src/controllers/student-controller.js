@@ -61,7 +61,7 @@ export const get = async (request, response) => {
 };
 
 export const getByGroup = async (request, response) => {
-  const group = request.body.groups[0];
+  const group = request.params.group;
   try {
     const document = await Student.find({ groups: group, deleted: false })
       .populate('groups')
@@ -78,7 +78,7 @@ export const getByGroup = async (request, response) => {
 };
 
 export const getById = async (request, response) => {
-  const id = request.body.id;
+  const id = request.params.id;
   try {
     const document = await Student.findOne({ _id: id, deleted: false })
       .populate('groups')
@@ -95,7 +95,7 @@ export const getById = async (request, response) => {
 };
 
 export const getByNiev = async (request, response) => {
-  const niev = request.body.niev;
+  const niev = request.params.niev;
   try {
     const document = await Student.findOne({ niev: niev, deleted: false })
       .populate('groups')
@@ -112,7 +112,7 @@ export const getByNiev = async (request, response) => {
 };
 
 export const getByTutor = async (request, response) => {
-  const tutor = request.body.tutor;
+  const tutor = request.params.tutor;
   try {
     const document = await Student.find({ tutor: tutor, deleted: false })
       .populate('groups')
@@ -129,7 +129,7 @@ export const getByTutor = async (request, response) => {
 };
 
 export const getByUser = async (request, response) => {
-  const user = request.body.user;
+  const user = request.params.user;
   try {
     const document = await Student.findOne({ user: user, deleted: false })
       .populate('groups')
@@ -186,7 +186,7 @@ export const log = async (request, response) => {
 };
 
 export const remove = async (request, response) => {
-  const id = request.body.id;
+  const id = request.params.id;
   try {
     const document = await Student.findByIdAndUpdate(
       id,

@@ -1,4 +1,5 @@
 import Router from 'express';
+import fileUpload from 'express-fileupload';
 import {
   get,
   getById,
@@ -8,14 +9,12 @@ import {
   update,
 } from '../controllers/format-controller.js';
 import { isValidAuth } from '../security/basic.js';
-import fileUpload from 'express-fileupload';
 
 const router = Router();
 
-router.delete('/format', isValidAuth, remove);
+router.delete('/format/:id', isValidAuth, remove);
 router.get('/format', isValidAuth, get);
 router.get('/format/:id', isValidAuth, getById);
-router.get('/format/title', isValidAuth, getByTitle);
 router.post(
   '/format',
   isValidAuth,
@@ -25,6 +24,7 @@ router.post(
   }),
   log
 );
+router.post('/format/title', isValidAuth, getByTitle);
 router.put(
   '/format',
   isValidAuth,
