@@ -43,9 +43,9 @@ export const get = async (request, response) => {
 };
 
 export const getById = async (request, response) => {
+  const id = request.body.id;
   try {
-    const { id } = request.params;
-    const document = await Format.findById(id);
+    const document = await Format.findOne({ _id: id, deleted: false });
     if (document) {
       response.status(code.OK).send(json(body.RETRIEVE, document));
     } else {
@@ -71,23 +71,19 @@ export const getByTitle = async (request, response) => {
 };
 
 export const log = async (request, response) => {
-  const { title } = request.body;
+  const title = request.body.title;
   try {
     let format = await Format.findOne({ title: title, deleted: false });
     if (!format) {
       format = new Format({ title: title });
-
       if (request.files?.file) {
         const result = await uploadFile(request.files.file.tempFilePath);
-
         format.file = {
           public_id: result.public_id,
           secure_url: result.secure_url,
         };
-
         await fs.unlink(request.files.file.tempFilePath);
       }
-
       const document = await format.save();
       response.status(code.CREATED).send(json(body.POST, document));
     } else {
@@ -126,12 +122,10 @@ export const update = async (request, response) => {
     if (document) {
       if (request.files?.image) {
         const result = await uploadFile(request.files.image.tempFilePath);
-
         document.file = {
           public_id: result.public_id,
           secure_url: result.secure_url,
         };
-
         await fs.unlink(request.files.image.tempFilePath);
       }
       response.status(code.OK).send(json(body.PUT, document));

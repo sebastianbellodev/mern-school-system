@@ -13,9 +13,9 @@ const router = Router();
 
 router.delete('/group', isValidToken, remove);
 router.get('/group', isValidToken, get);
-router.get('/group/id', isValidToken, getById);
-router.get('/group/number', isValidToken, getByNumber);
 router.post('/group', isValidToken, log);
+router.post('/group/id', isValidToken, getById);
+router.post('/group/number', isValidToken, getByNumber);
 router.put('/group', isValidToken, update);
 
 export default router;
