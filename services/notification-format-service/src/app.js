@@ -1,19 +1,23 @@
-import cookieParser from 'cookie-parser';
 import express from 'express';
-import morgan from 'morgan';
+import code from './tools/code.js';
+import cookieParser from 'cookie-parser';
 import cors from 'cors';
-
+import dotenv from 'dotenv';
 import format from './routes/format-routes.js';
+import morgan from 'morgan';
 import notification from './routes/notification-routes.js';
 import type from './routes/type-routes.js';
-import code from './tools/code.js';
+
+dotenv.config();
 
 const app = express();
 const api = '/api';
 
+const CORS_ORIGIN = process.env.CORS_ORIGIN;
+
 app.use(
   cors({
-    origin: 'http://localhost:5173',
+    origin: CORS_ORIGIN,
   })
 );
 app.use(morgan('dev'));
