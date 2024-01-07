@@ -1,4 +1,5 @@
 import Router from 'express';
+import fileUpload from 'express-fileupload';
 import {
   get,
   getById,
@@ -8,7 +9,6 @@ import {
   update,
 } from '../controllers/format-controller.js';
 import { isValidAuth } from '../security/basic.js';
-import fileUpload from 'express-fileupload';
 
 const router = Router();
 
