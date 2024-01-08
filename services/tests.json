@@ -4,14 +4,14 @@
 		"name": "SchoolControlSystem",
 		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
 		"_exporter_id": "26613462",
-		"_collection_link": "https://warped-satellite-88103.postman.co/workspace/Team-Workspace~cf57d6d8-1597-4305-8ef4-1b4381cb4fa3/collection/26613462-f2ce3cb1-1818-4b0a-9e14-b0065cc6e6b8?action=share&source=collection_link&creator=26613462"
+		"_collection_link": "https://sejomaro.postman.co/workspace/Sejomaro~cf57d6d8-1597-4305-8ef4-1b4381cb4fa3/collection/26613462-f2ce3cb1-1818-4b0a-9e14-b0065cc6e6b8?action=share&source=collection_link&creator=26613462"
 	},
 	"item": [
 		{
 			"name": "Format",
 			"item": [
 				{
-					"name": "delete",
+					"name": "remove",
 					"request": {
 						"auth": {
 							"type": "basic",
@@ -434,7 +434,7 @@
 			"name": "Group",
 			"item": [
 				{
-					"name": "delete",
+					"name": "remove",
 					"request": {
 						"method": "DELETE",
 						"header": [],
@@ -582,7 +582,7 @@
 			"name": "Notification",
 			"item": [
 				{
-					"name": "delete",
+					"name": "remove",
 					"request": {
 						"auth": {
 							"type": "basic",
@@ -650,7 +650,31 @@
 							]
 						}
 					},
-					"response": []
+					"response": [
+						{
+							"name": "get",
+							"originalRequest": {
+								"method": "GET",
+								"header": [],
+								"url": {
+									"raw": "http://localhost:3001/api/notification",
+									"protocol": "http",
+									"host": [
+										"localhost"
+									],
+									"port": "3001",
+									"path": [
+										"api",
+										"notification"
+									]
+								}
+							},
+							"_postman_previewlanguage": null,
+							"header": null,
+							"cookie": [],
+							"body": null
+						}
+					]
 				},
 				{
 					"name": "getByDate",
@@ -709,7 +733,7 @@
 						"method": "GET",
 						"header": [],
 						"url": {
-							"raw": "http://localhost:3001/api/notification/id/659b8bc91164e24d44262265",
+							"raw": "http://localhost:3001/api/notification/id/6599a0686e5fb3018a8ecece",
 							"protocol": "http",
 							"host": [
 								"localhost"
@@ -719,7 +743,7 @@
 								"api",
 								"notification",
 								"id",
-								"659b8bc91164e24d44262265"
+								"6599a0686e5fb3018a8ecece"
 							]
 						}
 					},
@@ -804,20 +828,45 @@
 							]
 						}
 					},
-					"response": []
+					"response": [
+						{
+							"name": "log",
+							"originalRequest": {
+								"method": "POST",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "{\r\n    \"title\": \"Suspensión de clases el día 16 de septiembre 2\",\r\n    \"description\": \"Por conmemoración de la Independencia de México, se suspenden clases el 16 de septiembre de 2023. Retomaremos actividades el día siguiente. ¡Festejemos juntos nuestra historia!\",\r\n    \"date\": \"2023-01-08T00:00:00.000Z\",\r\n    \"isSpinner\": false,\r\n    \"type\": \"65986060efc9f57b8d62a8ac\"\r\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "http://localhost:3001/api/notification",
+									"protocol": "http",
+									"host": [
+										"localhost"
+									],
+									"port": "3001",
+									"path": [
+										"api",
+										"notification"
+									]
+								}
+							},
+							"_postman_previewlanguage": null,
+							"header": null,
+							"cookie": [],
+							"body": null
+						}
+					]
 				},
 				{
 					"name": "getByTitle",
 					"request": {
 						"method": "POST",
-						"header": []
-					},
-					"response": []
-				},
-				{
-					"name": "update",
-					"request": {
-						"method": "PUT",
 						"header": []
 					},
 					"response": []
@@ -1019,7 +1068,7 @@
 			"name": "Propadeutic Area",
 			"item": [
 				{
-					"name": "delete",
+					"name": "remove",
 					"request": {
 						"method": "DELETE",
 						"header": [],
@@ -1197,7 +1246,7 @@
 			"name": "Role",
 			"item": [
 				{
-					"name": "delete",
+					"name": "remove",
 					"request": {
 						"method": "DELETE",
 						"header": [],
@@ -1355,7 +1404,7 @@
 			"name": "Semester",
 			"item": [
 				{
-					"name": "delete",
+					"name": "remove",
 					"request": {
 						"method": "DELETE",
 						"header": [],
@@ -1502,7 +1551,7 @@
 			"name": "Student",
 			"item": [
 				{
-					"name": "delete",
+					"name": "remove",
 					"request": {
 						"method": "DELETE",
 						"header": [],
@@ -1716,7 +1765,7 @@
 			"name": "Subject",
 			"item": [
 				{
-					"name": "delete",
+					"name": "remove",
 					"request": {
 						"method": "DELETE",
 						"header": [],
@@ -1915,7 +1964,7 @@
 			"name": "Teacher",
 			"item": [
 				{
-					"name": "delete",
+					"name": "remove",
 					"request": {
 						"method": "DELETE",
 						"header": [],
@@ -2129,7 +2178,7 @@
 			"name": "Tutor",
 			"item": [
 				{
-					"name": "delete",
+					"name": "remove",
 					"request": {
 						"method": "DELETE",
 						"header": [],
@@ -2277,7 +2326,7 @@
 			"name": "Type",
 			"item": [
 				{
-					"name": "delete",
+					"name": "remove",
 					"request": {
 						"auth": {
 							"type": "basic",
@@ -2508,7 +2557,7 @@
 			"name": "User",
 			"item": [
 				{
-					"name": "delete",
+					"name": "remove",
 					"request": {
 						"method": "DELETE",
 						"header": [],
