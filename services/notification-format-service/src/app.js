@@ -8,16 +8,14 @@ import morgan from 'morgan';
 import notification from './routes/notification-routes.js';
 import type from './routes/type-routes.js';
 
-dotenv.config();
-
 const app = express();
 const api = '/api';
 
-const CORS_ORIGIN = process.env.CORS_ORIGIN || 'http://localhost:5173';
+const ADMIN_CORS_ORIGIN = process.env.ADMIN_CORS_ORIGIN;
 
 app.use(
   cors({
-    origin: 'http://localhost:5173',
+    origin: [ADMIN_CORS_ORIGIN],
   })
 );
 app.use(morgan('dev'));

@@ -16,16 +16,16 @@ import teacher from './routes/teacher-routes.js';
 import tutor from './routes/tutor-routes.js';
 import user from './routes/user-routes.js';
 
-dotenv.config();
-
 const app = express();
 const api = '/api';
 
-const CORS_ORIGIN = process.env.CORS_ORIGIN || 'http://localhost:5173';
+const ADMIN_CORS_ORIGIN = process.env.ADMIN_CORS_ORIGIN;
+
+console.log(ADMIN_CORS_ORIGIN);
 
 app.use(
   cors({
-    origin: 'http://localhost:5173',
+    origin: [ADMIN_CORS_ORIGIN],
     credentials: true,
   })
 );
