@@ -12,5 +12,7 @@ export const errors = {
   image_size: 'Imagen muy grande, el tamaño máximo es de 1 MB',
   file_required: 'Archivo requerido',
   file_size: 'Archivo muy grande, el tamaño máximo es de 1 MB',
-  password_match:'Las contraseñas no coinciden'
+  password_match: 'Las contraseñas no coinciden',
+  name_required: 'Nombre requerido',
+  lastname_required: 'Apellido requerido',
 };
