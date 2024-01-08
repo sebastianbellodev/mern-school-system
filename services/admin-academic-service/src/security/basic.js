@@ -5,7 +5,7 @@ import dotenv from 'dotenv';
 
 dotenv.config();
 
-const key = {
+const KEY = {
   USERNAME: process.env.AUTH_USERNAME,
   PASSWORD: process.env.AUTH_PASSWORD,
 };
@@ -13,7 +13,7 @@ const key = {
 export const isValidAuth = (request, response, callback) => {
   const auth = basicAuth(request);
   if (auth) {
-    if (auth.name === key.USERNAME && auth.pass === key.PASSWORD) {
+    if (auth.name === KEY.USERNAME && auth.pass === KEY.PASSWORD) {
       return callback();
     }
     return response
