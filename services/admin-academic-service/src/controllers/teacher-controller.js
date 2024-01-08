@@ -109,7 +109,7 @@ export const getById = async (request, response) => {
 export const getBySubject = async (request, response) => {
   const subject = request.params.subject;
   try {
-    const document = await Teacher.find({ subjects: subject, deleted: deleted })
+    const document = await Teacher.find({ subjects: subject, deleted: false })
       .populate('groups')
       .populate('subjects')
       .populate('user');

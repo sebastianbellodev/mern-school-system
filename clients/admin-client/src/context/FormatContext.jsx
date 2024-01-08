@@ -88,7 +88,7 @@ export const FormatProvider = ({ children }) => {
       const response = await removeRequest(id);
       const { data } = response;
       console.log(data);
-      if (response.status === 204) {
+      if (response.status === 200) {
         setFormat(format.filter((format) => format.id !== id));
       }
     } catch (error) {

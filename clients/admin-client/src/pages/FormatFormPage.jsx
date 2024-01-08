@@ -28,6 +28,11 @@ function NotificationFormPage() {
       if (params.id) {
         const format = await getFormatById(params.id);
         formikRef.current.setFieldValue('title', format.title);
+        if (format.file.secure_url) {
+          const fileLink = document.getElementById('fileLink');
+          fileLink.classList.remove('hidden');
+          fileLink.href = format.file.secure_url;
+        }
       }
     }
     loadNotification();
@@ -41,6 +46,10 @@ function NotificationFormPage() {
     format = { ...format, file };
     if (params.id) {
       format.id = params.id;
+      if (!(format.file instanceof File)) {
+        delete format.file;
+        console.log(true);
+      }
       updateFormat(format);
       return navigate('/format');
     }
@@ -110,15 +119,13 @@ function NotificationFormPage() {
                 </section>
                 <section>
                   <header>
-                    <h1 className="font-bold text-lg">
-                      Archivo<nav></nav>
-                    </h1>
+                    <h1 className="font-bold text-lg">Archivo</h1>
                     <h2 className="mb-3">
                       Únicamente puede seleccionar un archivo con un tamaño con
                       un peso de 20 MB. El formato de archivo esperado es PDF.
                     </h2>
                   </header>
-                  <article className="flex gap-3 items-center">
+                  <article className="flex gap-10 items-baseline">
                     <Form.Group controlId="fileValidation" className="mb-3">
                       <Form.Control
                         type="file"
@@ -136,6 +143,15 @@ function NotificationFormPage() {
                         {errors.file}
                       </Form.Control.Feedback>
                     </Form.Group>
+                    <a
+                      id="fileLink"
+                      href=""
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className="text-grey_hover hover:text-green hover:underline hidden"
+                    >
+                      Archivo
+                    </a>
                   </article>
                 </section>
                 <Button

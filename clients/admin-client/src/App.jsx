@@ -18,6 +18,7 @@ import ProtectedRoute from './pages/security/ProtectedRoute.jsx';
 import EditUserPage from './pages/EditUserPage.jsx';
 import { TeacherProvider } from './context/TeacherContext.jsx';
 import { StudentProvider } from './context/StudentContext.jsx';
+import { GroupProvider } from './context/GroupContext.jsx';
 import TeacherFormPage from './pages/TeacherFormPage.jsx';
 import { ClassProvider } from './context/ClassContext.jsx';
 import { SemesterProvider } from './context/SemesterContext.jsx';

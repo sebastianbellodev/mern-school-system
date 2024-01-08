@@ -13,19 +13,27 @@ import Header from '../components/Header';
 import { errors } from '../tools/errors/errors.js';
 import { useUser } from '../context/UserContext.jsx';
 import { useStudent } from '../context/StudentContext.jsx';
+import { useGroup } from '../context/GroupContext.jsx';
 
 function TeacherFormPage() {
   const { Formik } = formik;
   const { logStudent, getStudentById, updateStudent, student } = useStudent();
+  const { group, getGroup } = useGroup();
   const { signUp } = useUser();
   const navigate = useNavigate();
   const params = useParams();
   const formikRef = useRef();
 
   useEffect(() => {
+    getGroup();
+  }, []);
+
+  useEffect(() => {
     async function loadStudent() {
       if (params.id) {
         const teacher = await getStudentById(params.id);
+        formikRef.current.setFieldValue('niev', teacher.niev);
+        formikRef.current.setFieldValue('curp', teacher.curp);
         formikRef.current.setFieldValue('name', teacher.name);
         formikRef.current.setFieldValue(
           'paternalSurname',
@@ -36,14 +44,20 @@ function TeacherFormPage() {
           teacher.maternalSurname
         );
         formikRef.current.setFieldValue('emailAddress', teacher.emailAddress);
+        formikRef.current.setFieldValue('phone', teacher.phone);
+        if (teacher.groups.length > 0) {
+          formikRef.current.setFieldValue('group', teacher.groups[0]._id);
+        }
       }
     }
     loadStudent();
   }, []);
 
   const handleFormSubmit = (student) => {
+    student.groups = [student.group];
     if (params.id) {
       student.id = params.id;
+      console.log(student);
       updateStudent(student);
       return navigate('/student');
     }
@@ -59,6 +73,8 @@ function TeacherFormPage() {
   };
 
   const schema = yup.object().shape({
+    niev: yup.string(errors.string).required(errors.niev_required),
+    curp: yup.string(errors.string).required(errors.curp_required),
     name: yup.string(errors.string).required(errors.title_required),
     paternalSurname: yup
       .string(errors.string)
@@ -70,6 +86,8 @@ function TeacherFormPage() {
       .string(errors.string)
       .email(errors.email_invalid)
       .required(errors.email_required),
+    phone: yup.string(errors.string).required(errors.phone_required),
+    group: yup.string(errors.string).required(errors.group_required),
   });
 
   return (
@@ -88,6 +106,8 @@ function TeacherFormPage() {
             validationSchema={schema}
             onSubmit={handleFormSubmit}
             initialValues={{
+              curp: '',
+              niev: '',
               name: '',
               paternalSurname: '',
               maternalSurname: '',
@@ -238,39 +258,42 @@ function TeacherFormPage() {
                   </Form.Group>
                 </section>
                 <section>
-                  <header>
-                    <h1 className="font-bold text-lg">
-                      Padre de familia o tutor<nav></nav>
-                    </h1>
-                    <h2 className="mb-3">
-                      Introduzca la información del padre de familia o tutor.
-                    </h2>
-                  </header>
-                  <article className="flex gap-3 items-center">
-                    <Form.Group
-                      md="3"
-                      controlId="tutorNameValidation"
-                      className="w-[55%]"
-                    >
-                      <FloatingLabel
-                        controlId="tutorNameValidation"
-                        label="Nombre"
+                  <Form.Group md="3" controlId="phone" className="w-[60%]">
+                    <FloatingLabel controlId="phone" label="Teléfono">
+                      <Form.Control
+                        required
+                        type="tel"
+                        placeholder=""
+                        name="phone"
+                        value={values.phone}
+                        onChange={handleChange}
+                        isInvalid={!!errors.phone}
+                      />
+                      <Form.Control.Feedback type="invalid">
+                        {errors.phone}
+                      </Form.Control.Feedback>
+                    </FloatingLabel>
+                  </Form.Group>
+                </section>
+                <section>
+                  <Form.Group>
+                    <FloatingLabel label="Grupo">
+                      <Form.Select
+                        name="group"
+                        as="type"
+                        value={values.group}
+                        onChange={handleChange}
+                        className="w-[50%]"
                       >
-                        <Form.Control
-                          required
-                          type="text"
-                          placeholder=""
-                          name="tutorName"
-                          value={values.tutorName}
-                          onChange={handleChange}
-                          isInvalid={!!errors.tutorName}
-                        />
-                        <Form.Control.Feedback type="invalid">
-                          {errors.tutorName}
-                        </Form.Control.Feedback>
-                      </FloatingLabel>
-                    </Form.Group>
-                  </article>
+                        <option value="none">Seleccione una opción</option>
+                        {group.map((group) => (
+                          <option key={group.id} value={group.id}>
+                            {String(group.number)}
+                          </option>
+                        ))}
+                      </Form.Select>
+                    </FloatingLabel>
+                  </Form.Group>
                 </section>
                 <Button
                   variant="primary"
