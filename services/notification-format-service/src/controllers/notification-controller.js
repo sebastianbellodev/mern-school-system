@@ -55,7 +55,7 @@ export const getByDate = async (request, response) => {
   const date = new Date();
   try {
     const document = await Notification.find({
-      date: { $lte: date },
+      date: { $eq: date },
       deleted: false,
     }).populate('type');
     if (document.length > 0) {
