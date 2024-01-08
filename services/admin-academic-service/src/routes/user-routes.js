@@ -21,7 +21,7 @@ router.get('/token', isValidAuth, token);
 router.get('/user', isValidToken, get);
 router.get('/user/id/:id', isValidToken, getById);
 router.get('/user/role/:role', isValidToken, getByRole);
-router.get('/user/isername/:username', isValidToken, getByUsername);
+router.get('/user/username/:username', isValidToken, getByUsername);
 router.post('/user/login', isValidAuth, login);
 router.post('/user/logout', logOut);
 router.post('/user/signup', isValidAuth, signUp);
