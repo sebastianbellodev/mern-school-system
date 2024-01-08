@@ -115,18 +115,18 @@ export const remove = async (request, response) => {
 export const update = async (request, response) => {
   const id = request.body.id;
   try {
+    if (request.files?.file) {
+      const result = await uploadFile(request.files.file.tempFilePath);
+      request.body.file = {
+        public_id: result.public_id,
+        secure_url: result.secure_url,
+      };
+      await fs.unlink(request.files.file.tempFilePath);
+    }
     const document = await Format.findByIdAndUpdate(id, request.body, {
       new: true,
     });
     if (document) {
-      if (request.files?.image) {
-        const result = await uploadFile(request.files.image.tempFilePath);
-        document.file = {
-          public_id: result.public_id,
-          secure_url: result.secure_url,
-        };
-        await fs.unlink(request.files.image.tempFilePath);
-      }
       response.status(code.OK).send(json(body.PUT, document));
     } else {
       response.status(code.NOT_FOUND).send({ error: body.NOT_FOUND });

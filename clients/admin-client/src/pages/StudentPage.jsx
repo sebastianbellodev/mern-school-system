@@ -67,7 +67,7 @@ function StudentPage() {
           id="container"
           className="flex flex-wrap h-fit w-[80vw] shadow-lg mb-4 rounded-lg p-4 gap-3"
         >
-          {student.map((student) => (
+          {filterStudent.map((student) => (
             <StudentCard key={student.id} student={student}></StudentCard>
           ))}
         </section>
