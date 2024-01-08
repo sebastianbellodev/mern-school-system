@@ -5,7 +5,7 @@ const ROUTE = '/format';
 export const getRequest = () => axios.get(`${ROUTE}`);
 
 export const getByIdRequest = (id) => {
-  return axios.get(`${ROUTE}/${id}`);
+  return axios.get(`${ROUTE}/id/${id}`);
 };
 
 export const logRequest = (formData) =>
