@@ -22,12 +22,7 @@ function NotificationCard({ student }) {
             {`${student.name} ${student.paternalSurname} ${student.maternalSurname}`}
           </h3>
           <h4 className="text-sm overflow-hidden text-ellipsis">
-            {() => {
-              if (student.groups.length === 0) {
-                return toString(student.groups[0].number);
-              }
-              return 'Sin grupo';
-            }}
+            {student.curp}
           </h4>
         </aside>
       </aside>
