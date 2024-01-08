@@ -1,12 +1,11 @@
 import { createContext, useContext, useState, useEffect } from 'react';
+import { getGradeStudentRequest } from '../api/grades.js';
 
-import { getGroupSubjectsRequest } from '../api/courses.js';
-
-const CoursesContext = createContext();
+const GradeContext = createContext();
 
 // eslint-disable-next-line react-refresh/only-export-components
-export const useCourse = () => {
-  const context = useContext(CoursesContext);
+export const useGrade = () => {
+  const context = useContext(GradeContext);
 
   if (!context) {
     throw new Error('useCourse must be used within a CourseProvider');
@@ -16,16 +15,16 @@ export const useCourse = () => {
 };
 
 // eslint-disable-next-line react/prop-types
-export const CoursesProvider = ({ children }) => {
-  const [course, setCourses] = useState([]);
-  const [filterCourses, setFilterCourses] = useState([]);
+export const GradeProvider = ({ children }) => {
+  const [grade, setGrade] = useState([]);
+  const [filterGrades, setFilterGrades] = useState([]);
   const [errors, setErrors] = useState([]);
 
-  const getCoursesByStudent = async (group) => {
+  const getGradesByStudent = async (student) => {
     try {
-      const response = await getGroupSubjectsRequest(group);
-      setCourses(response.data.subjects);
-      setFilterCourses(response.data.subjects);
+      const response = await getGradeStudentRequest(student);
+      setGrade(response.data.grade);
+      setFilterGrades(response.data.grade);
     } catch (error) {
       if (Array.isArray(error.response.data)) {
         return setErrors(error.response.data);
@@ -44,16 +43,16 @@ export const CoursesProvider = ({ children }) => {
   }, [errors]);
 
   return (
-    <CoursesContext.Provider
+    <GradeContext.Provider
       value={{
-        course,
-        filterCourses,
+        grade,
         errors,
-        getCoursesByStudent,
-        setFilterCourses,
+        filterGrades,
+        getGradesByStudent,
+        setFilterGrades,
       }}
     >
       {children}
-    </CoursesContext.Provider>
+    </GradeContext.Provider>
   );
 };

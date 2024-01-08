@@ -12,4 +12,6 @@ export const errors = {
   image_size: 'Imagen muy grande, el tamaño máximo es de 1 MB',
   file_required: 'Archivo requerido',
   file_size: 'Archivo muy grande, el tamaño máximo es de 1 MB',
+  name_required: 'Nombre requerido',
+  isJobTraining_required: 'Estatus requerido',
 };

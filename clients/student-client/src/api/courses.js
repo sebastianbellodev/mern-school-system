@@ -1,6 +1,6 @@
 import axios from './config/axiosAdmin.js';
 
-const ROUTE = '/courses';
+const ROUTE = '/subject';
 
 export const getGroupSubjectsRequest = (group) =>
-  axios.get(`${ROUTE}/group`, group);
+  axios.get(`${ROUTE}/group/:group`, group);
