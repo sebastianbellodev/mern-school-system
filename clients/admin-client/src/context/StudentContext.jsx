@@ -31,7 +31,6 @@ export const StudentProvider = ({ children }) => {
   const getStudent = async () => {
     try {
       const response = await getRequest();
-      console.log(response.data);
       setStudent(response.data.students);
       setFilterStudent(response.data.students);
     } catch (error) {

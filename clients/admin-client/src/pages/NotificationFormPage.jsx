@@ -58,6 +58,9 @@ function NotificationFormPage() {
     notification = { ...notification, image };
     if (params.id) {
       notification.id = params.id;
+      if (!(notification.image instanceof File)) {
+        delete notification.image;
+      }
       updateNotification(notification);
       return navigate('/notification');
     }

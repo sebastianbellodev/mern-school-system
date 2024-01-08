@@ -15,4 +15,8 @@ export const errors = {
   password_match: 'Las contraseñas no coinciden',
   name_required: 'Nombre requerido',
   lastname_required: 'Apellido requerido',
+  phone_required: 'Teléfono requerido',
+  niev_required: 'NIEV requerido',
+  curp_required: 'CURP requerido',
+  group_required: 'Grupo requerido',
 };

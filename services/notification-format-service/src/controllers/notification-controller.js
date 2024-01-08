@@ -179,19 +179,19 @@ export const remove = async (request, response) => {
 export const update = async (request, response) => {
   const id = request.body.id;
   try {
+    if (request.files?.image) {
+      const result = await uploadImage(request.files.image.tempFilePath);
+      request.body.image = {
+        public_id: result.public_id,
+        secure_url: result.secure_url,
+      };
+      await fs.unlink(request.files.image.tempFilePath);
+    }
     const document = await Notification.findByIdAndUpdate(id, request.body, {
       new: true,
     }).populate('type');
     if (!document) {
       return response.status(code.NOT_FOUND).send({ error: body.NOT_FOUND });
-    }
-    if (request.files?.image) {
-      const result = await uploadImage(request.files.image.tempFilePath);
-      document.image = {
-        public_id: result.public_id,
-        secure_url: result.secure_url,
-      };
-      await fs.unlink(request.files.image.tempFilePath);
     }
     response.status(code.CREATED).send(json(body.PUT, document));
   } catch (error) {
