@@ -18,4 +18,4 @@ export const updateRequest = (formData) =>
     headers: { 'Content-Type': 'multipart/form-data' },
   });
 
-export const removeRequest = (id) => axios.delete(`${ROUTE}`, { data: { id } });
+export const removeRequest = (id) => axios.delete(`${ROUTE}/${id}`);
