@@ -2,7 +2,6 @@ import express from 'express';
 import code from './tools/code.js';
 import cookieParser from 'cookie-parser';
 import cors from 'cors';
-import dotenv from 'dotenv';
 import format from './routes/format-routes.js';
 import morgan from 'morgan';
 import notification from './routes/notification-routes.js';

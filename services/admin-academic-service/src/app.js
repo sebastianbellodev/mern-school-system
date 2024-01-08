@@ -1,7 +1,6 @@
 import code from './tools/code.js';
 import cookieParser from 'cookie-parser';
 import cors from 'cors';
-import dotenv from 'dotenv';
 import express from 'express';
 import grade from './routes/grade-routes.js';
 import group from './routes/group-routes.js';
