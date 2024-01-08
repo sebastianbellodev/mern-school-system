@@ -13,8 +13,8 @@ const router = Router();
 
 router.delete('/group/:id', isValidToken, remove);
 router.get('/group', isValidToken, get);
-router.get('/group/:id', isValidToken, getById);
-router.get('/group/:number', isValidToken, getByNumber);
+router.get('/group/id/:id', isValidToken, getById);
+router.get('/group/number/:number', isValidToken, getByNumber);
 router.post('/group', isValidToken, log);
 router.put('/group', isValidToken, update);
 

@@ -77,7 +77,6 @@ export const log = async (request, response) => {
       response.status(code.BAD_REQUEST).send({ error: body.ENRROLLED });
     }
   } catch (error) {
-    console.error(error);
     response.status(code.INTERNAL_SERVER_ERROR).send({ error: body.ERROR });
   }
 };

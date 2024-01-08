@@ -15,8 +15,8 @@ const router = Router();
 
 router.delete('/subject/:id', isValidToken, remove);
 router.get('/subject', isValidToken, get);
-router.get('/subject/:group', isValidToken, getByGroup);
-router.get('/subject/:id', isValidToken, getById);
+router.get('/subject/group/:group', isValidToken, getByGroup);
+router.get('/subject/id/:id', isValidToken, getById);
 router.get('/subject/jobtraining', isValidToken, getByJobTraining);
 router.post('/subject', isValidToken, log);
 router.post('/subject/name', isValidToken, getByName);

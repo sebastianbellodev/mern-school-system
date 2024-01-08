@@ -13,7 +13,7 @@ const router = Router();
 
 router.delete('/role/:id', isValidToken, remove);
 router.get('/role', isValidToken, get);
-router.get('/role/:id', isValidToken, getById);
+router.get('/role/id/:id', isValidToken, getById);
 router.post('/role', isValidToken, log);
 router.post('/role/name', isValidToken, getByName);
 router.put('/role', isValidToken, update);
