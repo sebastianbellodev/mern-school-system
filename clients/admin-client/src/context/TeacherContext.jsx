@@ -9,28 +9,30 @@ import {
   logRequest,
   updateRequest,
   removeRequest,
-} from '../api/format.js';
+} from '../api/teacher.js';
 
-const FormatContext = createContext();
+const TeacherContext = createContext();
 
-export const useFormat = () => {
-  const context = useContext(FormatContext);
+export const useTeacher = () => {
+  const context = useContext(TeacherContext);
 
   if (!context) {
-    throw new Error('useFormat must be used within a FormatProvider');
+    throw new Error('useTeacher must be used within a TeacherProvider');
   }
 
   return context;
 };
 
-export const FormatProvider = ({ children }) => {
-  const [format, setFormat] = useState([]);
+export const TeacherProvider = ({ children }) => {
+  const [teacher, setTeacher] = useState([]);
+  const [filterTeacher, setFilterTeacher] = useState([]);
   const [errors, setErrors] = useState([]);
 
-  const getFormat = async () => {
+  const getTeacher = async () => {
     try {
       const response = await getRequest();
-      setFormat(response.data.formats);
+      setTeacher(response.data.teachers);
+      setFilterTeacher(response.data.teachers);
     } catch (error) {
       if (Array.isArray(error.response.data)) {
         return setErrors(error.response.data);
@@ -39,10 +41,10 @@ export const FormatProvider = ({ children }) => {
     }
   };
 
-  const getFormatById = async (id) => {
+  const getTeacherById = async (id) => {
     try {
       const response = await getByIdRequest(id);
-      return response.data.format;
+      return response.data.teacher;
     } catch (error) {
       if (Array.isArray(error.response.data)) {
         return setErrors(error.response.data);
@@ -51,14 +53,10 @@ export const FormatProvider = ({ children }) => {
     }
   };
 
-  const logFormat = async (format) => {
+  const logTeacher = async (teacher) => {
     try {
-      const formData = new FormData();
-      for (const [key, value] of Object.entries(format)) {
-        formData.append(key, value);
-      }
-      await logRequest(formData);
-      getFormat();
+      await logRequest(teacher);
+      getTeacher();
     } catch (error) {
       if (Array.isArray(error.response.data)) {
         return setErrors(error.response.data);
@@ -67,14 +65,10 @@ export const FormatProvider = ({ children }) => {
     }
   };
 
-  const updateFormat = async (format) => {
+  const updateTeacher = async (teacher) => {
     try {
-      const formData = new FormData();
-      for (const [key, value] of Object.entries(format)) {
-        formData.append(key, value);
-      }
-      await updateRequest(formData);
-      getFormat();
+      await updateRequest(teacher);
+      getTeacher();
     } catch (error) {
       if (Array.isArray(error.response.data)) {
         return setErrors(error.response.data);
@@ -83,13 +77,12 @@ export const FormatProvider = ({ children }) => {
     }
   };
 
-  const removeFormat = async (id) => {
+  const removeTeacher = async (id) => {
     try {
       const response = await removeRequest(id);
       const { data } = response;
-      console.log(data);
-      if (response.status === 204) {
-        setFormat(format.filter((format) => format.id !== id));
+      if (response.status === 200) {
+        setFilterTeacher(teacher.filter((teacher) => teacher.id !== id));
       }
     } catch (error) {
       if (Array.isArray(error.response.data)) {
@@ -109,18 +102,20 @@ export const FormatProvider = ({ children }) => {
   }, [errors]);
 
   return (
-    <FormatContext.Provider
+    <TeacherContext.Provider
       value={{
-        format,
+        teacher,
+        filterTeacher,
         errors,
-        getFormat,
-        getFormatById,
-        logFormat,
-        updateFormat,
-        removeFormat,
+        getTeacher,
+        getTeacherById,
+        logTeacher,
+        updateTeacher,
+        removeTeacher,
+        setFilterTeacher,
       }}
     >
       {children}
-    </FormatContext.Provider>
+    </TeacherContext.Provider>
   );
 };

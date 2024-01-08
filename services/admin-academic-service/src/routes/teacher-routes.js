@@ -18,7 +18,7 @@ router.delete('/teacher/:id', isValidToken, remove);
 router.get('/teacher', isValidToken, get);
 router.get('/teacher/:emailaddress', isValidToken, getByEmailAddress);
 router.get('/teacher/:group', isValidToken, getByGroup);
-router.get('/teacher/:id', isValidToken, getById);
+router.get('/teachers/:id', isValidToken, getById);
 router.get('/teacher/:subject', isValidToken, getBySubject);
 router.get('/teacher/:user', isValidToken, getByUser);
 router.post('/teacher', isValidToken, log);

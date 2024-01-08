@@ -92,7 +92,7 @@ export const NotificationProvider = ({ children }) => {
       const response = await removeRequest(id);
       const { data } = response;
       console.log(data);
-      if (response.status === 204) {
+      if (response.status === 200) {
         setFilterNotification(
           notification.filter((notification) => notification.id !== id)
         );
