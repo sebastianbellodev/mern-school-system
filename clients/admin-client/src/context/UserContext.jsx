@@ -1,7 +1,12 @@
 import { createContext, useState, useContext, useEffect } from 'react';
 import Cookies from 'js-cookie';
 
-import { loginRequest, tokenRequest, updateRequest } from '../api/user.js';
+import {
+  loginRequest,
+  tokenRequest,
+  updateRequest,
+  signUpRequest,
+} from '../api/user.js';
 
 export const UserContext = createContext();
 
@@ -26,7 +31,6 @@ export const UserProvider = ({ children }) => {
     try {
       const response = await loginRequest(user);
       const { data } = response;
-      console.log(data);
       setUser(data);
       setAuthenticated(true);
     } catch (error) {
@@ -37,23 +41,35 @@ export const UserProvider = ({ children }) => {
     }
   };
 
+  const signUp = async (user) => {
+    try {
+      const response = await signUpRequest(user);
+      const { data } = response;
+      return data;
+    } catch (error) {
+      if (Array.isArray(error.response.data)) {
+        return setErrors(error.response.data);
+      }
+      setErrors([error.response.data.error]);
+    }
+  };
+
   const update = async (password) => {
-      var updatedUser = {
-        id : '65977be75e6f0dcd9728d59d',
-        password : password
+    var updatedUser = {
+      id: '65977be75e6f0dcd9728d59d',
+      password: password,
+    };
+    try {
+      const response = await updateRequest(updatedUser);
+      const { data } = response;
+      console.log(data);
+    } catch (error) {
+      if (Array.isArray(error.response.data)) {
+        return setErrors(error.response.data);
       }
-      try {
-        const response = await updateRequest(updatedUser);
-        const { data } = response;
-        console.log(data);
-      } catch (error) {
-        if (Array.isArray(error.response.data)) {
-          return setErrors(error.response.data);
-        }
-        setErrors([error.response.data.error]);
-      }
-  
-  } 
+      setErrors([error.response.data.error]);
+    }
+  };
 
   useEffect(() => {
     if (errors.length > 0) {
@@ -105,6 +121,7 @@ export const UserProvider = ({ children }) => {
         user,
         login,
         update,
+        signUp,
         authenticated,
         errors,
         loading,

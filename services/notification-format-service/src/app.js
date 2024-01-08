@@ -13,11 +13,11 @@ dotenv.config();
 const app = express();
 const api = '/api';
 
-const CORS_ORIGIN = process.env.CORS_ORIGIN;
+const CORS_ORIGIN = process.env.CORS_ORIGIN || 'http://localhost:5173';
 
 app.use(
   cors({
-    origin: CORS_ORIGIN,
+    origin: 'http://localhost:5173',
   })
 );
 app.use(morgan('dev'));

@@ -1,4 +1,6 @@
 import bcrypt from 'bcrypt';
+import jwt from 'jsonwebtoken';
+
 import body from '../tools/body.js';
 import code from '../tools/code.js';
 import User from '../models/user-model.js';
@@ -161,25 +163,30 @@ export const signUp = async (request, response) => {
 };
 
 export const token = async (request, response) => {
-  const token = request.cookies;
+  const { token } = request.cookies;
+
   if (!token) {
     return response
       .status(code.UNAUTHORIZED)
       .send({ error: body.INVALID_AUTHORIZATION });
   }
+
   const KEY = process.env.JWT_KEY;
+
   jwt.verify(token, KEY, async (error, user) => {
     if (error) {
       return response
         .status(code.FORBIDDEN)
         .send({ error: body.INVALID_TOKEN });
     }
+
     const document = await User.findById(user.id);
     if (!document) {
       return response
         .status(code.FORBIDDEN)
         .send({ error: body.INVALID_TOKEN });
     }
+
     return response.status(code.OK).send(json(body.RETRIEVE, document));
   });
 };
