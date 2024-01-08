@@ -36,7 +36,7 @@ function StudentPage() {
             variant="primary"
             type="submit"
             className="h-14 bg-grey border-none hover:bg-grey_hover text-white font-bold text-base w-fit mb-4"
-            onClick={() => navigate('/teacher/add')}
+            onClick={() => navigate('/student/add')}
           >
             Agregar
           </Button>

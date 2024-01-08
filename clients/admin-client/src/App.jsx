@@ -7,6 +7,7 @@ import FormatPage from './pages/FormatPage.jsx';
 import FormatFormPage from './pages/FormatFormPage.jsx';
 import TeacherPage from './pages/TeacherPage.jsx';
 import StudentPage from './pages/StudentPage.jsx';
+import StudentFormPage from './pages/StudentFormPage.jsx';
 import ClassPage from './pages/ClassPage.jsx';
 import SemesterPage from './pages/SemesterPage.jsx';
 import { UserProvider } from './context/UserContext.jsx';
@@ -78,6 +79,14 @@ function App() {
                       <Route
                         path="/student"
                         element={<StudentPage></StudentPage>}
+                      ></Route>
+                      <Route
+                        path="/student/add"
+                        element={<StudentFormPage></StudentFormPage>}
+                      ></Route>
+                      <Route
+                        path="/student:id"
+                        element={<StudentFormPage></StudentFormPage>}
                       ></Route>
                       <Route
                         path="/class"
