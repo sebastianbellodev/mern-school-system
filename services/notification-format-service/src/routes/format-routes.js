@@ -14,7 +14,7 @@ const router = Router();
 
 router.delete('/format/:id', isValidAuth, remove);
 router.get('/format', isValidAuth, get);
-router.get('/format/:id', isValidAuth, getById);
+router.get('/format/id/:id', isValidAuth, getById);
 router.post(
   '/format',
   isValidAuth,

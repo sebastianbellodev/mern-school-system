@@ -4,7 +4,7 @@ const ROUTE = '/student';
 
 export const getRequest = () => axios.get(`${ROUTE}`);
 
-export const getByIdRequest = (id) => axios.get(`${ROUTE}/${id}`);
+export const getByIdRequest = (id) => axios.get(`${ROUTE}/id/${id}`);
 
 export const logRequest = (student) => axios.post(`${ROUTE}`, student);
 
