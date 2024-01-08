@@ -38,7 +38,7 @@ export const get = async (request, response) => {
 };
 
 export const getById = async (request, response) => {
-  const id = request.body.id;
+  const id = request.params.id;
   try {
     const document = await Role.findOne({ _id: id, deleted: false });
     if (document) {
@@ -77,12 +77,13 @@ export const log = async (request, response) => {
       response.status(code.BAD_REQUEST).send({ error: body.ENRROLLED });
     }
   } catch (error) {
+    console.error(error);
     response.status(code.INTERNAL_SERVER_ERROR).send({ error: body.ERROR });
   }
 };
 
 export const remove = async (request, response) => {
-  const id = request.body.id;
+  const id = request.params.id;
   try {
     const document = await Role.findByIdAndUpdate(
       id,

@@ -1,4 +1,5 @@
 import Router from 'express';
+import fileUpload from 'express-fileupload';
 import {
   get,
   getByDate,
@@ -10,16 +11,14 @@ import {
   update,
 } from '../controllers/notification-controller.js';
 import { isValidAuth } from '../security/basic.js';
-import fileUpload from 'express-fileupload';
 
 const router = Router();
 
-router.delete('/notification', isValidAuth, remove);
+router.delete('/notification/:id', isValidAuth, remove);
 router.get('/notification', isValidAuth, get);
 router.get('/notification/date', isValidAuth, getByDate);
 router.get('/notification/:id', isValidAuth, getById);
-router.get('/notification/title', isValidAuth, getByTitle);
-router.get('/notification/type', isValidAuth, getByType);
+router.get('/notification/:type', isValidAuth, getByType);
 router.post(
   '/notification',
   isValidAuth,
@@ -29,6 +28,7 @@ router.post(
   }),
   log
 );
+router.post('/notification/title', isValidAuth, getByTitle);
 router.put(
   '/notification',
   isValidAuth,

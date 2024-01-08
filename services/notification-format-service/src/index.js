@@ -1,7 +1,10 @@
 import app from './app.js';
 import connectToAtlas from './data/database.js';
+import dotenv from 'dotenv';
 
-const PORT = 3001;
+dotenv.config();
+
+const PORT = process.env.PORT;
 
 connectToAtlas((error) => {
   if (!error) {

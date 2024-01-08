@@ -9,28 +9,31 @@ import {
   logRequest,
   updateRequest,
   removeRequest,
-} from '../api/format.js';
+} from '../api/student.js';
 
-const FormatContext = createContext();
+const StudentContext = createContext();
 
-export const useFormat = () => {
-  const context = useContext(FormatContext);
+export const useStudent = () => {
+  const context = useContext(StudentContext);
 
   if (!context) {
-    throw new Error('useFormat must be used within a FormatProvider');
+    throw new Error('useStudent must be used within a StudentProvider');
   }
 
   return context;
 };
 
-export const FormatProvider = ({ children }) => {
-  const [format, setFormat] = useState([]);
+export const StudentProvider = ({ children }) => {
+  const [student, setStudent] = useState([]);
+  const [filterStudent, setFilterStudent] = useState([]);
   const [errors, setErrors] = useState([]);
 
-  const getFormat = async () => {
+  const getStudent = async () => {
     try {
       const response = await getRequest();
-      setFormat(response.data.formats);
+      console.log(response.data);
+      setStudent(response.data.students);
+      setFilterStudent(response.data.students);
     } catch (error) {
       if (Array.isArray(error.response.data)) {
         return setErrors(error.response.data);
@@ -39,10 +42,10 @@ export const FormatProvider = ({ children }) => {
     }
   };
 
-  const getFormatById = async (id) => {
+  const getStudentById = async (id) => {
     try {
       const response = await getByIdRequest(id);
-      return response.data.format;
+      return response.data.student;
     } catch (error) {
       if (Array.isArray(error.response.data)) {
         return setErrors(error.response.data);
@@ -51,14 +54,10 @@ export const FormatProvider = ({ children }) => {
     }
   };
 
-  const logFormat = async (format) => {
+  const logStudent = async (student) => {
     try {
-      const formData = new FormData();
-      for (const [key, value] of Object.entries(format)) {
-        formData.append(key, value);
-      }
-      await logRequest(formData);
-      getFormat();
+      await logRequest(student);
+      getStudent();
     } catch (error) {
       if (Array.isArray(error.response.data)) {
         return setErrors(error.response.data);
@@ -67,14 +66,10 @@ export const FormatProvider = ({ children }) => {
     }
   };
 
-  const updateFormat = async (format) => {
+  const updateStudent = async (teacher) => {
     try {
-      const formData = new FormData();
-      for (const [key, value] of Object.entries(format)) {
-        formData.append(key, value);
-      }
-      await updateRequest(formData);
-      getFormat();
+      await updateRequest(teacher);
+      getStudent();
     } catch (error) {
       if (Array.isArray(error.response.data)) {
         return setErrors(error.response.data);
@@ -83,13 +78,11 @@ export const FormatProvider = ({ children }) => {
     }
   };
 
-  const removeFormat = async (id) => {
+  const removeStudent = async (id) => {
     try {
       const response = await removeRequest(id);
-      const { data } = response;
-      console.log(data);
-      if (response.status === 204) {
-        setFormat(format.filter((format) => format.id !== id));
+      if (response.status === 200) {
+        setFilterStudent(student.filter((student) => student.id !== id));
       }
     } catch (error) {
       if (Array.isArray(error.response.data)) {
@@ -109,18 +102,20 @@ export const FormatProvider = ({ children }) => {
   }, [errors]);
 
   return (
-    <FormatContext.Provider
+    <StudentContext.Provider
       value={{
-        format,
+        student,
+        filterStudent,
         errors,
-        getFormat,
-        getFormatById,
-        logFormat,
-        updateFormat,
-        removeFormat,
+        getStudent,
+        getStudentById,
+        logStudent,
+        updateStudent,
+        removeStudent,
+        setFilterStudent,
       }}
     >
       {children}
-    </FormatContext.Provider>
+    </StudentContext.Provider>
   );
 };

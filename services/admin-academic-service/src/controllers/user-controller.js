@@ -1,4 +1,6 @@
 import bcrypt from 'bcrypt';
+import jwt from 'jsonwebtoken';
+
 import body from '../tools/body.js';
 import code from '../tools/code.js';
 import User from '../models/user-model.js';
@@ -42,7 +44,7 @@ export const get = async (request, response) => {
 };
 
 export const getById = async (request, response) => {
-  const id = request.body.id;
+  const id = request.params.id;
   try {
     const document = await User.findOne({ _id: id, deleted: false }).populate(
       'role'
@@ -58,7 +60,7 @@ export const getById = async (request, response) => {
 };
 
 export const getByRole = async (request, response) => {
-  const role = request.body.role;
+  const role = request.params.role;
   try {
     const document = await User.find({ role: role, deleted: false }).populate(
       'role'
@@ -74,7 +76,7 @@ export const getByRole = async (request, response) => {
 };
 
 export const getByUsername = async (request, response) => {
-  const username = request.body.username;
+  const username = request.params.username;
   try {
     const document = await User.findOne({
       username: username,
@@ -121,7 +123,7 @@ export const logOut = (request, response) => {
 };
 
 export const remove = async (request, response) => {
-  const id = request.body.id;
+  const id = request.params.id;
   try {
     const document = await User.findByIdAndUpdate(
       id,
@@ -161,33 +163,43 @@ export const signUp = async (request, response) => {
 };
 
 export const token = async (request, response) => {
-  const token = request.cookies;
+  const { token } = request.cookies;
+
   if (!token) {
     return response
       .status(code.UNAUTHORIZED)
       .send({ error: body.INVALID_AUTHORIZATION });
   }
+
   const KEY = process.env.JWT_KEY;
+
   jwt.verify(token, KEY, async (error, user) => {
     if (error) {
       return response
         .status(code.FORBIDDEN)
         .send({ error: body.INVALID_TOKEN });
     }
+
     const document = await User.findById(user.id);
     if (!document) {
       return response
         .status(code.FORBIDDEN)
         .send({ error: body.INVALID_TOKEN });
     }
+
     return response.status(code.OK).send(json(body.RETRIEVE, document));
   });
 };
 
 export const update = async (request, response) => {
-  const id = request.body.id;
+  const user = request.body;
   try {
-    const document = await User.findByIdAndUpdate(id, request.body, {
+    if (user.password) {
+      const salt = await bcrypt.genSalt(10);
+      user.password = await bcrypt.hash(user.password, salt);
+    }
+    const id = user.id;
+    const document = await User.findByIdAndUpdate(id, user, {
       new: true,
     }).populate('role');
     if (document) {

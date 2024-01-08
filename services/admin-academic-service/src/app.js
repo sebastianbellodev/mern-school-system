@@ -1,10 +1,11 @@
+import code from './tools/code.js';
 import cookieParser from 'cookie-parser';
-import express from 'express';
-import morgan from 'morgan';
 import cors from 'cors';
-
+import dotenv from 'dotenv';
+import express from 'express';
 import grade from './routes/grade-routes.js';
 import group from './routes/group-routes.js';
+import morgan from 'morgan';
 import partial from './routes/partial-routes.js';
 import propadeuticArea from './routes/propadeutic-area-routes.js';
 import role from './routes/role-routes.js';
@@ -14,12 +15,13 @@ import subject from './routes/subject-routes.js';
 import teacher from './routes/teacher-routes.js';
 import tutor from './routes/tutor-routes.js';
 import user from './routes/user-routes.js';
-import code from './tools/code.js';
+
+dotenv.config();
 
 const app = express();
 const api = '/api';
 
-const CORS_ORIGIN = process.env.CORS_ORIGIN;
+const CORS_ORIGIN = process.env.CORS_ORIGIN || 'http://localhost:5173';
 
 app.use(
   cors({
