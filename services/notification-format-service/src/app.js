@@ -12,10 +12,11 @@ const app = express();
 const api = '/api';
 
 const ADMIN_CORS_ORIGIN = process.env.ADMIN_CORS_ORIGIN;
+const LANDING_CORS_ORIGIN = process.env.LANDING_CORS_ORIGIN;
 
 app.use(
   cors({
-    origin: [ADMIN_CORS_ORIGIN],
+    origin: [ADMIN_CORS_ORIGIN, LANDING_CORS_ORIGIN],
   })
 );
 app.use(morgan('dev'));
