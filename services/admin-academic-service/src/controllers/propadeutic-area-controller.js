@@ -136,7 +136,7 @@ export const update = async (request, response) => {
       new: true,
     }).populate('groups');
     if (document) {
-      response.stauts(code.OK).send(json(body.PUT, document));
+      response.status(code.OK).send(json(body.PUT, document));
     } else {
       response.status(code.NOT_FOUND).send({ error: body.NOT_FOUND });
     }
