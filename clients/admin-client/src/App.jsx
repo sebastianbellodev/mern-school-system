@@ -19,6 +19,9 @@ import EditUserPage from './pages/EditUserPage.jsx';
 import { TeacherProvider } from './context/TeacherContext.jsx';
 import { StudentProvider } from './context/StudentContext.jsx';
 import TeacherFormPage from './pages/TeacherFormPage.jsx';
+import { ClassProvider } from './context/ClassContext.jsx';
+import { SemesterProvider } from './context/SemesterContext.jsx';
+import SemesterFormPage from './pages/SemesterFormPage.jsx';
 
 function App() {
   return (
@@ -28,81 +31,96 @@ function App() {
           <FormatProvider>
             <TeacherProvider>
               <StudentProvider>
-                <BrowserRouter>
-                  <Routes>
-                    <Route path="/" element={<LoginPage></LoginPage>}></Route>
-                    <Route
-                      path="/login"
-                      element={<LoginPage></LoginPage>}
-                    ></Route>
+                <ClassProvider>
+                  <SemesterProvider>
+                    <BrowserRouter>
+                      <Routes>
+                        <Route
+                          path="/"
+                          element={<LoginPage></LoginPage>}
+                        ></Route>
+                        <Route
+                          path="/login"
+                          element={<LoginPage></LoginPage>}
+                        ></Route>
 
-                    {/*
+                        {/*
                   Protected routes through token authentication
                 */}
-                    <Route element={<ProtectedRoute></ProtectedRoute>}>
-                      <Route
-                        path="/notification"
-                        element={<NotificationPage></NotificationPage>}
-                      ></Route>
-                      <Route
-                        path="/notification/add"
-                        element={<NotificationFormPage></NotificationFormPage>}
-                      ></Route>
-                      <Route
-                        path="/notification/:id"
-                        element={<NotificationFormPage></NotificationFormPage>}
-                      ></Route>
-                      <Route
-                        path="/format"
-                        element={<FormatPage></FormatPage>}
-                      ></Route>
-                      <Route
-                        path="/format/add"
-                        element={<FormatFormPage></FormatFormPage>}
-                      ></Route>
-                      <Route
-                        path="/format/:id"
-                        element={<FormatFormPage></FormatFormPage>}
-                      ></Route>
-                      <Route
-                        path="/teacher"
-                        element={<TeacherPage></TeacherPage>}
-                      ></Route>
-                      <Route
-                        path="/teacher/add"
-                        element={<TeacherFormPage></TeacherFormPage>}
-                      ></Route>
-                      <Route
-                        path="/teacher/:id"
-                        element={<TeacherFormPage></TeacherFormPage>}
-                      ></Route>
-                      <Route
-                        path="/student"
-                        element={<StudentPage></StudentPage>}
-                      ></Route>
-                      <Route
-                        path="/student/add"
-                        element={<StudentFormPage></StudentFormPage>}
-                      ></Route>
-                      <Route
-                        path="/student:id"
-                        element={<StudentFormPage></StudentFormPage>}
-                      ></Route>
-                      <Route
-                        path="/class"
-                        element={<ClassPage></ClassPage>}
-                      ></Route>
-                      <Route
-                        path="/semester"
-                        element={<SemesterPage></SemesterPage>}
-                      ></Route>
-                      <Route
-                        path="/edituser"
-                        element={<EditUserPage></EditUserPage>}
-                      ></Route>
-                    </Route>
-                  </Routes>
-                </BrowserRouter>
+                        <Route element={<ProtectedRoute></ProtectedRoute>}>
+                          <Route
+                            path="/notification"
+                            element={<NotificationPage></NotificationPage>}
+                          ></Route>
+                          <Route
+                            path="/notification/add"
+                            element={
+                              <NotificationFormPage></NotificationFormPage>
+                            }
+                          ></Route>
+                          <Route
+                            path="/notification/:id"
+                            element={
+                              <NotificationFormPage></NotificationFormPage>
+                            }
+                          ></Route>
+                          <Route
+                            path="/format"
+                            element={<FormatPage></FormatPage>}
+                          ></Route>
+                          <Route
+                            path="/format/add"
+                            element={<FormatFormPage></FormatFormPage>}
+                          ></Route>
+                          <Route
+                            path="/format/:id"
+                            element={<FormatFormPage></FormatFormPage>}
+                          ></Route>
+                          <Route
+                            path="/teacher"
+                            element={<TeacherPage></TeacherPage>}
+                          ></Route>
+                          <Route
+                            path="/teacher/add"
+                            element={<TeacherFormPage></TeacherFormPage>}
+                          ></Route>
+                          <Route
+                            path="/teacher/:id"
+                            element={<TeacherFormPage></TeacherFormPage>}
+                          ></Route>
+                          <Route
+                            path="/student"
+                            element={<StudentPage></StudentPage>}
+                          ></Route>
+                          <Route
+                            path="/student/add"
+                            element={<StudentFormPage></StudentFormPage>}
+                          ></Route>
+                          <Route
+                            path="/student:id"
+                            element={<StudentFormPage></StudentFormPage>}
+                          ></Route>
+                          <Route
+                            path="/class"
+                            element={<ClassPage></ClassPage>}
+                          ></Route>
+                          <Route
+                            path="/semester"
+                            element={<SemesterPage></SemesterPage>}
+                          ></Route>
+                          <Route
+                            path="/semester/add"
+                            element={<SemesterFormPage></SemesterFormPage>}
+                          ></Route>
+                          <Route
+                            path="/edituser"
+                            element={<EditUserPage></EditUserPage>}
+                          ></Route>
+                        </Route>
+                      </Routes>
+                    </BrowserRouter>
+                  </SemesterProvider>
+                </ClassProvider>
               </StudentProvider>
             </TeacherProvider>
           </FormatProvider>
